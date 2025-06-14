@@ -1,4 +1,3 @@
-// Server.js using ESM imports
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -9,10 +8,13 @@ const app = express();
 const PORT = 3000;
 const JWT_SECRET = 'your_jwt_secret';
 
+// Middleware
 app.use(express.json());
 app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
 
-const uri = "mongodb+srv://bikashmhto2002:<db_password>@cluster0.l1jzczl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+// ✅ Correct URI
+const uri = "mongodb+srv://bikashmhto2002:Bikash123...@cluster0.l1jzczl.mongodb.net/?retryWrites=true&w=majority";
+
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,

@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate(); // React Router navigation
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -17,18 +17,30 @@ const Login = () => {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json();
+      const contentType = response.headers.get('content-type');
 
-      if (data.token) {
-        localStorage.setItem('token', data.token);
-        console.log('Login successful');
-        navigate('/App'); // Redirect only after successful login
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Server responded with ${response.status}: ${errorText}`);
+      }
+
+      if (contentType && contentType.includes('application/json')) {
+        const data = await response.json();
+
+        if (data.token) {
+          localStorage.setItem('token', data.token);
+          console.log('✅ Login successful');
+          navigate('/App');
+        } else {
+          alert('❌ Login failed: ' + (data.message || 'Invalid credentials'));
+        }
       } else {
-        alert('Login failed: ' + data.message);
+        const errorText = await response.text();
+        throw new Error(`❌ Unexpected response format: ${errorText}`);
       }
     } catch (error) {
       console.error('Login error:', error);
-      alert('Login failed: server error');
+      alert('Login failed: ' + error.message);
     }
   };
 
