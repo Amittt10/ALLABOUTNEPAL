@@ -8,13 +8,13 @@
   --color-text-muted: #d1d5db;
   --color-feature-bg: #8b005d;
   --color-feature-bg-hover: #a83279;
-  --font-base: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-base: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   --border-radius: 12px;
   --transition-speed: 0.3s;
 }
 
-
-body, html {
+body,
+html {
   margin: 0;
   font-family: var(--font-base);
   background-color: var(--color-bg-dark);
@@ -27,7 +27,7 @@ body, html {
 /* Home container */
 .home {
   min-height: 100vh;
-  background-image: url('/Users/amit/Desktop/CH/CulturalHeritageGuide/src/assets/photo.jpg');
+  background-image: url("../../assets/photo.jpg");
   display: flex;
   flex-direction: column;
   color: var(--color-text-light);
@@ -41,7 +41,7 @@ body, html {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url('./assets/photo.jpg'); /* Use relative path, forward slashes */
+  background-image: url("../../assets/photo.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -72,7 +72,7 @@ body, html {
   font-weight: 900;
   margin-bottom: 1rem;
   color: var(--color-primary);
-  text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
   letter-spacing: 0.05em;
 }
 
@@ -83,7 +83,7 @@ body, html {
   color: var(--color-text-light);
   font-weight: 400;
   line-height: 1.4;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 /* CTA Button */
@@ -99,9 +99,8 @@ body, html {
   text-decoration: none;
   cursor: pointer;
   box-shadow: 0 5px 15px rgba(244, 114, 182, 0.4);
-  transition: background-color var(--transition-speed) ease,
-              box-shadow var(--transition-speed) ease,
-              transform var(--transition-speed) ease;
+  transition: background-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease, transform
+    var(--transition-speed) ease;
   user-select: none;
 }
 
@@ -162,10 +161,8 @@ body, html {
   text-align: center;
   box-shadow: 0 8px 20px rgba(139, 0, 93, 0.4);
   cursor: default;
-  transition:
-    transform var(--transition-speed) ease,
-    background-color var(--transition-speed) ease,
-    box-shadow var(--transition-speed) ease;
+  transition: transform var(--transition-speed) ease, background-color var(--transition-speed) ease, box-shadow
+    var(--transition-speed) ease;
   user-select: none;
 }
 
@@ -193,7 +190,8 @@ body, html {
     background-position: center top;
   }
 }
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
   padding: 0;
@@ -203,7 +201,7 @@ html, body {
 :root {
   --color-bg-dark: #1e1e1e;
   --color-text-light: #f3f4f6;
-  --font-base: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-base: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
@@ -220,7 +218,7 @@ body {
 
 .home-header {
   flex-grow: 1;
-  background-image: url('./assets/photo.jpg');
+  background-image: url("../../assets/photo.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -232,11 +230,10 @@ body {
 }
 
 .overlay {
-  background: rgba(0,0,0,0.7);
+  background: rgba(0, 0, 0, 0.7);
   padding: 2rem;
   border-radius: 12px;
   max-width: 90vw;
   text-align: center;
   box-sizing: border-box;
 }
-
