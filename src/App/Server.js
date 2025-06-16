@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
 
 // ✅ Correct URI
-const uri = "mongodb+srv://bikashmhto2002:Bikash123...@cluster0.l1jzczl.mongodb.net/?retryWrites=true&w=majority";
+const uri = "mongodb+srv://majhiamit4045:Amit4045@cluster0.l1jzczl.mongodb.net/?retryWrites=true&w=majority";
 
 const client = new MongoClient(uri, {
   serverApi: {

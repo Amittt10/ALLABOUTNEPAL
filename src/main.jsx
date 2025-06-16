@@ -16,14 +16,13 @@ root.render(
 <BrowserRouter>
     <Routes>
       {/* initial route  */}
-      <Route path='' element={<UserSignup/>}/>
       <Route path='/register' element={<UserSignup/>}/>
       <Route path='/footer' element={<Footer/>}/>
       <Route path='/header' element={<Header/>}/>
       <Route path='/home' element={<Home/>}/>
       <Route path='/layout' element={<Layout/>}/>
       <Route path='/login' element={<UserLogin/>}/>
-      <Route path='/app' element={<App/>}>
+      <Route path='' element={<App/>}>
       </Route>
     </Routes>
   </BrowserRouter>
