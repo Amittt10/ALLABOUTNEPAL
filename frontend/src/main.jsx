@@ -1,14 +1,16 @@
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter , Routes , Route} from 'react-router-dom';
 
-import App from './App';
 
-import UserLogin from './App/UserLogin';
-import UserSignup from './App/UserSignup';
-import Footer from './Component/Footer/Footer';
+
+import UserSignup from './Component/UserSignup/UserSignup';
+import UserLogin from './Component/UserLogin/UserLogin';  
 import Header from './Component/Header/Header';
-import Layout from './Component/Layout/Layout';
 import Home from './Home/Home';
+import Footer from './Component/Footer/Footer';
+import Layout from './Component/Layout/Layout';
+import App from '../../src/App';
+
 const rootElement = document.getElementById('root');
 const root = createRoot(rootElement);
 
