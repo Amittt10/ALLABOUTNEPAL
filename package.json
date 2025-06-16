@@ -11,19 +11,24 @@
     "start": "node src/App/Server.js"
   },
   "dependencies": {
+    "@react-google-maps/api": "^2.20.6",
     "bcryptjs": "^2.4.3",
+    "bootstrap": "^5.3.6",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^4.18.4",
     "jsonwebtoken": "^9.0.2",
+    "leaflet": "^1.9.4",
     "mongod": "^2.0.0",
     "mongodb": "^6.5.0",
     "mongoose": "^8.15.1",
     "outlet": "^0.1.5",
-    "react": "^18.2.0",
+    "react": "^18.3.1",
     "react-dom": "^18.2.0",
+    "react-leaflet": "^5.0.0",
     "react-router": "^7.6.2",
-    "react-router-dom": "^6.22.3"
+    "react-router-dom": "^6.22.3",
+    "reactstrap": "^9.2.3"
   },
   "devDependencies": {
     "@eslint/js": "^8.56.0",
