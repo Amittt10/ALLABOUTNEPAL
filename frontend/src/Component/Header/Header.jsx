@@ -1,72 +1,64 @@
-import React from 'react'
-import './Header.css'
-import {Container, Row, Button} from 'reactstrap'
+// src/components/Header.jsx
+import React, { useState } from 'react';
+import { NavLink, Link, useLocation } from 'react-router-dom';
+import './Header.css';
+import Logo from '../../assets/logo.png';
 
-import Logo from '../../assets/logo.png'
-import { NavLink, Link } from 'react-router-dom'
-
-// Navigation links for the header
-
-const nav_links=[
-  {
-    path:'/home',
-    display:'Home'
-  },
-  {
-    path:'/about',
-    display:'About'
-  },
-  {
-    path:'/CulturalHeritageGuide',
-    display:'CulturalHeritage'
-  },
-]
+const nav_links = [
+  { path: '/', display: 'Home' },
+  { path: '/about', display: 'About' },
+  { path: '/CulturalHeritageGuide', display: 'CulturalHeritage' },
+];
 
 const Header = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const toggleMenu = () => setMenuOpen(!menuOpen);
+  const location = useLocation();
+
+  const handleLogoClick = () => {
+    if (location.pathname === '/') {
+      // If already on home page, just scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    // If not, router <Link> will take care of redirecting to "/"
+  };
+
   return (
-    <header className='header'>
-      <Container>
-        <Row>
-          <div className='nav_wrapper d-flex align-items-center justify-content-between'>
-            <div className='Logo'>
-              <img src={Logo} alt="Logo" />
-            </div>
-            <nav className="navigation">
-              <ul className="menu d-flex align-items-center gap-5">
-                {nav_links.map((item, index) => (
-                  <li className='nav_item' key={index}>
-                    <NavLink
-                      to={item.path}
-                      className={({ isActive }) => (isActive ? 'active_link' : '')}
-                    >
-                      {item.display}
-                    </NavLink>
-                  </li>
-                ))}
-              </ul>
-            <div className='nav_right d-flex align-items-center gap-4'>
-              <div className='nav_btns d-flex align-items-center gap-4'>
-                <Button className='btn secondary_btn'>
-                  <Link to='/login' className='text-decoration-none text-reset'>
-                    Login
-                  </Link>
-                </Button>
-                <Button className='btn primary_btn'>
-                  <Link to='/register' className='text-decoration-none text-reset'>
-                    Register
-                  </Link>
-                </Button>
-              </div>
-              <span className='menu' onClick={() => document.querySelector('.navigation').classList.toggle('active')}>
-                <i class="ri-menu-line"></i>
-              </span>
-            </div>
-            </nav>
+    <header className="header">
+      <div className="nav_wrapper">
+        <div className="logo">
+          <Link to="/" onClick={handleLogoClick}>
+            <img src={Logo} alt="Logo" />
+          </Link>
+        </div>
+
+        <nav className={`navigation ${menuOpen ? 'active' : ''}`}>
+          <ul className="menu">
+            {nav_links.map((item, index) => (
+              <li className="nav_item" key={index}>
+                <NavLink
+                  to={item.path}
+                  className={({ isActive }) => (isActive ? 'active_link' : '')}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {item.display}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+
+          <div className="nav_btns">
+            <Link to="/login" className="btn secondary_btn">Login</Link>
+            <Link to="/register" className="btn primary_btn">Register</Link>
           </div>
-        </Row>
-      </Container>
+        </nav>
+
+        <div className="mobile_menu" onClick={toggleMenu}>
+          <i className="ri-menu-line"></i>
+        </div>
+      </div>
     </header>
   );
-}
+};
 
-export default Header
+export default Header;

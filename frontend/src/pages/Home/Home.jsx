@@ -2,13 +2,10 @@
 import React from 'react';
 import './Home.css';
 
-
 const Home = () => {
   return (
     <div className="home">
-      <header
-        className="home-header"
-      >
+      <header className="home-header">
         <div className="overlay">
           <h1 className="title">Welcome to Cultural Heritage Guide</h1>
           <p className="subtitle">
@@ -19,7 +16,7 @@ const Home = () => {
       </header>
 
       <section id="explore" className="intro-section">
-        <div className="container">
+        <div className="section-container">
           <h2>Explore Our Heritage</h2>
           <p>
             Nepal is home to centuries-old monuments, sacred temples, and vibrant cultural traditions.

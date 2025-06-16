@@ -1,48 +1,50 @@
-import React, { useState } from 'react';
-import './Login.css';
-import { Link, useNavigate } from 'react-router-dom';
+"use client"
+
+import { useState } from "react"
+import "./Login.css"
+import { Link, useNavigate } from "react-router-dom"
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const navigate = useNavigate();
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const navigate = useNavigate()
 
   const handleLogin = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     try {
-      const response = await fetch('http://localhost:3000/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("http://localhost:3000/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
-      });
+      })
 
-      const contentType = response.headers.get('content-type');
+      const contentType = response.headers.get("content-type")
 
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Server responded with ${response.status}: ${errorText}`);
+        const errorText = await response.text()
+        throw new Error(`Server responded with ${response.status}: ${errorText}`)
       }
 
-      if (contentType && contentType.includes('application/json')) {
-        const data = await response.json();
+      if (contentType && contentType.includes("application/json")) {
+        const data = await response.json()
 
         if (data.token) {
-          localStorage.setItem('token', data.token);
-          console.log('✅ Login successful');
-          navigate('/App');
+          localStorage.setItem("token", data.token)
+          console.log("✅ Login successful")
+          navigate("/App")
         } else {
-          alert('❌ Login failed: ' + (data.message || 'Invalid credentials'));
+          alert("❌ Login failed: " + (data.message || "Invalid credentials"))
         }
       } else {
-        const errorText = await response.text();
-        throw new Error(`❌ Unexpected response format: ${errorText}`);
+        const errorText = await response.text()
+        throw new Error(`❌ Unexpected response format: ${errorText}`)
       }
     } catch (error) {
-      console.error('Login error:', error);
-      alert('Login failed: ' + error.message);
+      console.error("Login error:", error)
+      alert("Login failed: " + error.message)
     }
-  };
+  }
 
   return (
     <div className="login-container">
@@ -72,7 +74,7 @@ const Login = () => {
         </p>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login
