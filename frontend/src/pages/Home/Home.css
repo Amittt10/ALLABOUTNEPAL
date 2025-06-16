@@ -27,7 +27,7 @@ body, html {
 /* Home container */
 .home {
   min-height: 100vh;
-  background-image: url('C:\Users\Bikash\CulturalHeritageGuide\src\assets\photo.jpg');
+  background-image: url('/Users/amit/Desktop/CH/CulturalHeritageGuide/src/assets/photo.jpg');
   display: flex;
   flex-direction: column;
   color: var(--color-text-light);
