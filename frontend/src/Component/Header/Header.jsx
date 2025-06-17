@@ -7,7 +7,8 @@ import Logo from '../../assets/logo.png';
 const nav_links = [
   { path: '/', display: 'Home' },
   { path: '/cultural-heritage', display: 'Cultural Heritage' },
-  { path: '/festivals', display: 'Festivals & Events' },
+  { path: '/festivals', display: 'Festivals' },
+  { path: '/events', display: 'Events' },
   { path: '/quiz', display: 'Quiz' },
   { path: '/about', display: 'About Us' },
 ];
