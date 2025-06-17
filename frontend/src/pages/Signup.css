@@ -8,24 +8,15 @@
 }
 
 .signup-container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   max-width: 400px;
-<<<<<<< HEAD
-=======
   width: 100%;
   background-color: #fff;
->>>>>>> 3655ae2 (updated login/signup)
   padding: 2rem;
   border: 1px solid #2629d3;
   border-radius: 8px;
   text-align: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   font-family: sans-serif;
-  background: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
 .signup-form {
