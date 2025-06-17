@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "start": "node backend/Server.js",
-    "test": "echo \"No test specified\" && exit 0" // <--- ADD THIS LINE
+    "test": "echo \"No test specified\" && exit 0" 
   },
   "dependencies": {
     "@react-google-maps/api": "^2.20.6",
