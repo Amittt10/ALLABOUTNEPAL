@@ -12,6 +12,7 @@ import App from "./App"
 import CulturalHeritage from "./pages/CulturalHeritage"
 import Festivals from "./pages/Festivals"
 import Quiz from "./pages/Quiz"
+import Aboutus from "./pages/Aboutus"
 
 const rootElement = document.getElementById("root")
 const root = createRoot(rootElement)
@@ -31,6 +32,7 @@ root.render(
       <Route path="/cultural-heritage" element={<CulturalHeritage />} />
       <Route path="/festivals" element={<Festivals />} />
       <Route path="/quiz" element={<Quiz />} />
+      <Route path="/about" element={<Aboutus />} />
 
       {/* default or root route */}
       <Route path="/" element={<App />} />
