@@ -1,7 +1,7 @@
 /* src/components/Header.css */
 
 .header {
-  width: 100vw;
+  width: 100%;
   background-color: #fff;
   position: sticky;
   top: 0;
@@ -11,7 +11,8 @@
 }
 
 .nav_wrapper {
-  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;  /* centers the nav */
   padding: 0.8rem 2rem;
   display: flex;
   justify-content: space-between;

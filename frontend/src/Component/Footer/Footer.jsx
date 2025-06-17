@@ -1,4 +1,4 @@
-// src/components/Footer.jsx
+// src/Component/Footer/Footer.jsx
 import React from 'react';
 import './Footer.css';
 import { Link } from 'react-router-dom';
@@ -17,7 +17,7 @@ const Footer = () => {
           <ul>
             <li><Link to="/home">Home</Link></li>
             <li><Link to="/about">About</Link></li>
-            <li><Link to="/CulturalHeritageGuide">Heritage</Link></li>
+            <li><Link to="/cultural-heritage">Heritage</Link></li>
             <li><Link to="/contact">Contact</Link></li>
           </ul>
         </div>
