@@ -5,12 +5,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-<<<<<<< HEAD
   background: linear-gradient(135deg, #f0b0b0, #d9d9d9);
-
-=======
-  background: #f0f2f5;
->>>>>>> 3655ae2 (updated login/signup)
+  background-color: #f0f2f5;
 }
 
 .login-container {
