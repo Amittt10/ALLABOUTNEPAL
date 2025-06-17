@@ -17,12 +17,26 @@ export default {
           900: "#831843",
           950: "#500724",
         },
+        festivalOrange: '#fb923c',
+        festivalLight: '#fff7ed',
       },
       fontFamily: {
         sans: ["Outfit", "sans-serif"],
         prata: ["Prata", "serif"],
       },
+      boxShadow: {
+        cardHover: '0 8px 16px rgba(0, 0, 0, 0.08)',
+      },
     },
   },
-  plugins: [],
+  darkMode: "class", // Enable dark mode support
+  corePlugins: {
+    preflight: false, // Disable Tailwind's base styles
+  },
+  plugins: [
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/aspect-ratio'),
+  ],
 }
+

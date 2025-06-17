@@ -6,11 +6,12 @@ import UserSignup from './pages/UserSignup';
 import UserLogin from './pages/UserLogin';
 import Home from './pages/Home/Home';
 import CulturalHeritage from './pages/CulturalHeritage';
-import Festivals from './pages/Festivals';
+
 import Quiz from './pages/Quiz';
 import Aboutus from './pages/Aboutus';
 
 import Layout from './Component/Layout/Layout';
+import Festivals from './pages/Festivals';
 
 const rootElement = document.getElementById('root');
 const root = createRoot(rootElement);

@@ -5,6 +5,7 @@ import Home from "./pages/Home/Home"
 import Footer from "./Component/Footer/Footer"
 import Layout from "./Component/Layout/Layout"
 
+
 export default function App() {
   return (
     <>
