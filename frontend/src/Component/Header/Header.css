@@ -12,7 +12,7 @@
 
 .nav_wrapper {
   max-width: 1200px;
-  margin: 0 auto;  /* centers the nav */
+  margin: 0 auto;  
   padding: 0.8rem 2rem;
   display: flex;
   justify-content: space-between;
