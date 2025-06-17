@@ -1,0 +1,48 @@
+.aboutus-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px 30px;
+  background-color: #f7f9fc;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+}
+
+.aboutus-container h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  color: #2d3748;
+  margin-bottom: 20px;
+}
+
+.aboutus-container p {
+  line-height: 1.7;
+  font-size: 1.1rem;
+  text-align: justify;
+  margin-bottom: 30px;
+}
+
+.aboutus-team h2 {
+  font-size: 1.8rem;
+  color: #4a5568;
+  margin-bottom: 10px;
+}
+
+.aboutus-team ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.aboutus-team li {
+  font-size: 1.05rem;
+  margin-bottom: 8px;
+  padding-left: 16px;
+  position: relative;
+}
+
+.aboutus-team li::before {
+  content: "👤";
+  position: absolute;
+  left: 0;
+}
