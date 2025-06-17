@@ -22,6 +22,14 @@
   max-width: 400px;
   border: 1px solid #2629d3;
   text-align: center;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  animation: fadeIn 0.5s ease-in-out;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
 }
 
 .login-container h2 {
@@ -84,6 +92,14 @@
 @media (max-width: 480px) {
   .login-container {
     padding: 30px 20px;
+    width: 90%;
+    max-width: none;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
   }
 
   .login-container h2 {
