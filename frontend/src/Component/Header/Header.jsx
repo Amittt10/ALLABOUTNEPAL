@@ -6,13 +6,13 @@ import Logo from '../../assets/logo.png';
 
 const nav_links = [
   { path: '/', display: 'Home' },
-  { path: '/CulturalHeritageGuide', display: 'Cultural Heritage' },
-  { path: '/Festivals', display: 'Festivals' },
-  { path: '/Events', display: 'Events' },
-  { path: '/Quiz', display: 'Quiz' },
+  { path: '/cultural-heritage', display: 'Cultural Heritage' },
+  { path: '/festivals', display: 'Festivals' },
+  { path: '/events', display: 'Events' },
+  { path: '/quiz', display: 'Quiz' },
   { path: '/about', display: 'About Us' },
-  
 ];
+
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
