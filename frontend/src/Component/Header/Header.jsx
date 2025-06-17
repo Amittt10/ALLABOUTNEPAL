@@ -6,8 +6,9 @@ import Logo from '../../assets/logo.png';
 
 const nav_links = [
   { path: '/', display: 'Home' },
-  { path: '/about', display: 'About' },
   { path: '/CulturalHeritageGuide', display: 'CulturalHeritage' },
+  { path: '/about', display: 'About' },
+  
 ];
 
 const Header = () => {
