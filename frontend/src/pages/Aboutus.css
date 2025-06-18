@@ -1,48 +1,251 @@
+/* === Base Reset & Font === */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(to bottom right, #fff5f5, #fffaf0);
+  color: #1f2937;
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* === About Us Container === */
 .aboutus-container {
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 20px 30px;
-  background-color: #f7f9fc;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  font-family: 'Segoe UI', sans-serif;
-  color: #333;
-}
-
-.aboutus-container h1 {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 4rem 2rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   text-align: center;
-  font-size: 2.5rem;
-  color: #2d3748;
-  margin-bottom: 20px;
+  background: linear-gradient(to bottom right, #fff5f5, #fffaf0);
 }
 
-.aboutus-container p {
-  line-height: 1.7;
-  font-size: 1.1rem;
-  text-align: justify;
-  margin-bottom: 30px;
-}
-
-.aboutus-team h2 {
-  font-size: 1.8rem;
-  color: #4a5568;
-  margin-bottom: 10px;
-}
-
-.aboutus-team ul {
-  list-style-type: none;
-  padding-left: 0;
-}
-
-.aboutus-team li {
-  font-size: 1.05rem;
-  margin-bottom: 8px;
-  padding-left: 16px;
+/* === Typography === */
+.aboutus-container h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 2rem;
+  line-height: 1.2;
+  text-align: center;
   position: relative;
 }
 
-.aboutus-team li::before {
-  content: "👤";
+.aboutus-container h1::after {
+  content: "";
   position: absolute;
-  left: 0;
+  bottom: -0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4rem;
+  height: 0.25rem;
+  background: linear-gradient(to right, #f97316, #ef4444);
+  border-radius: 0.125rem;
+}
+
+.aboutus-container p {
+  font-size: 1.25rem;
+  color: #374151;
+  line-height: 1.8;
+  max-width: 50rem;
+  margin: 0 auto;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 2rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(249, 115, 22, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+/* === Hover Effects === */
+.aboutus-container {
+  transition: all 0.3s ease-in-out;
+}
+
+.aboutus-container p:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+/* === Responsive Design === */
+@media (max-width: 1024px) {
+  .aboutus-container {
+    padding: 3rem 1.5rem;
+  }
+
+  .aboutus-container h1 {
+    font-size: 2.5rem;
+  }
+
+  .aboutus-container p {
+    font-size: 1.125rem;
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .aboutus-container {
+    padding: 2rem 1rem;
+  }
+
+  .aboutus-container h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .aboutus-container p {
+    font-size: 1rem;
+    padding: 1.25rem;
+    line-height: 1.7;
+  }
+}
+
+@media (max-width: 480px) {
+  .aboutus-container {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .aboutus-container h1 {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .aboutus-container h1::after {
+    width: 3rem;
+    height: 0.1875rem;
+  }
+
+  .aboutus-container p {
+    font-size: 0.9375rem;
+    padding: 1rem;
+    line-height: 1.6;
+  }
+}
+
+/* === Focus and Accessibility === */
+.aboutus-container:focus-within {
+  outline: 2px solid #f97316;
+  outline-offset: 2px;
+}
+
+/* === Print Styles === */
+@media print {
+  .aboutus-container {
+    background: white;
+    box-shadow: none;
+    padding: 2rem;
+  }
+
+  .aboutus-container p {
+    background: white;
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+}
+
+/* === Dark Mode Support === */
+@media (prefers-color-scheme: dark) {
+  body {
+    background: linear-gradient(to bottom right, #1f2937, #374151);
+    color: #f9fafb;
+  }
+
+  .aboutus-container {
+    background: linear-gradient(to bottom right, #1f2937, #374151);
+  }
+
+  .aboutus-container h1 {
+    color: #f9fafb;
+  }
+
+  .aboutus-container p {
+    color: #e5e7eb;
+    background-color: rgba(31, 41, 55, 0.8);
+    border-color: rgba(249, 115, 22, 0.2);
+  }
+
+  .aboutus-container p:hover {
+    background-color: rgba(31, 41, 55, 0.95);
+  }
+}
+
+/* === High Contrast Mode === */
+@media (prefers-contrast: high) {
+  .aboutus-container h1 {
+    color: #000000;
+  }
+
+  .aboutus-container p {
+    background-color: #ffffff;
+    color: #000000;
+    border: 2px solid #000000;
+  }
+}
+
+/* === Reduced Motion === */
+@media (prefers-reduced-motion: reduce) {
+  .aboutus-container,
+  .aboutus-container p {
+    transition: none;
+  }
+
+  .aboutus-container p:hover {
+    transform: none;
+  }
+}
+
+/* === Additional Utility Classes === */
+.text-center {
+  text-align: center;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.text-gray-900 {
+  color: #111827;
+}
+
+.text-gray-700 {
+  color: #374151;
+}
+
+.bg-white {
+  background-color: #ffffff;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.shadow-md {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.transition-all {
+  transition: all 0.3s ease-in-out;
+}
+
+.p-8 {
+  padding: 2rem;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.max-w-4xl {
+  max-width: 56rem;
 }
