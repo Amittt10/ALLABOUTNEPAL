@@ -1,48 +1,62 @@
-// src/components/Header.jsx
-import React, { useState } from 'react';
-import { NavLink, Link, useLocation } from 'react-router-dom';
-import './Header.css';
-import Logo from '../../assets/logo.png';
+import React, { useState, useContext, useRef, useEffect } from "react";
+import { NavLink, Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
+import "./Header.css";
+import Logo from "../../assets/logo.png";
 
 const nav_links = [
-  { path: '/', display: 'Home' },
-  { path: '/cultural-heritage', display: 'Heritage Sites' },
-  { path: '/festivals', display: 'Festivals & Events' },
-  { path: '/quiz', display: 'Quiz' },
-  { path: '/about', display: 'About Us' },
+  { path: "/", display: "Home" },
+  { path: "/cultural-heritage", display: "Heritage Sites" },
+  { path: "/festivals", display: "Festivals & Events" },
+  { path: "/quiz", display: "Quiz" },
+  { path: "/about", display: "About Us" },
 ];
-
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const toggleMenu = () => setMenuOpen(!menuOpen);
-  const location = useLocation();
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const { user, logout } = useContext(AuthContext);
+  const profileRef = useRef();
+  const navigate = useNavigate();
 
-  const handleLogoClick = () => {
-    if (location.pathname === '/') {
-      // If already on home page, just scroll to top
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Close dropdown on outside click
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (profileRef.current && !profileRef.current.contains(e.target)) {
+        setProfileMenuOpen(false);
+      }
     }
-    // If not, router <Link> will take care of redirecting to "/"
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const toggleMenu = () => setMenuOpen(!menuOpen);
+  const toggleProfileMenu = () => setProfileMenuOpen((p) => !p);
+
+  const handleLogout = () => {
+    logout();
+    setMenuOpen(false);
+    setProfileMenuOpen(false);
+    navigate("/");
   };
 
   return (
     <header className="header">
       <div className="nav_wrapper">
         <div className="logo">
-          <Link to="/" onClick={handleLogoClick}>
+          <Link to="/">
             <img src={Logo} alt="Logo" />
           </Link>
         </div>
 
-        <nav className={`navigation ${menuOpen ? 'active' : ''}`}>
+        <nav className={`navigation ${menuOpen ? "active" : ""}`}>
           <ul className="menu">
-            {nav_links.map((item, index) => (
-              <li className="nav_item" key={index}>
+            {nav_links.map((item, i) => (
+              <li className="nav_item" key={i}>
                 <NavLink
                   to={item.path}
-                  className={({ isActive }) => (isActive ? 'active_link' : '')}
                   onClick={() => setMenuOpen(false)}
+                  className={({ isActive }) => (isActive ? "active_link" : "")}
                 >
                   {item.display}
                 </NavLink>
@@ -51,8 +65,57 @@ const Header = () => {
           </ul>
 
           <div className="nav_btns">
-            <Link to="/login" className="btn secondary_btn">Login</Link>
-            <Link to="/register" className="btn primary_btn">Register</Link>
+            {!user.email ? (
+              <>
+                <Link
+                  to="/login"
+                  className="btn secondary_btn"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/register"
+                  className="btn primary_btn"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Register
+                </Link>
+              </>
+            ) : (
+              <div className="profile-menu" ref={profileRef}>
+                <img
+                  src={
+                    user.photo
+                      ? `http://localhost:3000/${user.photo}`
+                      : "/default-avatar.png"
+                  }
+                  alt="Profile"
+                  className="avatar"
+                  onClick={toggleProfileMenu}
+                />
+                {profileMenuOpen && (
+                  <div className="dropdown">
+                    <ul>
+                      <li>
+                        <Link
+                          to="/profile"
+                          onClick={() => {
+                            setMenuOpen(false);
+                            setProfileMenuOpen(false);
+                          }}
+                        >
+                          My Profile
+                        </Link>
+                      </li>
+                      <li>
+                        <button onClick={handleLogout}>Logout</button>
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </nav>
 
