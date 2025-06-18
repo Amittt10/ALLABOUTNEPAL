@@ -32,6 +32,26 @@ const heritageSites = [
     entryFee: 'NRs. 1500 for foreigners',
     gallery: ['/images/bhaktapur.jpg', '/images/bhaktapur2.jpg']
   },
+    {
+    id: 1,
+    name: 'Swayambhunath Stupa',
+    image: '/images/swayambhunath.jpg',
+    shortDescription: 'A sacred Buddhist site known as the Monkey Temple.',
+    history: 'Swayambhunath is one of the oldest religious sites in Nepal. It is believed to have been established around the 5th century AD. The stupa is a UNESCO World Heritage Site and is an important pilgrimage site for Buddhists. The site is also known for its monkeys, which are considered sacred by locals. It offers panoramic views of the Kathmandu Valley. The stupa is adorned with colorful prayer flags and intricate carvings, making it a significant cultural landmark. A major restoration project was undertaken in 2010 to preserve its historical integrity. The site attracts millions of visitors each year, making it a significant cultural and historical site in Nepal. It is also a symbol of peace and harmony among different religions in the region. Swayambhunath is often associated with various legends, including one that states it was formed from a lotus flower that bloomed in the middle of a lake. The stupa is surrounded by numerous small stupas, shrines, and monasteries, adding to its spiritual significance. The site is also a popular spot for meditation and reflection, attracting both locals and tourists.',
+    location: 'Kathmandu, Nepal',
+    entryFee: 'NRs. 200 for SAARC nationals, NRs. 1000 for others',
+    gallery: ['/images/swayambhunath.jpg', '/images/swayambhunath2.jpg']
+  },
+    {
+    id: 1,
+    name: 'Swayambhunath Stupa',
+    image: '/images/swayambhunath.jpg',
+    shortDescription: 'A sacred Buddhist site known as the Monkey Temple.',
+    history: 'Swayambhunath is one of the oldest religious sites in Nepal. It is believed to have been established around the 5th century AD. The stupa is a UNESCO World Heritage Site and is an important pilgrimage site for Buddhists. The site is also known for its monkeys, which are considered sacred by locals. It offers panoramic views of the Kathmandu Valley. The stupa is adorned with colorful prayer flags and intricate carvings, making it a significant cultural landmark. A major restoration project was undertaken in 2010 to preserve its historical integrity. The site attracts millions of visitors each year, making it a significant cultural and historical site in Nepal. It is also a symbol of peace and harmony among different religions in the region. Swayambhunath is often associated with various legends, including one that states it was formed from a lotus flower that bloomed in the middle of a lake. The stupa is surrounded by numerous small stupas, shrines, and monasteries, adding to its spiritual significance. The site is also a popular spot for meditation and reflection, attracting both locals and tourists.',
+    location: 'Kathmandu, Nepal',
+    entryFee: 'NRs. 200 for SAARC nationals, NRs. 1000 for others',
+    gallery: ['/images/swayambhunath.jpg', '/images/swayambhunath2.jpg']
+  },
   {
     id: 4,
     name: 'Pashupatinath Temple',

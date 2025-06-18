@@ -6,7 +6,7 @@ import Logo from '../../assets/logo.png';
 
 const nav_links = [
   { path: '/', display: 'Home' },
-  { path: '/cultural-heritage', display: 'Cultural Heritage' },
+  { path: '/cultural-heritage', display: 'Heritage Sites' },
   { path: '/festivals', display: 'Festivals & Events' },
   { path: '/quiz', display: 'Quiz' },
   { path: '/about', display: 'About Us' },
