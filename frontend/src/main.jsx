@@ -15,6 +15,7 @@ import Profile from './pages/Profile';
 
 import Layout from './Component/Layout/Layout';
 import SearchResults from "./pages/SearchResults";
+import 
 
 const root = createRoot(document.getElementById('root'));
 
