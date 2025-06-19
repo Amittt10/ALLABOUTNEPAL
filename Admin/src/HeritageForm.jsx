@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import axiosInstance from '../api/axiosConfig';
+import axiosInstance from './api/axiosConfig';
 
 const HeritageForm = () => {
   const [form, setForm] = useState({ name: '', description: '' });
