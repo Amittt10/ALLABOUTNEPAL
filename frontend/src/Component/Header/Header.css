@@ -216,3 +216,31 @@
   border-radius: 6px;
 }
 
+/* Search Bar Styling */
+.search-bar {
+  display: flex;
+  align-items: center;
+  margin-left: 1rem;
+  background-color: #fff;
+  border-radius: 20px;
+  padding: 4px 10px;
+  border: 1px solid #ccc;
+}
+
+.search-bar input {
+  border: none;
+  outline: none;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  background: transparent;
+}
+
+.search-bar button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+

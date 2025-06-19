@@ -10,14 +10,14 @@ import { MongoClient, ServerApiVersion, ObjectId } from 'mongodb';
 // Constants
 const app = express();
 const PORT = 3000;
-const JWT_SECRET = 'your_jwt_secret'; // Use env var in production
+const JWT_SECRET = 'your_jwt_secret'; // In production, use .env
 
 // Middleware
 app.use(express.json());
 app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
-app.use('/uploads', express.static('uploads')); // Serve static profile photos
+app.use('/uploads', express.static('uploads')); // Serve uploaded profile photos
 
-// Multer setup for file uploads
+// Multer setup for file uploads (profile pictures)
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const dir = './uploads';
@@ -30,14 +30,16 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// MongoDB setup
+// MongoDB Setup
 const uri = "mongodb+srv://majhiamit4045:Amit4045@cluster0.l1jzczl.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri, {
   serverApi: { version: ServerApiVersion.v1, strict: true, deprecationErrors: true }
 });
-let usersCollection;
 
-// Start server after DB connects
+let usersCollection;
+let heritageCollection;
+let festivalCollection;
+
 async function startServer() {
   try {
     await client.connect();
@@ -45,6 +47,8 @@ async function startServer() {
 
     const db = client.db('auth_demo');
     usersCollection = db.collection('users');
+    heritageCollection = db.collection('heritage_sites');
+    festivalCollection = db.collection('festivals');
 
     app.listen(PORT, () => {
       console.log(`🚀 Server running at http://localhost:${PORT}`);
@@ -54,7 +58,6 @@ async function startServer() {
   }
 }
 startServer();
-
 
 // ==========================
 // ✅ AUTH ROUTES
@@ -86,16 +89,10 @@ app.post('/api/login', async (req, res) => {
 
   try {
     const user = await usersCollection.findOne({ email });
-    if (!user) {
-      console.log("❌ User not found");
-      return res.status(401).json({ message: 'Invalid credentials' });
-    }
+    if (!user) return res.status(401).json({ message: 'Invalid credentials' });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      console.log("❌ Incorrect password");
-      return res.status(401).json({ message: 'Invalid credentials' });
-    }
+    if (!isMatch) return res.status(401).json({ message: 'Invalid credentials' });
 
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' });
     res.json({ token });
@@ -153,6 +150,31 @@ app.post('/api/profile/update', upload.single('photo'), async (req, res) => {
   }
 });
 
+// ==========================
+// ✅ PUBLIC CONTENT ROUTES
+// ==========================
+
+// Heritage sites
+app.get('/api/heritage', async (req, res) => {
+  try {
+    const results = await heritageCollection.find().toArray();
+    res.json(results);
+  } catch (err) {
+    console.error('Error fetching heritage:', err);
+    res.status(500).json({ message: 'Failed to fetch heritage sites' });
+  }
+});
+
+// Festivals
+app.get('/api/festivals', async (req, res) => {
+  try {
+    const results = await festivalCollection.find().toArray();
+    res.json(results);
+  } catch (err) {
+    console.error('Error fetching festivals:', err);
+    res.status(500).json({ message: 'Failed to fetch festivals' });
+  }
+});
 
 // ==========================
 // ✅ PROTECTED ROUTES EXAMPLE
@@ -175,5 +197,5 @@ const protectedHandler = async (req, res) => {
 };
 
 app.get('/api/cultural-heritage', protectedHandler);
-app.get('/api/festivals', protectedHandler);
+app.get('/api/festivals-protected', protectedHandler);
 app.get('/api/quiz', protectedHandler);

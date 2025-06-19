@@ -15,11 +15,11 @@ const nav_links = [
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const { user, logout } = useContext(AuthContext);
   const profileRef = useRef();
   const navigate = useNavigate();
 
-  // Close dropdown on outside click
   useEffect(() => {
     function handleClickOutside(e) {
       if (profileRef.current && !profileRef.current.contains(e.target)) {
@@ -38,6 +38,15 @@ const Header = () => {
     setMenuOpen(false);
     setProfileMenuOpen(false);
     navigate("/");
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery("");
+      setMenuOpen(false);
+    }
   };
 
   return (
@@ -63,6 +72,19 @@ const Header = () => {
               </li>
             ))}
           </ul>
+
+          {/* Search Bar */}
+          <form className="search-bar" onSubmit={handleSearch}>
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <button type="submit">
+              <i className="ri-search-line"></i>
+            </button>
+          </form>
 
           <div className="nav_btns">
             {!user.email ? (

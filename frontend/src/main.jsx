@@ -14,6 +14,7 @@ import Festivals from './pages/Festivals';
 import Profile from './pages/Profile';
 
 import Layout from './Component/Layout/Layout';
+import SearchResults from "./pages/SearchResults";
 
 const root = createRoot(document.getElementById('root'));
 
@@ -32,6 +33,7 @@ root.render(
           <Route path="/quiz" element={<Quiz />} />
           <Route path="/about" element={<Aboutus />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/search" element={<SearchResults />} />
         </Route>
       </Routes>
     </AuthProvider>
