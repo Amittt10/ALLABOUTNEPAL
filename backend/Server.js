@@ -1,3 +1,7 @@
+// ==========================
+// SERVER.JS
+// ==========================
+
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -6,6 +10,8 @@ import multer from 'multer';
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
+import nodemailer from 'nodemailer';
+import crypto from 'crypto';
 import { MongoClient, ServerApiVersion, ObjectId } from 'mongodb';
 
 dotenv.config();
@@ -14,7 +20,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
-// CORS setup - allow localhost ports 5173 and 5174
+// CORS setup
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
@@ -35,7 +41,7 @@ app.use(cors({
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 
-// Multer setup for uploads
+// Multer setup
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const dir = './uploads';
@@ -48,7 +54,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// MongoDB Setup
+// MongoDB setup
 const uri = process.env.MONGO_URI;
 const client = new MongoClient(uri, {
   serverApi: { version: ServerApiVersion.v1, strict: true, deprecationErrors: true }
@@ -77,21 +83,21 @@ async function startServer() {
 }
 startServer();
 
-// Middleware: Authenticate JWT token
+// Middleware: Authenticate JWT
 const authenticateJWT = (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) return res.status(401).json({ message: 'No token provided' });
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = decoded; // save decoded user info
+    req.user = decoded;
     next();
   } catch (err) {
     return res.status(401).json({ message: 'Invalid token' });
   }
 };
 
-// Middleware: Authorize Admin only
+// Middleware: Authorize Admin
 const authorizeAdmin = (req, res, next) => {
   if (req.user.role !== 'admin') {
     return res.status(403).json({ message: 'Forbidden: Admins only' });
@@ -99,36 +105,76 @@ const authorizeAdmin = (req, res, next) => {
   next();
 };
 
+// Nodemailer setup
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: process.env.SMTP_PORT,
+  secure: false, // Use true if port is 465
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+});
+
+const sendVerificationEmail = async (to, url) => {
+  await transporter.sendMail({
+    from: `"Heritage App" <${process.env.SMTP_USER}>`,
+    to,
+    subject: 'Verify Your Email',
+    html: `
+      <h2>Email Verification</h2>
+      <p>Click the link below to verify your email:</p>
+      <a href="${url}">${url}</a>
+    `,
+  });
+};
+
+
 // ==========================
 // AUTH ROUTES
 // ==========================
 
-// Register (normal users)
+//Register
 app.post('/api/register', async (req, res) => {
-  const email = req.body.email.toLowerCase();
-  const { password } = req.body;
+  const { fullname, username, email, password } = req.body;
+  const emailLower = email.toLowerCase();
 
   try {
-    const existingUser = await usersCollection.findOne({ email });
+    const existingUser = await usersCollection.findOne({ email: emailLower });
     if (existingUser) return res.status(400).json({ message: 'Email already registered' });
 
-    const passwordHash = await bcrypt.hash(password, 10);
-    await usersCollection.insertOne({ email, password: passwordHash, role: 'user' });
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const verificationToken = crypto.randomBytes(32).toString('hex');
 
-    res.status(201).json({ message: 'User registered successfully' });
+    const newUser = {
+      fullname,
+      username,
+      email: emailLower,
+      password: hashedPassword,
+      verified: false,
+      verificationToken,
+      role: 'user',
+    };
+
+    await usersCollection.insertOne(newUser);
+
+    // Send verification email
+    const verifyURL = `http://localhost:5173/verify?token=${verificationToken}&email=${emailLower}`;
+    await sendVerificationEmail(emailLower, verifyURL);
+
+    res.status(201).json({ message: 'Signup successful. Please check your email to verify your account.' });
   } catch (err) {
     console.error('Register error:', err);
     res.status(500).json({ error: 'Registration failed' });
   }
 });
 
-// Login (user or admin)
+// Login
 app.post('/api/login', async (req, res) => {
   const email = req.body.email.toLowerCase();
   const { password } = req.body;
 
   try {
-    // Check if admin login
     if (email === process.env.ADMIN_EMAIL) {
       if (password === process.env.ADMIN_PASSWORD) {
         const token = jwt.sign({ email, role: 'admin' }, JWT_SECRET, { expiresIn: '1h' });
@@ -138,7 +184,6 @@ app.post('/api/login', async (req, res) => {
       }
     }
 
-    // Normal user login
     const user = await usersCollection.findOne({ email });
     if (!user) return res.status(401).json({ message: 'Invalid credentials' });
 
@@ -153,15 +198,35 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
+// Verify Email
+app.get('/api/verify-email', async (req, res) => {
+  const { token, email } = req.query;
+
+  try {
+    const user = await usersCollection.findOne({ email, verificationToken: token });
+    if (!user) return res.status(400).send('Invalid or expired verification link.');
+
+    await usersCollection.updateOne(
+      { email },
+      { $set: { verified: true }, $unset: { verificationToken: "" } }
+    );
+
+    res.send("✅ Email verified successfully. You may now log in.");
+  } catch (err) {
+    console.error("Email verification error:", err);
+    res.status(500).send("Email verification failed.");
+  }
+});
+
+
 // ==========================
 // PROFILE ROUTES
 // ==========================
 
-// Get profile (protected)
+// Get Profile
 app.get('/api/profile', authenticateJWT, async (req, res) => {
   try {
     if (req.user.role === 'admin') {
-      // Admin profile (minimal example)
       return res.json({ email: req.user.email, role: 'admin' });
     }
 
@@ -177,7 +242,7 @@ app.get('/api/profile', authenticateJWT, async (req, res) => {
   }
 });
 
-// Update profile (name and photo) for users only
+// Update Profile
 app.post('/api/profile/update', authenticateJWT, upload.single('photo'), async (req, res) => {
   if (req.user.role !== 'user') return res.status(403).json({ message: 'Only users can update profile' });
 
@@ -202,7 +267,6 @@ app.post('/api/profile/update', authenticateJWT, upload.single('photo'), async (
 // PUBLIC ROUTES
 // ==========================
 
-// Get heritage sites (public)
 app.get('/api/heritage', async (req, res) => {
   try {
     const heritage = await heritageCollection.find().toArray();
@@ -213,7 +277,6 @@ app.get('/api/heritage', async (req, res) => {
   }
 });
 
-// Get festivals (public)
 app.get('/api/festivals', async (req, res) => {
   try {
     const festivals = await festivalCollection.find().toArray();
@@ -225,7 +288,7 @@ app.get('/api/festivals', async (req, res) => {
 });
 
 // ==========================
-// ADMIN HERITAGE CRUD (protected and admin-only)
+// ADMIN HERITAGE CRUD
 // ==========================
 
 app.get('/api/admin/heritage', authenticateJWT, authorizeAdmin, async (req, res) => {
@@ -243,7 +306,7 @@ app.post('/api/admin/heritage', authenticateJWT, authorizeAdmin, async (req, res
 
   try {
     const result = await heritageCollection.insertOne({ name, description });
-    res.status(201).json(result.ops ? result.ops[0] : { _id: result.insertedId, name, description });
+    res.status(201).json({ _id: result.insertedId, name, description });
   } catch (err) {
     res.status(500).json({ message: 'Failed to add heritage site' });
   }
@@ -278,10 +341,9 @@ app.delete('/api/admin/heritage/:id', authenticateJWT, authorizeAdmin, async (re
 });
 
 // ==========================
-// NEW ROUTES YOU REQUESTED
+// VERIFY & STATS ROUTES
 // ==========================
 
-// Token verification route (verify token and get user info)
 app.get('/api/verify', authenticateJWT, async (req, res) => {
   try {
     if (req.user.role === 'admin') {
@@ -299,7 +361,6 @@ app.get('/api/verify', authenticateJWT, async (req, res) => {
   }
 });
 
-// Admin stats route (protected & admin only)
 app.get('/api/admin/stats', authenticateJWT, authorizeAdmin, async (req, res) => {
   try {
     const userCount = await usersCollection.countDocuments();

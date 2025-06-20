@@ -4,16 +4,32 @@ import { Loader2 } from "lucide-react";
 import "./Signup.css";
 
 const UserSignup = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [form, setForm] = useState({
+    fullname: "",
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+    setStatus("");
+  };
+
   const handleSignup = async (e) => {
     e.preventDefault();
-    setStatus("");
-    if (!email || !password) {
-      setStatus("Please fill in all fields.");
+
+    const { fullname, username, email, password, confirmPassword } = form;
+    if (!fullname || !username || !email || !password || !confirmPassword) {
+      setStatus("❌ Please fill in all fields.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setStatus("❌ Passwords do not match.");
       return;
     }
 
@@ -22,20 +38,24 @@ const UserSignup = () => {
       const response = await fetch("http://localhost:3000/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ fullname, username, email, password }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        setStatus("✅ Signup successful. You can now login.");
-        setEmail("");
-        setPassword("");
+        setStatus("✅ Signup successful. Please check your email to verify your account.");
+        setForm({
+          fullname: "",
+          username: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        });
       } else {
         setStatus(`❌ Signup failed: ${data.message || data.error}`);
       }
     } catch (error) {
-      console.error("Signup error:", error);
       setStatus("❌ Network error during signup.");
     } finally {
       setLoading(false);
@@ -55,40 +75,31 @@ const UserSignup = () => {
 
         <div className="signup-right-panel">
           <h2>Sign Up</h2>
-
           {status && (
-            <p
-              className={`signup-status ${
-                status.startsWith("✅") ? "status-success" : "status-error"
-              }`}
-            >
+            <p className={`signup-status ${status.startsWith("✅") ? "status-success" : "status-error"}`}>
               {status}
             </p>
           )}
 
           <form onSubmit={handleSignup} className="signup-form">
-            <label>
-              Email Address <span className="required">*</span>
-              <input
-                type="email"
-                placeholder="Username or Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="signup-input"
-              />
+            <label>Full Name<span className="required">*</span>
+              <input className="signup-input" name="fullname" type="text" value={form.fullname} onChange={handleChange} required />
             </label>
 
-            <label>
-              Password <span className="required">*</span>
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="signup-input"
-              />
+            <label>Username<span className="required">*</span>
+              <input name="username" type="text" value={form.username} onChange={handleChange} required />
+            </label>
+
+            <label>Email<span className="required">*</span>
+              <input name="email" type="email" value={form.email} onChange={handleChange} required />
+            </label>
+
+            <label>Password<span className="required">*</span>
+              <input name="password" type="password" value={form.password} onChange={handleChange} required />
+            </label>
+
+            <label>Confirm Password<span className="required">*</span>
+              <input name="confirmPassword" type="password" value={form.confirmPassword} onChange={handleChange} required />
             </label>
 
             <button type="submit" className="signup-submit" disabled={loading}>

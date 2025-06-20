@@ -20,6 +20,7 @@ import Profile from './pages/Profile';
 import SearchResults from './pages/SearchResults';
 
 import Layout from './Component/Layout/Layout';
+import Verify from './pages/Verify';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -36,6 +37,8 @@ const router = createBrowserRouter(
         <Route path="/about" element={<Aboutus />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/search" element={<SearchResults />} />
+        <Route path="/verify" element={<Verify />} />
+
       </Route>
     </>
   ),

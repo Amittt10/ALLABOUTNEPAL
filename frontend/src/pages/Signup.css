@@ -15,83 +15,79 @@ body, html, #root {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
+  padding: 20px;
 }
 
-/* Outer wrapper to hold both panels */
+/* Wrapper */
 .signup-wrapper {
-  width: 720px;
-  height: 380px;
-  box-shadow: 0 6px 20px rgb(0 0 0 / 0.1);
+  width: 100%;
+  max-width: 800px;
   display: flex;
   background: white;
-  border-radius: 6px;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   overflow: hidden;
 }
 
-/* Left panel with green background and diagonal cut */
+/* Left panel */
 .signup-left-panel {
-  position: relative;
-  width: 260px;
-  background: #0a9254; /* green */
+  width: 280px;
+  background: #0a9254;
   color: white;
   padding: 40px 30px;
-  clip-path: polygon(0 0, 100% 0, 65% 100%, 0% 100%);
+  clip-path: polygon(0 0, 100% 0, 70% 100%, 0% 100%);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 16px;
+  gap: 20px;
 }
 
 .signup-left-panel h1 {
-  margin: 0;
   font-size: 2rem;
-  font-weight: 700;
+  margin: 0;
 }
 
 .signup-left-panel p {
-  font-size: 1.1rem;
-  line-height: 1.3;
-  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 .signup-left-button {
-  width: fit-content;
-  margin-top: 12px;
-  padding: 8px 20px;
+  padding: 10px 24px;
   font-size: 1rem;
-  border: 1.5px solid white;
-  border-radius: 30px;
+  border: 2px solid white;
+  border-radius: 999px;
   background: transparent;
-  color: rgb(255, 255, 255);
+  color: white;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s;
 }
 
 .signup-left-button:hover {
-  background-color: rgba(255 255 255 / 0.2);
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
-/* Right panel with form */
+/* Right panel */
 .signup-right-panel {
-  flex-grow: 1;
+  flex: 1;
   padding: 40px 50px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  color: #4a4a4a;
+  color: #333;
 }
 
 .signup-right-panel h2 {
-  margin: 0 0 24px 0;
-  font-weight: 600;
+  margin-bottom: 24px;
   font-size: 1.8rem;
+  font-weight: 600;
 }
 
 .signup-status {
   margin-bottom: 16px;
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-size: 0.95rem;
+  font-weight: 500;
 }
 
 .status-success {
@@ -104,43 +100,45 @@ body, html, #root {
 
 .signup-form label {
   display: block;
-  font-weight: 600;
-  margin-bottom: 6px;
+  margin-bottom: 18px;
   font-size: 0.95rem;
-  color: #555;
+  font-weight: 500;
+  color: #444;
 }
 
-.required {
-  color: red;
-  margin-left: 2px;
-}
-
-.signup-input {
+.signup-form input {
   width: 100%;
   padding: 10px 14px;
-  border: 1.5px solid #ddd;
-  border-radius: 18px;
-  margin-bottom: 20px;
+  margin-top: 6px;
   font-size: 1rem;
-  transition: border-color 0.25s ease;
+  border: 1.5px solid #ccc;
+  border-radius: 20px;
+  transition: border-color 0.3s;
 }
 
-.signup-input:focus {
+.signup-form input:focus {
   outline: none;
   border-color: #0a9254;
 }
 
+.required {
+  color: red;
+  margin-left: 4px;
+}
+
+/* Submit button */
 .signup-submit {
+  margin-top: 12px;
   width: 100%;
-  padding: 12px 0;
-  font-size: 1.1rem;
+  padding: 12px;
+  font-size: 1rem;
   font-weight: 600;
-  border-radius: 30px;
-  border: 1.5px solid #0a9254;
+  border-radius: 999px;
+  border: 2px solid #0a9254;
   color: #0a9254;
   background: transparent;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s, color 0.3s;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -157,7 +155,7 @@ body, html, #root {
   cursor: not-allowed;
 }
 
-/* Loader icon spinning */
+/* Loader */
 .animate-spin {
   animation: spin 1s linear infinite;
   height: 20px;
@@ -167,5 +165,24 @@ body, html, #root {
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* Responsive tweak */
+@media (max-width: 768px) {
+  .signup-wrapper {
+    flex-direction: column;
+    border-radius: 6px;
+  }
+
+  .signup-left-panel {
+    clip-path: none;
+    width: 100%;
+    text-align: center;
+    padding: 30px;
+  }
+
+  .signup-right-panel {
+    padding: 30px;
   }
 }
