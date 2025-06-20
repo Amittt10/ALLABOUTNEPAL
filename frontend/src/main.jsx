@@ -21,6 +21,8 @@ import SearchResults from './pages/SearchResults';
 
 import Layout from './Component/Layout/Layout';
 import Verify from './pages/Verify';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -38,6 +40,8 @@ const router = createBrowserRouter(
         <Route path="/profile" element={<Profile />} />
         <Route path="/search" element={<SearchResults />} />
         <Route path="/verify" element={<Verify />} />
+        <Route path="/forgot" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
       </Route>
     </>

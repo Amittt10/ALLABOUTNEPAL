@@ -1,0 +1,92 @@
+/* Container wrappers */
+.forgot-wrapper,
+.reset-wrapper {
+  max-width: 400px;
+  margin: 60px auto;
+  padding: 30px 25px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 6px 12px rgb(0 0 0 / 0.1);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.forgot-wrapper h2,
+.reset-wrapper h2 {
+  margin-bottom: 25px;
+  color: #222;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* Forms */
+.forgot-wrapper form,
+.reset-wrapper form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.forgot-wrapper input,
+.reset-wrapper input {
+  padding: 12px 14px;
+  font-size: 16px;
+  border: 1.8px solid #ddd;
+  border-radius: 6px;
+  outline-offset: 2px;
+  transition: border-color 0.3s ease;
+}
+
+.forgot-wrapper input:focus,
+.reset-wrapper input:focus {
+  border-color: #3b82f6;
+}
+
+/* Buttons */
+.forgot-wrapper button,
+.reset-wrapper button {
+  padding: 12px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  background-color: #3b82f6;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.forgot-wrapper button:disabled,
+.reset-wrapper button:disabled {
+  background-color: #a5b4fc;
+  cursor: not-allowed;
+}
+
+.forgot-wrapper button:hover:not(:disabled),
+.reset-wrapper button:hover:not(:disabled) {
+  background-color: #2563eb;
+}
+
+/* Messages */
+.success-message,
+.error-message {
+  margin-top: 15px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.success-message {
+  color: #16a34a;
+}
+
+.error-message {
+  color: #dc2626;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .forgot-wrapper,
+  .reset-wrapper {
+    margin: 40px 15px;
+    padding: 20px 15px;
+  }
+}

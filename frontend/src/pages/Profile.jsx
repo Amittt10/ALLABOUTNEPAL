@@ -4,21 +4,14 @@ import { useDropzone } from "react-dropzone";
 import { AuthContext } from "../context/AuthContext";
 import "./Profile.css";
 
-const AdvancedProfile = () => {
+const Profile = () => {
   const { user, setUser } = useContext(AuthContext);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    bio: "",
-    address: "",
-  });
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  // Load user profile on mount or when user changes
+  // Load profile data on mount or when user changes
   useEffect(() => {
     if (!user.email) {
       const token = localStorage.getItem("token");
@@ -29,31 +22,16 @@ const AdvancedProfile = () => {
         })
         .then((res) => {
           setUser(res.data);
-          setFormData({
-            name: res.data.name || "",
-            email: res.data.email || "",
-            phone: res.data.phone || "",
-            bio: res.data.bio || "",
-            address: res.data.address || "",
-          });
           setLoading(false);
         })
         .catch(() => {
           setError("Failed to load profile data.");
           setLoading(false);
         });
-    } else {
-      setFormData({
-        name: user.name || "",
-        email: user.email || "",
-        phone: user.phone || "",
-        bio: user.bio || "",
-        address: user.address || "",
-      });
     }
-  }, [user, setUser]);
+  }, [user.email, setUser]);
 
-  // Drag & drop image upload
+  // Handle image drop
   const onDrop = async (acceptedFiles) => {
     const file = acceptedFiles[0];
     if (!file) return;
@@ -61,26 +39,26 @@ const AdvancedProfile = () => {
     setPreview(URL.createObjectURL(file));
     setMessage("");
     setError("");
+    setLoading(true);
 
     const form = new FormData();
     form.append("photo", file);
     const token = localStorage.getItem("token");
 
     try {
-      const res = await axios.post("http://localhost:3000/api/profile/update-photo", form, {
+      const res = await axios.post("http://localhost:3000/api/profile/update", form, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       });
-      setUser((prev) => ({
-        ...prev,
-        photo: res.data.photo || prev.photo,
-      }));
+      setUser(res.data);
       setMessage("Profile photo updated successfully!");
-    } catch (err) {
+    } catch {
       setError("Error updating profile photo.");
       setPreview(null);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -89,53 +67,19 @@ const AdvancedProfile = () => {
     accept: { "image/*": [] },
   });
 
-  // Handle form field changes
-  const handleChange = (e) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    setMessage("");
-    setError("");
-  };
-
-  // Submit updated profile details (excluding photo)
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setMessage("");
-    setError("");
-
-    try {
-      const token = localStorage.getItem("token");
-      const res = await axios.put(
-        "http://localhost:3000/api/profile/update",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setUser(res.data);
-      setMessage("Profile updated successfully!");
-    } catch (err) {
-      setError("Failed to update profile.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
-    <div className="profile-container advanced-profile">
-      <h2>User Profile</h2>
+    <div className="profile-container">
+      <h2>Your Profile</h2>
 
       {message && <p className="profile-message success">{message}</p>}
       {error && <p className="profile-message error">{error}</p>}
 
       <div
-        className={`profile-photo ${isDragActive ? "drag-active" : ""}`}
+        className={`profile-photo ${isDragActive ? "drag-active" : ""} ${loading ? "disabled" : ""}`}
         {...getRootProps()}
         title="Drag & drop or click to change photo"
       >
-        <input {...getInputProps()} />
+        <input {...getInputProps()} disabled={loading} />
         <img
           src={
             preview ||
@@ -144,64 +88,21 @@ const AdvancedProfile = () => {
           alt="profile"
           className="profile-img"
         />
-        <p className="upload-hint">{isDragActive ? "Drop the image..." : "Click or drag to upload"}</p>
+      
       </div>
 
-      <form className="profile-form" onSubmit={handleSubmit}>
-        <label htmlFor="name">Full Name</label>
-        <input
-          type="text"
-          name="name"
-          id="name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-          disabled={loading}
-          placeholder="Your full name"
-        />
+      <form className="profile-form">
+        <label>Full Name</label>
+        <input type="text" value={user.fullname || ""} disabled />
 
-        <label htmlFor="email">Email (cannot change)</label>
-        <input type="email" id="email" value={formData.email} disabled />
+        <label>Username</label>
+        <input type="text" value={user.username || ""} disabled />
 
-        <label htmlFor="phone">Phone Number</label>
-        <input
-          type="tel"
-          name="phone"
-          id="phone"
-          value={formData.phone}
-          onChange={handleChange}
-          placeholder="Your phone number"
-          disabled={loading}
-        />
-
-        <label htmlFor="bio">Bio</label>
-        <textarea
-          name="bio"
-          id="bio"
-          value={formData.bio}
-          onChange={handleChange}
-          placeholder="Tell us about yourself"
-          disabled={loading}
-          rows={4}
-        />
-
-        <label htmlFor="address">Address</label>
-        <textarea
-          name="address"
-          id="address"
-          value={formData.address}
-          onChange={handleChange}
-          placeholder="Your address"
-          disabled={loading}
-          rows={3}
-        />
-
-        <button type="submit" disabled={loading}>
-          {loading ? "Saving..." : "Save Profile"}
-        </button>
+        <label>Email</label>
+        <input type="email" value={user.email || ""} disabled />
       </form>
     </div>
   );
 };
 
-export default AdvancedProfile;
+export default Profile;

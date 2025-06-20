@@ -69,7 +69,6 @@ const Login = () => {
               Email Address
             </label>
             <div className="input-wrapper">
-              <span className="input-icon">📧</span>
               <input
                 id="email"
                 name="email"
@@ -89,7 +88,6 @@ const Login = () => {
               Password
             </label>
             <div className="input-wrapper">
-              <span className="input-icon">🔒</span>
               <input
                 id="password"
                 name="password"
