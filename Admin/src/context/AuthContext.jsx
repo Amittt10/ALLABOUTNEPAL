@@ -1,35 +1,75 @@
-// src/context/AuthContext.jsx
-import React, { createContext, useState, useEffect } from 'react';
-import { setAuthToken } from '../api/axiosConfig';
+"use client"
 
-export const AuthContext = createContext();
+import { createContext, useState, useEffect, useContext } from "react"
+import { api, setAuthToken } from "../api/axiosConfig"
+
+const AuthContext = createContext()
+
+export const useAuth = () => {
+  const context = useContext(AuthContext)
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider")
+  }
+  return context
+}
 
 export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(localStorage.getItem('adminToken'));
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
-    if (token) {
-      setAuthToken(token);
-    } else {
-      setAuthToken(null);
+    const initAuth = async () => {
+      const token = localStorage.getItem("adminToken")
+      if (token) {
+        try {
+          setAuthToken(token)
+          const response = await api.verifyToken()
+          setUser(response.data.user)
+        } catch (err) {
+          console.error("Token verification failed:", err)
+          localStorage.removeItem("adminToken")
+          setAuthToken(null)
+        }
+      }
+      setLoading(false)
     }
-    setLoading(false);
-  }, [token]);
 
-  const login = (newToken) => {
-    localStorage.setItem('adminToken', newToken);
-    setToken(newToken);
-  };
+    initAuth()
+  }, [])
+
+  const login = async (credentials) => {
+    try {
+      setError(null)
+      const response = await api.login(credentials)
+      const { token, user } = response.data
+
+      setAuthToken(token)
+      setUser(user)
+
+      return { success: true }
+    } catch (err) {
+      const message = err.response?.data?.message || "Login failed"
+      setError(message)
+      return { success: false, error: message }
+    }
+  }
 
   const logout = () => {
-    localStorage.removeItem('adminToken');
-    setToken(null);
-  };
+    setAuthToken(null)
+    setUser(null)
+    setError(null)
+  }
 
-  return (
-    <AuthContext.Provider value={{ token, login, logout, loading }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
+  const value = {
+    user,
+    login,
+    logout,
+    loading,
+    error,
+    isAuthenticated: !!user,
+    isAdmin: user?.role === "admin",
+  }
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+}

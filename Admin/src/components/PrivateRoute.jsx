@@ -1,18 +1,20 @@
-// src/components/PrivateRoute.jsx
-import React, { useContext } from 'react';
-import { Navigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
+"use client"
+import { Navigate } from "react-router-dom"
+import { useAuth } from "../context/AuthContext"
+import LoadingSpinner from "./LoadingSpinner"
 
 const PrivateRoute = ({ children }) => {
-  const { token, loading } = useContext(AuthContext);
+  const { isAuthenticated, loading } = useAuth()
 
-  if (loading) return <p>Loading...</p>;
-
-  if (!token) {
-    return <Navigate to="/login" replace />;
+  if (loading) {
+    return <LoadingSpinner />
   }
 
-  return children;
-};
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />
+  }
 
-export default PrivateRoute;
+  return children
+}
+
+export default PrivateRoute

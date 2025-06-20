@@ -1,14 +1,71 @@
-// src/api/axiosConfig.js
-import axios from 'axios';
+import axios from "axios"
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api"
 
 export const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3000/api',
-});
+  baseURL: API_BASE_URL,
+  timeout: 10000,
+  headers: {
+    "Content-Type": "application/json",
+  },
+})
 
 export const setAuthToken = (token) => {
   if (token) {
-    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`
+    localStorage.setItem("adminToken", token)
   } else {
-    delete axiosInstance.defaults.headers.common['Authorization'];
+    delete axiosInstance.defaults.headers.common["Authorization"]
+    localStorage.removeItem("adminToken")
   }
-};
+}
+
+// Request interceptor
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("adminToken")
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+    return config
+  },
+  (error) => Promise.reject(error),
+)
+
+// Response interceptor
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem("adminToken")
+      window.location.href = "/login"
+    }
+
+    // Handle network errors
+    if (!error.response) {
+      console.error("Network error:", error.message)
+      return Promise.reject(new Error("Network error. Please check your connection."))
+    }
+
+    return Promise.reject(error)
+  },
+)
+
+// API methods
+export const api = {
+  // Auth
+  login: (credentials) => axiosInstance.post("/login", credentials),
+  verifyToken: () => axiosInstance.get("/verify"),
+
+  // Heritage
+  getHeritage: (params = {}) => axiosInstance.get("/heritage", { params }),
+
+  // Admin Heritage
+  getAdminHeritage: (params = {}) => axiosInstance.get("/admin/heritage", { params }),
+  createHeritage: (data) => axiosInstance.post("/admin/heritage", data),
+  updateHeritage: (id, data) => axiosInstance.put(`/admin/heritage/${id}`, data),
+  deleteHeritage: (id) => axiosInstance.delete(`/admin/heritage/${id}`),
+
+  // Stats
+  getStats: () => axiosInstance.get("/admin/stats"),
+}
