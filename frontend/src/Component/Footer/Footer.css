@@ -12,7 +12,7 @@
   margin: auto;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
   gap: 2rem;
 }
 
@@ -32,6 +32,9 @@
 .footer-links ul {
   list-style: none;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .footer-links ul li {
@@ -46,6 +49,13 @@
 
 .footer-links ul li a:hover {
   color: #f57c00;
+}
+
+.footer-contact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .footer-contact p {
