@@ -1,118 +1,161 @@
-/* Container */
+/* Profile.css */
+
+/* Reset box sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body, html, #root {
+  height: 100%;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #fff; /* clean white background */
+  color: #222;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 .profile-container {
   max-width: 480px;
   margin: 3rem auto;
-  padding: 2.5rem 2rem 3rem;
-  background: #fff;
-  border-radius: 14px;
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  text-align: center;
+  padding: 0 1rem;
 }
 
-/* Heading */
 .profile-container h2 {
   font-weight: 700;
-  color: #222;
+  font-size: 2rem;
   margin-bottom: 2rem;
+  text-align: center;
+  color: #111;
+  letter-spacing: 0.02em;
 }
 
-/* Messages */
 .profile-message {
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 0.7rem 1rem;
   font-weight: 600;
+  font-size: 1rem;
+  border-radius: 6px;
+  text-align: center;
+  user-select: text;
 }
 
 .profile-message.success {
-  color: #2a9d8f;
+  background-color: #e6f4ea;
+  color: #2a7a33;
+  border: 1.5px solid #61b15a;
 }
 
 .profile-message.error {
-  color: #e63946;
+  background-color: #fdecea;
+  color: #b3312c;
+  border: 1.5px solid #e07a74;
 }
 
-/* Profile photo container */
 .profile-photo {
-  position: relative;
-  margin: 0 auto 2rem;
-  width: 160px;
-  height: 160px;
+  width: 140px;
+  height: 140px;
+  margin: 0 auto 2rem auto;
   border-radius: 50%;
+  border: 3px solid #4a90e2;
   overflow: hidden;
-  box-shadow: 0 0 12px #2a9d8f44;
-  border: 3px solid #2a9d8f;
   cursor: pointer;
-  transition: box-shadow 0.3s ease;
-  user-select: none;
-  background: #f0f0f0;
+  transition: box-shadow 0.3s ease, transform 0.25s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f9ff;
 }
 
-.profile-photo:hover:not(.disabled),
-.profile-photo.drag-active:not(.disabled) {
-  box-shadow: 0 0 18px #2a9d8fff;
+.profile-photo:hover:not(.disabled) {
+  box-shadow: 0 0 15px 3px rgba(74, 144, 226, 0.6);
+  transform: scale(1.05);
 }
 
-/* Disabled state */
+.profile-photo.drag-active {
+  border-color: #34a853;
+  box-shadow: 0 0 20px 5px rgba(52, 168, 83, 0.7);
+}
+
 .profile-photo.disabled {
+  opacity: 0.65;
   cursor: not-allowed;
-  opacity: 0.7;
   pointer-events: none;
+  box-shadow: none;
+  transform: none !important;
 }
 
-/* Hidden input */
-.profile-photo input {
+.profile-photo input[type="file"] {
   display: none;
 }
 
-/* Profile image */
 .profile-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-/* Upload hint text */
-.upload-hint {
-  position: absolute;
-  bottom: 6px;
-  width: 100%;
-  font-size: 0.85rem;
-  color: #2a9d8f;
-  background: rgba(255, 255, 255, 0.85);
-  padding: 4px 0;
-  font-weight: 600;
+  border-radius: 50%;
   user-select: none;
+  pointer-events: none;
+  transition: transform 0.3s ease;
 }
 
-/* Form styles */
+.profile-photo:hover:not(.disabled) .profile-img {
+  transform: scale(1.08);
+}
+
 .profile-form {
   display: flex;
   flex-direction: column;
-  gap: 1.3rem;
-  text-align: left;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
 }
 
-/* Labels */
 .profile-form label {
   font-weight: 600;
-  color: #444;
-  font-size: 0.9rem;
+  font-size: 1rem;
+  color: #3a3a3a;
+  user-select: text;
 }
 
-/* Disabled inputs for fixed info */
-.profile-form input {
-  padding: 0.7rem 1rem;
-  border-radius: 10px;
-  border: 1.5px solid #ccc;
+.profile-form input[type="text"],
+.profile-form input[type="email"] {
+  padding: 0.6rem 0.9rem;
   font-size: 1rem;
-  color: #555;
-  background-color: #f9f9f9;
-  cursor: not-allowed;
+  border-radius: 8px;
+  border: 1.5px solid #cdd4db;
+  color: #3a3a3a;
+  background-color: #fefefe;
+  cursor: default;
+  user-select: text;
   transition: border-color 0.25s ease;
 }
 
-.profile-form input:disabled {
-  background-color: #f9f9f9;
-  color: #777;
-  border-color: #ddd;
+.profile-form input[type="text"]:disabled,
+.profile-form input[type="email"]:disabled {
+  background-color: #f5f7fa;
+  border-color: #e1e5eb;
+  color: #9098a3;
+}
+
+.profile-form input[type="text"]:focus,
+.profile-form input[type="email"]:focus {
+  outline: none;
+  border-color: #4a90e2;
+  background-color: #fff;
+  box-shadow: 0 0 8px rgba(74, 144, 226, 0.35);
+}
+
+@media (max-width: 520px) {
+  .profile-container {
+    margin: 2rem 1rem;
+  }
+  
+  .profile-photo {
+    width: 120px;
+    height: 120px;
+  }
 }
