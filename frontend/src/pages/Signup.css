@@ -1,105 +1,171 @@
-/* src/pages/UserSignup.css */
+/* Base reset */
+* {
+  box-sizing: border-box;
+}
+
+body, html, #root {
+  height: 100%;
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #f7f9fc;
+}
+
+/* Full page container */
 .signup-page {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  background: #f0f3f5;
-  padding: 1rem;
+  height: 100vh;
 }
 
-.signup-container {
-  background: rgba(255 255 255 / 0.9);
-  border-radius: 12px;
-  padding: 2rem;
-  width: 320px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+/* Outer wrapper to hold both panels */
+.signup-wrapper {
+  width: 720px;
+  height: 380px;
+  box-shadow: 0 6px 20px rgb(0 0 0 / 0.1);
+  display: flex;
+  background: white;
+  border-radius: 6px;
+  overflow: hidden;
 }
 
-.glass-effect {
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255,255,255,0.4);
+/* Left panel with green background and diagonal cut */
+.signup-left-panel {
+  position: relative;
+  width: 260px;
+  background: #0a9254; /* green */
+  color: white;
+  padding: 40px 30px;
+  clip-path: polygon(0 0, 100% 0, 65% 100%, 0% 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
 }
 
-.signup-title {
-  font-size: 1.8rem;
+.signup-left-panel h1 {
+  margin: 0;
+  font-size: 2rem;
   font-weight: 700;
-  margin-bottom: 0.25rem;
-  text-align: center;
-  color: #222;
 }
 
-.signup-subtitle {
+.signup-left-panel p {
+  font-size: 1.1rem;
+  line-height: 1.3;
+  margin: 0;
+}
+
+.signup-left-button {
+  width: fit-content;
+  margin-top: 12px;
+  padding: 8px 20px;
+  font-size: 1rem;
+  border: 1.5px solid white;
+  border-radius: 30px;
+  background: transparent;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.signup-left-button:hover {
+  background-color: rgba(255 255 255 / 0.2);
+}
+
+/* Right panel with form */
+.signup-right-panel {
+  flex-grow: 1;
+  padding: 40px 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #4a4a4a;
+}
+
+.signup-right-panel h2 {
+  margin: 0 0 24px 0;
+  font-weight: 600;
+  font-size: 1.8rem;
+}
+
+.signup-status {
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.status-success {
+  color: #2a7a1a;
+}
+
+.status-error {
+  color: #c82a2a;
+}
+
+.signup-form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
   font-size: 0.95rem;
-  margin-bottom: 1.5rem;
-  text-align: center;
   color: #555;
 }
 
-.signup-form {
-  display: flex;
-  flex-direction: column;
+.required {
+  color: red;
+  margin-left: 2px;
 }
 
 .signup-input {
-  padding: 0.8rem;
-  margin-bottom: 1rem;
-  border-radius: 8px;
-  border: 1px solid #ddd;
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid #ddd;
+  border-radius: 18px;
+  margin-bottom: 20px;
   font-size: 1rem;
+  transition: border-color 0.25s ease;
 }
 
 .signup-input:focus {
   outline: none;
-  border-color: #0077cc;
-  box-shadow: 0 0 4px #0077ccaa;
+  border-color: #0a9254;
 }
 
-.signup-button {
-  background-color: #0077cc;
-  color: white;
-  font-weight: 700;
-  padding: 0.8rem;
-  border: none;
-  border-radius: 8px;
+.signup-submit {
+  width: 100%;
+  padding: 12px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 30px;
+  border: 1.5px solid #0a9254;
+  color: #0a9254;
+  background: transparent;
   cursor: pointer;
-  font-size: 1rem;
+  transition: background-color 0.3s ease;
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 8px;
 }
 
-.signup-button:disabled {
-  background-color: #7ea4cc;
+.signup-submit:hover:not(:disabled) {
+  background-color: #0a9254;
+  color: white;
+}
+
+.signup-submit:disabled {
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
-.signup-status {
-  text-align: center;
-  font-weight: 600;
-  margin-bottom: 1rem;
+/* Loader icon spinning */
+.animate-spin {
+  animation: spin 1s linear infinite;
+  height: 20px;
+  width: 20px;
 }
 
-.status-success {
-  color: green;
-}
-
-.status-error {
-  color: red;
-}
-
-.signup-link {
-  margin-top: 1rem;
-  font-size: 0.9rem;
-  text-align: center;
-  color: #333;
-}
-
-.signup-link a {
-  color: #0077cc;
-  text-decoration: none;
-}
-
-.signup-link a:hover {
-  text-decoration: underline;
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }

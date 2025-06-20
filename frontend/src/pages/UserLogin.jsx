@@ -13,73 +13,75 @@ const UserLogin = () => {
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  setErrorMsg('');
+    e.preventDefault();
+    setLoading(true);
+    setErrorMsg('');
 
-  try {
-    // Step 1: Login & get token
-    const loginRes = await axios.post('http://localhost:3000/api/login', {
-      email,
-      password,
-    });
+    try {
+      const loginRes = await axios.post('http://localhost:3000/api/login', {
+        email,
+        password,
+      });
 
-    const token = loginRes.data.token;
-    localStorage.setItem('token', token); // optional, login() will also do this
+      const token = loginRes.data.token;
+      localStorage.setItem('token', token);
 
-    // Step 2: Fetch full user info with token
-    const profileRes = await axios.get('http://localhost:3000/api/profile', {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+      const profileRes = await axios.get('http://localhost:3000/api/profile', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
-    // Step 3: Save user & token to context
-    login(profileRes.data, token);
-    navigate('/');
-  } catch (err) {
-  console.log('Login error:', err.response?.data || err.message); // ✅ Add this line
-  const message = err.response?.data?.message || 'Login failed.';
-  setErrorMsg(message);
-}
-finally {
-    setLoading(false);
-  }
-};
-
+      login(profileRes.data, token);
+      navigate('/');
+    } catch (err) {
+      console.log('Login error:', err.response?.data || err.message);
+      const message = err.response?.data?.message || 'Login failed.';
+      setErrorMsg(message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="login-page">
-      <div className="login-container glass-effect">
-        <h2 className="login-title">Welcome Back</h2>
-        <p className="login-subtitle">Login to continue</p>
+    <div className="login-wrapper">
+      <div className="login-box">
+        <div className="login-left">
+          <h2>Welcome!</h2>
+          <p>Create your account.<br />For Free!</p>
+          <a href="/register" className="signup-button">Sign Up</a>
+        </div>
 
-        <form onSubmit={handleLogin} className="login-form">
-          {errorMsg && <div className="error-message">{errorMsg}</div>}
+        <div className="login-right">
+          <h3>Login</h3>
 
-          <input
-            type="email"
-            placeholder="Email"
-            className="login-input"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+          <form onSubmit={handleLogin} className="login-form">
+            <label>Username/Email address<span className="required">*</span></label>
+            <input
+              type="text"
+              placeholder="Username or Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
 
-          <input
-            type="password"
-            placeholder="Password"
-            className="login-input"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+            <label>Password<span className="required">*</span></label>
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
 
-          <button type="submit" className="login-button" disabled={loading}>
-            {loading ? 'Logging in...' : 'Login'}
-          </button>
-        </form>
+            {errorMsg && <div className="error-message">{errorMsg}</div>}
 
-        <div className="signup-link">
-          Don’t have an account? <a href="/register">Register</a>
+            <button type="submit" className="login-btn" disabled={loading}>
+              {loading ? 'Signing in...' : 'Sign In'}
+            </button>
+          </form>
+
+          <div className="forgot-link">
+            <a href="/forgot">Forgot password?</a>
+          </div>
         </div>
       </div>
     </div>

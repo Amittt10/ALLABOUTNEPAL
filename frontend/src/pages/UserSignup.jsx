@@ -1,4 +1,3 @@
-// src/pages/UserSignup.jsx
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Loader2 } from "lucide-react";
@@ -45,45 +44,58 @@ const UserSignup = () => {
 
   return (
     <div className="signup-page">
-      <div className="signup-container glass-effect">
-        <h2 className="signup-title">Create Account</h2>
-        <p className="signup-subtitle">Join to explore Nepal's Cultural Heritage</p>
+      <div className="signup-wrapper">
+        <div className="signup-left-panel">
+          <h1>Welcome!</h1>
+          <p>Create your account.<br />For Free!</p>
+          <Link to="/login">
+            <button className="signup-left-button">Login</button>
+          </Link>
+        </div>
 
-        {status && (
-          <p
-            className={`signup-status ${
-              status.startsWith("✅") ? "status-success" : "status-error"
-            }`}
-          >
-            {status}
-          </p>
-        )}
+        <div className="signup-right-panel">
+          <h2>Sign Up</h2>
 
-        <form onSubmit={handleSignup} className="signup-form">
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="signup-input"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="signup-input"
-          />
-          <button type="submit" className="signup-button" disabled={loading}>
-            {loading ? <Loader2 className="animate-spin mr-2 h-4 w-4" /> : "Sign Up"}
-          </button>
-        </form>
+          {status && (
+            <p
+              className={`signup-status ${
+                status.startsWith("✅") ? "status-success" : "status-error"
+              }`}
+            >
+              {status}
+            </p>
+          )}
 
-        <p className="signup-link">
-          Already have an account? <Link to="/login">Login</Link>
-        </p>
+          <form onSubmit={handleSignup} className="signup-form">
+            <label>
+              Email Address <span className="required">*</span>
+              <input
+                type="email"
+                placeholder="Username or Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="signup-input"
+              />
+            </label>
+
+            <label>
+              Password <span className="required">*</span>
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="signup-input"
+              />
+            </label>
+
+            <button type="submit" className="signup-submit" disabled={loading}>
+              {loading ? <Loader2 className="animate-spin" /> : "Sign Up"}
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
