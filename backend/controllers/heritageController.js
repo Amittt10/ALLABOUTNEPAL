@@ -1,6 +1,19 @@
 import { ObjectId } from 'mongodb';
 import fs from 'fs';
 
+export const adminGetHeritageSiteById = async (req, res) => {
+  const heritageCollection = req.db.heritageCollection;
+  const id = req.params.id;
+  try {
+    const site = await heritageCollection.findOne({ _id: new ObjectId(id) });
+    if (!site) return res.status(404).json({ message: 'Heritage site not found' });
+    res.json(site);
+  } catch (err) {
+    console.error('Fetch heritage by ID error:', err);
+    res.status(500).json({ message: 'Failed to fetch heritage site' });
+  }
+};
+
 export const getHeritageSites = async (req, res) => {
   const heritageCollection = req.db.heritageCollection;
   try {
@@ -9,6 +22,19 @@ export const getHeritageSites = async (req, res) => {
   } catch (err) {
     console.error('Fetch heritage error:', err);
     res.status(500).json({ message: 'Failed to fetch heritage sites' });
+  }
+};
+
+export const getHeritageSiteById = async (req, res) => {
+  const heritageCollection = req.db.heritageCollection;
+  const id = req.params.id;
+  try {
+    const site = await heritageCollection.findOne({ _id: new ObjectId(id) });
+    if (!site) return res.status(404).json({ message: 'Heritage site not found' });
+    res.json(site);
+  } catch (err) {
+    console.error('Public fetch heritage by ID error:', err);
+    res.status(500).json({ message: 'Failed to fetch heritage site' });
   }
 };
 

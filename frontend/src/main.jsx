@@ -25,6 +25,7 @@ import Layout from './Component/Layout/Layout';
 import Verify from './pages/Verify';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import HeritageDetails from './pages/HeritageDetails';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -44,6 +45,7 @@ const router = createBrowserRouter(
         <Route path="/verify" element={<Verify />} />
         <Route path="/forgot" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/heritage/:id" element={<HeritageDetails />} />
 
       </Route>
     </>
