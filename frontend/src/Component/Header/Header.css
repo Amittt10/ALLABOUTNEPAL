@@ -1,3 +1,4 @@
+/* Header Styles */
 .header {
   width: 100%;
   background-color: #fff;
@@ -72,17 +73,14 @@
   color: #fff;
   border: none;
 }
-
 .secondary_btn {
   border: 1px solid #f57c00;
   color: #f57c00;
   background: transparent;
 }
-
 .primary_btn:hover {
   background-color: #e65100;
 }
-
 .secondary_btn:hover {
   background-color: #f57c00;
   color: #fff;
@@ -108,28 +106,25 @@
     opacity: 0;
     pointer-events: none;
   }
-
   .navigation.active {
     transform: translateY(0);
     opacity: 1;
     pointer-events: all;
   }
-
   .menu {
     flex-direction: column;
     gap: 1rem;
   }
-
   .nav_btns {
     flex-direction: column;
     margin-top: 1rem;
   }
-
   .mobile_menu {
     display: block;
   }
 }
 
+/* Profile Menu Styles */
 .profile-menu {
   position: relative;
   display: flex;
@@ -172,7 +167,6 @@
   transform: translateY(0);
 }
 
-/* Small arrow on top */
 .dropdown::before {
   content: '';
   position: absolute;
@@ -243,4 +237,142 @@
   font-size: 1.2rem;
 }
 
+/* Calendar dropdown styles */
+.calendar-dropdown {
+  position: relative;
+  margin-left: 1rem;
+}
 
+.calendar-btn {
+  background: #f57c00;
+  color: #fff;
+  padding: 0.4rem 1rem;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.calendar-panel {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #1a1a1a;
+  padding: 1rem;
+  border-radius: 8px;
+  z-index: 2000;
+  min-width: 320px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.calendar-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.calendar-tabs button {
+  flex: 1;
+  padding: 0.4rem;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.3s;
+}
+
+.calendar-tabs button.active {
+  border-color: #f57c00;
+  color: #f57c00;
+}
+
+.calendar-content {
+  background: #fff;
+  padding: 0.5rem;
+  border-radius: 4px;
+  text-align: center;
+  width: 100%;
+}
+
+/* ========================
+   Nepali Calendar Styling
+   ======================== */
+
+.nepali-calendar-container {
+  width: 100%;
+  padding: 0;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
+
+/* Table should span full width and centered */
+.nepali-calendar-container table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* Force uniform column width */
+  text-align: center;
+  background: #fff;
+  color: #333;
+}
+
+/* Header (days like Sun, Mon...) */
+.nepali-calendar-container th {
+  padding: 0.5rem 0.2rem;
+  font-weight: 600;
+  font-size: 0.5rem;
+  background: #f8f8f8;
+  color: #666;
+  border-bottom: 1px solid #eee;
+}
+
+/* Days */
+.nepali-calendar-container td {
+  padding: 0.6rem 0;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #222;
+  border: 1px solid #f5f5f5;
+  transition: background 0.2s, color 0.2s;
+  width: calc(100% / 7); /* Force each cell to take up exactly 1/7th */
+  box-sizing: border-box;
+}
+
+/* Active & current day highlight */
+.nepali-calendar-container td.current-day,
+.nepali-calendar-container td.active,
+.nepali-calendar-container td:hover {
+  background: #f57c00;
+  color: #fff;
+  border-radius: 50%;
+  font-weight: bold;
+  box-shadow: 0 0 4px rgba(245,124,0,0.3);
+}
+
+/* Empty cells (e.g. before starting of the month) */
+.nepali-calendar-container td.empty {
+  background: transparent;
+  border: none;
+  cursor: default;
+}
+
+/* Remove text overflow */
+.nepali-calendar-container td span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  line-height: 2rem;
+  text-align: center;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .nepali-calendar-container th,
+  .nepali-calendar-container td {
+    padding: 0.4rem 0;
+    font-size: 0.8rem;
+  }
+}

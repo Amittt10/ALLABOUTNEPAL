@@ -1,6 +1,10 @@
 import React, { useState, useContext, useRef, useEffect } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import NepaliCalendar from "react-nepali-calendar";
+import * as jss from 'react-jss';
 import "./Header.css";
 import Logo from "../../assets/logo.png";
 
@@ -15,15 +19,24 @@ const nav_links = [
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const [calendarOpen, setCalendarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const { user, logout } = useContext(AuthContext);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [nepaliDate, setNepaliDate] = useState("2081-01-01"); // Valid default Nepali date
+  const [activeTab, setActiveTab] = useState("english");
+
   const profileRef = useRef();
+  const calendarRef = useRef();
   const navigate = useNavigate();
+  const { user, logout } = useContext(AuthContext);
 
   useEffect(() => {
     function handleClickOutside(e) {
       if (profileRef.current && !profileRef.current.contains(e.target)) {
         setProfileMenuOpen(false);
+      }
+      if (calendarRef.current && !calendarRef.current.contains(e.target)) {
+        setCalendarOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -31,15 +44,12 @@ const Header = () => {
   }, []);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
-  const toggleProfileMenu = () => setProfileMenuOpen((p) => !p);
-
   const handleLogout = () => {
     logout();
     setMenuOpen(false);
     setProfileMenuOpen(false);
     navigate("/");
   };
-
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
@@ -73,7 +83,6 @@ const Header = () => {
             ))}
           </ul>
 
-          {/* Search Bar */}
           <form className="search-bar" onSubmit={handleSearch}>
             <input
               type="text"
@@ -86,47 +95,63 @@ const Header = () => {
             </button>
           </form>
 
+          {/* CALENDAR DROPDOWN */}
+          <div className="calendar-dropdown" ref={calendarRef}>
+            <button className="calendar-btn" onClick={() => setCalendarOpen(!calendarOpen)}>
+              📆
+            </button>
+
+            {calendarOpen && (
+              <div className="calendar-panel">
+                <div className="calendar-tabs">
+                  <button
+                    className={activeTab === "english" ? "active" : ""}
+                    onClick={() => setActiveTab("english")}
+                  >
+                    English
+                  </button>
+                  <button
+                    className={activeTab === "nepali" ? "active" : ""}
+                    onClick={() => setActiveTab("nepali")}
+                  >
+                    Nepali
+                  </button>
+                </div>
+
+                <div className="calendar-content">
+                  {activeTab === "english" ? (
+                    <DatePicker inline selected={selectedDate} onChange={setSelectedDate} />
+                  ) : (
+                    <NepaliCalendar value={nepaliDate} onChange={setNepaliDate} />
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+
           <div className="nav_btns">
             {!user.email ? (
               <>
-                <Link
-                  to="/login"
-                  className="btn secondary_btn"
-                  onClick={() => setMenuOpen(false)}
-                >
+                <Link to="/login" className="btn secondary_btn" onClick={() => setMenuOpen(false)}>
                   Login
                 </Link>
-                <Link
-                  to="/register"
-                  className="btn primary_btn"
-                  onClick={() => setMenuOpen(false)}
-                >
+                <Link to="/register" className="btn primary_btn" onClick={() => setMenuOpen(false)}>
                   Register
                 </Link>
               </>
             ) : (
               <div className="profile-menu" ref={profileRef}>
                 <img
-                  src={
-                    user.photo
-                      ? `http://localhost:3000/${user.photo}`
-                      : "/default-avatar.png"
-                  }
+                  src={user.photo ? `http://localhost:3000/${user.photo}` : "/default-avatar.png"}
                   alt="Profile"
                   className="avatar"
-                  onClick={toggleProfileMenu}
+                  onClick={() => setProfileMenuOpen(!profileMenuOpen)}
                 />
                 {profileMenuOpen && (
                   <div className="dropdown">
                     <ul>
                       <li>
-                        <Link
-                          to="/profile"
-                          onClick={() => {
-                            setMenuOpen(false);
-                            setProfileMenuOpen(false);
-                          }}
-                        >
+                        <Link to="/profile" onClick={() => { setMenuOpen(false); setProfileMenuOpen(false); }}>
                           My Profile
                         </Link>
                       </li>
