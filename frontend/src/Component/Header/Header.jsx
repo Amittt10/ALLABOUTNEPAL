@@ -4,40 +4,42 @@ import { AuthContext } from "../../context/AuthContext";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import NepaliCalendar from "react-nepali-calendar";
-import * as jss from 'react-jss';
 import "./Header.css";
 import Logo from "../../assets/logo.png";
-
-const nav_links = [
-  { path: "/", display: "Home" },
-  { path: "/cultural-heritage", display: "Heritage Sites" },
-  { path: "/festivals", display: "Festivals & Events" },
-  { path: "/quiz", display: "Quiz" },
-  { path: "/about", display: "About Us" },
-];
+import { useTranslation } from "react-i18next";
 
 const Header = () => {
+  const { t, i18n } = useTranslation();
+
+  const nav_links = [
+    { path: "/", display: t('nav.home') },
+    { path: "/cultural-heritage", display: t('nav.heritageSites') },
+    { path: "/festivals", display: t('nav.festivalsEvents') },
+    { path: "/quiz", display: t('nav.quiz') },
+    { path: "/about", display: t('nav.aboutUs') },
+  ];
+
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [nepaliDate, setNepaliDate] = useState("2081-01-01"); // Valid default Nepali date
+  const [nepaliDate, setNepaliDate] = useState("2081-01-01");
   const [activeTab, setActiveTab] = useState("english");
+  const [langDropdownOpen, setLangDropdownOpen] = useState(false);
 
   const profileRef = useRef();
   const calendarRef = useRef();
+  const langDropdownRef = useRef();
+
   const navigate = useNavigate();
   const { user, logout } = useContext(AuthContext);
 
   useEffect(() => {
     function handleClickOutside(e) {
-      if (profileRef.current && !profileRef.current.contains(e.target)) {
-        setProfileMenuOpen(false);
-      }
-      if (calendarRef.current && !calendarRef.current.contains(e.target)) {
-        setCalendarOpen(false);
-      }
+      if (profileRef.current && !profileRef.current.contains(e.target)) setProfileMenuOpen(false);
+      if (calendarRef.current && !calendarRef.current.contains(e.target)) setCalendarOpen(false);
+      if (langDropdownRef.current && !langDropdownRef.current.contains(e.target)) setLangDropdownOpen(false);
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -58,12 +60,16 @@ const Header = () => {
       setMenuOpen(false);
     }
   };
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+    setLangDropdownOpen(false);
+  };
 
   return (
     <header className="header">
       <div className="nav_wrapper">
         <div className="logo">
-          <Link to="/">
+          <Link to="/" onClick={() => setMenuOpen(false)}>
             <img src={Logo} alt="Logo" />
           </Link>
         </div>
@@ -83,41 +89,30 @@ const Header = () => {
             ))}
           </ul>
 
+          {/* Search */}
           <form className="search-bar" onSubmit={handleSearch}>
             <input
               type="text"
-              placeholder="Search..."
+              placeholder={t('search.placeholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <button type="submit">
+            <button type="submit" aria-label={t('search.buttonLabel')}>
               <i className="ri-search-line"></i>
             </button>
           </form>
 
-          {/* CALENDAR DROPDOWN */}
+          {/* Calendar */}
           <div className="calendar-dropdown" ref={calendarRef}>
             <button className="calendar-btn" onClick={() => setCalendarOpen(!calendarOpen)}>
               📆
             </button>
-
             {calendarOpen && (
               <div className="calendar-panel">
                 <div className="calendar-tabs">
-                  <button
-                    className={activeTab === "english" ? "active" : ""}
-                    onClick={() => setActiveTab("english")}
-                  >
-                    English
-                  </button>
-                  <button
-                    className={activeTab === "nepali" ? "active" : ""}
-                    onClick={() => setActiveTab("nepali")}
-                  >
-                    Nepali
-                  </button>
+                  <button className={activeTab === "english" ? "active" : ""} onClick={() => setActiveTab("english")}>English</button>
+                  <button className={activeTab === "nepali" ? "active" : ""} onClick={() => setActiveTab("nepali")}>Nepali</button>
                 </div>
-
                 <div className="calendar-content">
                   {activeTab === "english" ? (
                     <DatePicker inline selected={selectedDate} onChange={setSelectedDate} />
@@ -129,14 +124,27 @@ const Header = () => {
             )}
           </div>
 
+          {/* Language switcher */}
+          <div className="language-switcher" ref={langDropdownRef}>
+            <button className="lang-btn" onClick={() => setLangDropdownOpen(!langDropdownOpen)} aria-label="Change Language" title="Change Language">
+              🌐
+            </button>
+            {langDropdownOpen && (
+              <ul className="lang-dropdown">
+                <li><button onClick={() => changeLanguage("en")} className={i18n.language === "en" ? "active" : ""}>English</button></li>
+                <li><button onClick={() => changeLanguage("np")} className={i18n.language === "np" ? "active" : ""}>नेपाली</button></li>
+              </ul>
+            )}
+          </div>
+
           <div className="nav_btns">
             {!user.email ? (
               <>
                 <Link to="/login" className="btn secondary_btn" onClick={() => setMenuOpen(false)}>
-                  Login
+                  {t('auth.login')}
                 </Link>
                 <Link to="/register" className="btn primary_btn" onClick={() => setMenuOpen(false)}>
-                  Register
+                  {t('auth.register')}
                 </Link>
               </>
             ) : (
@@ -152,11 +160,11 @@ const Header = () => {
                     <ul>
                       <li>
                         <Link to="/profile" onClick={() => { setMenuOpen(false); setProfileMenuOpen(false); }}>
-                          My Profile
+                          {t('profile.myProfile')}
                         </Link>
                       </li>
                       <li>
-                        <button onClick={handleLogout}>Logout</button>
+                        <button onClick={handleLogout}>{t('auth.logout')}</button>
                       </li>
                     </ul>
                   </div>

@@ -6,6 +6,8 @@ import {
   Route,
   createRoutesFromElements,
 } from 'react-router-dom';
+import './i18n';
+
 
 import { AuthProvider } from './context/AuthContext';
 
