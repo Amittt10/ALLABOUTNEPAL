@@ -1,201 +1,188 @@
-.heritage-form {
-  max-width: 800px;
-  margin: 0 auto;
+/* Base styles & colors */
+:root {
+  --bg-dark: #1e1e2f;
+  --bg-light: #26263a;
+  --bg-card: #2e2e42;
+  --text-light: #e5e5f7;
+  --text-muted: #9ca3af;
+  --accent: #3b82f6;
+  --danger: #f05454;
+  --radius: 0.75rem;
+  --transition: 0.2s ease-in-out;
+  --shadow: 0 4px 12px rgba(0,0,0,0.15);
+  --font-sans: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.form-header {
-  margin-bottom: 2rem;
-}
-
-.form-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #1f2937;
-  margin-bottom: 0.5rem;
-}
-
-.form-subtitle {
-  color: #6b7280;
-  margin: 0;
-}
-
-.form-container {
-  background: white;
-  border-radius: 1rem;
-  padding: 2rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.form-label {
-  font-weight: 500;
-  color: #374151;
-  font-size: 0.875rem;
-}
-
-.form-input,
-.form-textarea {
-  padding: 0.75rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  transition: all 0.2s;
-  font-family: inherit;
-}
-
-.form-input:focus,
-.form-textarea:focus {
-  outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.form-input-error {
-  border-color: #dc2626;
-}
-
-.form-input-error:focus {
-  border-color: #dc2626;
-  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
-}
-
-.form-textarea {
-  resize: vertical;
-  min-height: 120px;
-}
-
-.form-help {
-  font-size: 0.75rem;
-  color: #9ca3af;
-  text-align: right;
-}
-
-.form-error {
-  color: #dc2626;
-  font-size: 0.875rem;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.form-error-banner {
-  background-color: #fef2f2;
-  color: #dc2626;
+/* Containers */
+.heritage-form-container,
+.heritage-list {
+  max-width: 1200px;
+  margin: 2rem auto;
   padding: 1rem;
-  border-radius: 0.5rem;
-  border: 1px solid #fecaca;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
+  font-family: var(--font-sans);
+  color: var(--text-light);
 }
 
-.error-icon {
-  font-size: 1.25rem;
+.heritage-form-container {
+  background: var(--bg-dark);
+  padding: 2rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
 }
 
-.form-actions {
-  display: flex;
-  gap: 1rem;
-  justify-content: flex-end;
-  padding-top: 1rem;
-  border-top: 1px solid #f3f4f6;
+/* Form titles & labels */
+.heritage-form-title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  color: var(--accent);
+  font-weight: 700;
 }
 
-.form-button {
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  font-size: 1rem;
+.heritage-form label {
+  display: block;
+  margin-top: 1rem;
+  margin-bottom: 0.4rem;
   font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
+}
+
+/* Inputs */
+.heritage-form input,
+.heritage-form textarea {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
   border: none;
+  border-radius: 0.375rem;
+  background-color: var(--bg-light);
+  color: var(--text-light);
+  resize: vertical;
+}
+
+.heritage-form input::placeholder,
+.heritage-form textarea::placeholder {
+  color: var(--text-muted);
+}
+
+/* Buttons */
+.submit-btn,
+button,
+.add-button,
+.retry-button,
+.empty-action {
+  background-color: var(--accent);
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition);
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 120px;
+  gap: 0.5rem;
 }
 
-.form-button.primary {
-  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-  color: white;
+.submit-btn:hover,
+button:hover,
+.add-button:hover,
+.retry-button:hover,
+.empty-action:hover {
+  background-color: #2563eb;
 }
 
-.form-button.primary:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background: var(--bg-light);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
 }
 
-.form-button.primary:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
+table th, table td {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid #3e3e5a;
 }
 
-.form-button.secondary {
-  background-color: #f8fafc;
-  color: #475569;
-  border: 1px solid #e2e8f0;
-}
-
-.form-button.secondary:hover {
-  background-color: #f1f5f9;
-}
-
-.error-state {
-  text-align: center;
-  padding: 3rem 1rem;
-  background: white;
-  border-radius: 1rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.error-state .error-icon {
-  font-size: 4rem;
-  margin-bottom: 1rem;
-}
-
-.error-title {
-  font-size: 1.5rem;
+table th {
+  background-color: var(--bg-card);
+  color: var(--text-light);
   font-weight: 600;
-  color: #1f2937;
+}
+
+table tr:hover {
+  background-color: #2b2b46;
+}
+
+/* Heritage cards */
+.heritage-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.heritage-card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  border: 1px solid #3e3e5a;
+}
+
+.heritage-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.heritage-name {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-light);
+}
+
+.heritage-description {
+  margin: 0.5rem 0 1rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* Error & empty states */
+.error-banner,
+.empty-state {
+  padding: 2rem;
+  border-radius: var(--radius);
+  background: var(--bg-light);
+  box-shadow: var(--shadow);
+  text-align: center;
+  color: var(--text-light);
+}
+
+.error-banner {
+  border: 1px solid var(--danger);
+  color: var(--danger);
+}
+
+.empty-title {
+  font-size: 1.5rem;
   margin-bottom: 0.5rem;
 }
 
-.error-message {
-  color: #6b7280;
-  margin-bottom: 2rem;
+.empty-action {
+  margin-top: 1rem;
 }
 
+/* Responsive */
 @media (max-width: 768px) {
-  .heritage-form {
-    padding: 0 1rem;
+  .heritage-grid {
+    grid-template-columns: 1fr;
   }
-
-  .form-title {
-    font-size: 1.5rem;
-  }
-
-  .form-container {
-    padding: 1.5rem;
-  }
-
-  .form-actions {
-    flex-direction: column-reverse;
-  }
-
-  .form-button {
-    width: 100%;
+  table th, table td {
+    padding: 0.5rem;
+    font-size: 0.875rem;
   }
 }

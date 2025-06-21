@@ -1,185 +1,152 @@
-"use client"
-
-import { useState, useEffect } from "react"
-import { useNavigate, useParams } from "react-router-dom"
-import { axiosInstance } from "../api/axiosConfig"
-import LoadingSpinner from "../components/LoadingSpinner"
-import "./HeritageForm.css"
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { axiosInstance } from '../api/axiosConfig';
+import './HeritageForm.css'; // Assuming you have some styles for the component
 
 const HeritageEdit = () => {
-  const { id } = useParams()
-  const navigate = useNavigate()
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-  })
-  const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
-  const [errors, setErrors] = useState({})
+    name: '',
+    shortDescription: '',
+    history: '',
+    location: '',
+    entryFee: '',
+  });
+  const [imageFile, setImageFile] = useState(null);
+  const [galleryFiles, setGalleryFiles] = useState([]);
 
   useEffect(() => {
     const fetchHeritage = async () => {
       try {
-        const response = await axiosInstance.get("/admin/heritage")
-        const site = response.data.find((item) => item._id === id)
-
+        const res = await axiosInstance.get('/admin/heritage');
+        const site = res.data.find(item => item._id === id);
         if (!site) {
-          setErrors({ fetch: "Heritage site not found" })
-          return
+          alert('Heritage site not found');
+          navigate('/admin/heritage');
+          return;
         }
-
         setFormData({
-          name: site.name || "",
-          description: site.description || "",
-        })
+          name: site.name || '',
+          shortDescription: site.shortDescription || '',
+          history: site.history || '',
+          location: site.location || '',
+          entryFee: site.entryFee || '',
+        });
       } catch (err) {
-        setErrors({ fetch: "Failed to load heritage site" })
-      } finally {
-        setLoading(false)
+        alert('Failed to fetch heritage site');
       }
-    }
-
-    fetchHeritage()
-  }, [id])
+    };
+    fetchHeritage();
+  }, [id, navigate]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: "",
-      }))
-    }
-  }
+  const handleImageChange = (e) => {
+    setImageFile(e.target.files[0]);
+  };
 
-  const validateForm = () => {
-    const newErrors = {}
-
-    if (!formData.name.trim()) {
-      newErrors.name = "Heritage site name is required"
-    } else if (formData.name.trim().length < 3) {
-      newErrors.name = "Name must be at least 3 characters long"
-    }
-
-    if (formData.description.trim().length > 1000) {
-      newErrors.description = "Description must be less than 1000 characters"
-    }
-
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
+  const handleGalleryChange = (e) => {
+    setGalleryFiles(Array.from(e.target.files));
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    if (!validateForm()) {
-      return
-    }
-
-    setSaving(true)
+    const data = new FormData();
+    data.append('name', formData.name);
+    data.append('shortDescription', formData.shortDescription);
+    data.append('history', formData.history);
+    data.append('location', formData.location);
+    data.append('entryFee', formData.entryFee);
+    if (imageFile) data.append('image', imageFile);
+    galleryFiles.forEach(file => data.append('gallery', file));
 
     try {
-      await axiosInstance.put(`/admin/heritage/${id}`, {
-        name: formData.name.trim(),
-        description: formData.description.trim(),
-      })
-      navigate("/admin/heritage")
+      await axiosInstance.put(`/admin/heritage/${id}`, data, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+      alert('Heritage site updated successfully!');
+      navigate('/admin/heritage');
     } catch (err) {
-      setErrors({
-        submit: err.response?.data?.message || "Failed to update heritage site. Please try again.",
-      })
-    } finally {
-      setSaving(false)
+      alert('Failed to update heritage site');
     }
-  }
-
-  if (loading) {
-    return <LoadingSpinner message="Loading heritage site..." />
-  }
-
-  if (errors.fetch) {
-    return (
-      <div className="heritage-form">
-        <div className="error-state">
-          <div className="error-icon">⚠️</div>
-          <h2 className="error-title">Error Loading Site</h2>
-          <p className="error-message">{errors.fetch}</p>
-          <button onClick={() => navigate("/admin/heritage")} className="form-button primary">
-            Back to Heritage Sites
-          </button>
-        </div>
-      </div>
-    )
-  }
+  };
 
   return (
-    <div className="heritage-form">
-      <div className="form-header">
-        <h1 className="form-title">Edit Heritage Site</h1>
-        <p className="form-subtitle">Update heritage site information</p>
-      </div>
+    <div className="heritage-form-container">
+      <h2 className="heritage-form-title">Edit Heritage Site</h2>
+      <form className="heritage-form" onSubmit={handleSubmit}>
+        <label>Name *</label>
+        <input
+          type="text"
+          name="name"
+          placeholder="Enter the heritage site name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+        />
 
-      <div className="form-container">
-        <form onSubmit={handleSubmit} className="form">
-          <div className="form-group">
-            <label htmlFor="name" className="form-label">
-              Site Name *
-            </label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              required
-              className={`form-input ${errors.name ? "form-input-error" : ""}`}
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Enter heritage site name"
-            />
-            {errors.name && <span className="form-error">{errors.name}</span>}
-          </div>
+        <label>Short Description *</label>
+        <textarea
+          name="shortDescription"
+          placeholder="Write a short description"
+          value={formData.shortDescription}
+          onChange={handleChange}
+          required
+        />
 
-          <div className="form-group">
-            <label htmlFor="description" className="form-label">
-              Description
-            </label>
-            <textarea
-              id="description"
-              name="description"
-              rows={6}
-              className={`form-textarea ${errors.description ? "form-input-error" : ""}`}
-              value={formData.description}
-              onChange={handleChange}
-              placeholder="Enter site description (optional)"
-            />
-            <div className="form-help">{formData.description.length}/1000 characters</div>
-            {errors.description && <span className="form-error">{errors.description}</span>}
-          </div>
+        <label>History *</label>
+        <textarea
+          name="history"
+          placeholder="Write the history of the heritage site"
+          value={formData.history}
+          onChange={handleChange}
+          required
+        />
 
-          {errors.submit && (
-            <div className="form-error-banner">
-              <span className="error-icon">⚠️</span>
-              {errors.submit}
-            </div>
-          )}
+        <label>Location *</label>
+        <input
+          type="text"
+          name="location"
+          placeholder="Location (e.g., Lalitpur, Nepal)"
+          value={formData.location}
+          onChange={handleChange}
+          required
+        />
 
-          <div className="form-actions">
-            <button type="button" onClick={() => navigate("/admin/heritage")} className="form-button secondary">
-              Cancel
-            </button>
-            <button type="submit" disabled={saving} className="form-button primary">
-              {saving ? "Saving..." : "Save Changes"}
-            </button>
-          </div>
-        </form>
-      </div>
+        <label>Entry Fee *</label>
+        <input
+          type="text"
+          name="entryFee"
+          placeholder="e.g., NRs. 250 for SAARC, NRs. 1000 for foreigners"
+          value={formData.entryFee}
+          onChange={handleChange}
+          required
+        />
+
+        <label>Main Image</label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+        />
+
+        <label>Gallery Images (Select one or more)</label>
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={handleGalleryChange}
+        />
+
+        <button type="submit" className="submit-btn">Save Changes</button>
+      </form>
     </div>
-  )
-}
+  );
+};
 
-export default HeritageEdit
+export default HeritageEdit;

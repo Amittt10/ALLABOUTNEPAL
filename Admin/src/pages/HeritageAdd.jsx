@@ -1,136 +1,126 @@
-"use client"
-
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { axiosInstance } from "../api/axiosConfig"
-import "./HeritageForm.css"
+import React, { useState } from 'react'
+import { axiosInstance } from '../api/axiosConfig'
+import { useNavigate } from 'react-router-dom'
+import './HeritageForm.css' // your existing CSS file
 
 const HeritageAdd = () => {
   const navigate = useNavigate()
+
   const [formData, setFormData] = useState({
-    name: "",
-    description: "",
+    name: '',
+    shortDescription: '',
+    history: '',
+    location: '',
+    entryFee: '',
   })
-  const [loading, setLoading] = useState(false)
-  const [errors, setErrors] = useState({})
+  const [imageFile, setImageFile] = useState(null)
+  const [galleryFiles, setGalleryFiles] = useState([])
 
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
-
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: "",
-      }))
-    }
+    setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  const validateForm = () => {
-    const newErrors = {}
+  const handleImageChange = (e) => {
+    setImageFile(e.target.files[0])
+  }
 
-    if (!formData.name.trim()) {
-      newErrors.name = "Heritage site name is required"
-    } else if (formData.name.trim().length < 3) {
-      newErrors.name = "Name must be at least 3 characters long"
-    }
-
-    if (formData.description.trim().length > 1000) {
-      newErrors.description = "Description must be less than 1000 characters"
-    }
-
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
+  const handleGalleryChange = (e) => {
+    setGalleryFiles(Array.from(e.target.files))
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    if (!validateForm()) {
-      return
-    }
-
-    setLoading(true)
+    const data = new FormData()
+    data.append('name', formData.name)
+    data.append('shortDescription', formData.shortDescription)
+    data.append('history', formData.history)
+    data.append('location', formData.location)
+    data.append('entryFee', formData.entryFee)
+    if (imageFile) data.append('image', imageFile)
+    galleryFiles.forEach((file) => data.append('gallery', file))
 
     try {
-      await axiosInstance.post("/admin/heritage", {
-        name: formData.name.trim(),
-        description: formData.description.trim(),
+      await axiosInstance.post('/admin/heritage', data, {
+        headers: { 'Content-Type': 'multipart/form-data' },
       })
-      navigate("/admin/heritage")
+      alert('Heritage site added successfully!')
+      navigate('/admin/heritage')
     } catch (err) {
-      setErrors({
-        submit: err.response?.data?.message || "Failed to add heritage site. Please try again.",
-      })
-    } finally {
-      setLoading(false)
+      alert('Error! Please try again.')
     }
   }
 
   return (
-    <div className="heritage-form">
-      <div className="form-header">
-        <h1 className="form-title">Add Heritage Site</h1>
-        <p className="form-subtitle">Create a new heritage site entry</p>
-      </div>
+    <div className="heritage-form-container">
+      <h2 className="heritage-form-title">Add New Heritage Site</h2>
+      <form className="heritage-form" onSubmit={handleSubmit}>
+        <label>Name *</label>
+        <input
+          type="text"
+          name="name"
+          placeholder="Enter the heritage site name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+        />
 
-      <div className="form-container">
-        <form onSubmit={handleSubmit} className="form">
-          <div className="form-group">
-            <label htmlFor="name" className="form-label">
-              Site Name *
-            </label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              required
-              className={`form-input ${errors.name ? "form-input-error" : ""}`}
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Enter heritage site name"
-            />
-            {errors.name && <span className="form-error">{errors.name}</span>}
-          </div>
+        <label>Short Description *</label>
+        <textarea
+          name="shortDescription"
+          placeholder="Write a short description"
+          value={formData.shortDescription}
+          onChange={handleChange}
+          required
+        />
 
-          <div className="form-group">
-            <label htmlFor="description" className="form-label">
-              Description
-            </label>
-            <textarea
-              id="description"
-              name="description"
-              rows={6}
-              className={`form-textarea ${errors.description ? "form-input-error" : ""}`}
-              value={formData.description}
-              onChange={handleChange}
-              placeholder="Enter site description (optional)"
-            />
-            <div className="form-help">{formData.description.length}/1000 characters</div>
-            {errors.description && <span className="form-error">{errors.description}</span>}
-          </div>
+        <label>History *</label>
+        <textarea
+          name="history"
+          placeholder="Write the history of the heritage site"
+          value={formData.history}
+          onChange={handleChange}
+          required
+        />
 
-          {errors.submit && (
-            <div className="form-error-banner">
-              <span className="error-icon">⚠️</span>
-              {errors.submit}
-            </div>
-          )}
+        <label>Location *</label>
+        <input
+          type="text"
+          name="location"
+          placeholder="Location (e.g., Lalitpur, Nepal)"
+          value={formData.location}
+          onChange={handleChange}
+          required
+        />
 
-          <div className="form-actions">
-            <button type="button" onClick={() => navigate("/admin/heritage")} className="form-button secondary">
-              Cancel
-            </button>
-            <button type="submit" disabled={loading} className="form-button primary">
-              {loading ? "Adding..." : "Add Heritage Site"}
-            </button>
-          </div>
-        </form>
-      </div>
+        <label>Entry Fee *</label>
+        <input
+          type="text"
+          name="entryFee"
+          placeholder="e.g., NRs. 250 for SAARC, NRs. 1000 for foreigners"
+          value={formData.entryFee}
+          onChange={handleChange}
+          required
+        />
+
+        <label>Main Image *</label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          required
+        />
+
+        <label>Gallery Images (Select one or more)</label>
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={handleGalleryChange}
+        />
+
+        <button type="submit" className="submit-btn">Add Site</button>
+      </form>
     </div>
   )
 }

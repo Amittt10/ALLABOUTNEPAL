@@ -1,122 +1,74 @@
-"use client"
-
-import { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
-import { axiosInstance } from "../api/axiosConfig"
-import LoadingSpinner from "../components/LoadingSpinner"
-import "./HeritageList.css"
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { axiosInstance } from '../api/axiosConfig';
+import './HeritageList.css'; // Assuming you have some styles for the component
 
 const HeritageList = () => {
-  const [heritage, setHeritage] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState("")
+  const [heritage, setHeritage] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const fetchHeritage = async () => {
     try {
-      setLoading(true)
-      const response = await axiosInstance.get("/admin/heritage")
-      setHeritage(response.data)
-      setError("")
-    } catch (err) {
-      setError("Failed to fetch heritage sites. Please try again.")
-      console.error("Error fetching heritage:", err)
+      const res = await axiosInstance.get('/admin/heritage');
+      setHeritage(res.data);
+    } catch {
+      alert('Failed to fetch heritage sites');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchHeritage()
-  }, [])
+    fetchHeritage();
+  }, []);
 
-  const handleDelete = async (id, name) => {
-    if (!window.confirm(`Are you sure you want to delete "${name}"?`)) {
-      return
-    }
-
+  const handleDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this heritage site?')) return;
     try {
-      await axiosInstance.delete(`/admin/heritage/${id}`)
-      setHeritage(heritage.filter((item) => item._id !== id))
-    } catch (err) {
-      alert("Failed to delete heritage site. Please try again.")
-      console.error("Error deleting heritage:", err)
+      await axiosInstance.delete(`/admin/heritage/${id}`);
+      setHeritage(heritage.filter(item => item._id !== id));
+    } catch {
+      alert('Failed to delete heritage site');
     }
-  }
+  };
 
-  if (loading) {
-    return <LoadingSpinner message="Loading heritage sites..." />
-  }
+  if (loading) return <p>Loading heritage sites...</p>;
 
   return (
-    <div className="heritage-list">
-      <div className="heritage-header">
-        <div>
-          <h1 className="heritage-title">Heritage Sites</h1>
-          <p className="heritage-subtitle">Manage your heritage sites collection</p>
-        </div>
-        <Link to="add" className="add-button">
-          <span className="add-icon">➕</span>
-          Add New Site
-        </Link>
-      </div>
-
-      {error && (
-        <div className="error-banner">
-          <span className="error-icon">⚠️</span>
-          {error}
-          <button onClick={fetchHeritage} className="retry-button">
-            Retry
-          </button>
-        </div>
-      )}
-
+    <div style={{ maxWidth: 700, margin: '2rem auto', color: '#eee', fontFamily: 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif' }}>
+      <h2>Heritage Sites</h2>
+      <Link to="add" style={{ marginBottom: 12, display: 'inline-block', color: '#f0a500', fontWeight: '600' }}>
+        + Add New Heritage Site
+      </Link>
       {heritage.length === 0 ? (
-        <div className="empty-state">
-          <div className="empty-icon">🏛️</div>
-          <h3 className="empty-title">No heritage sites found</h3>
-          <p className="empty-description">Get started by adding your first heritage site</p>
-          <Link to="add" className="empty-action">
-            Add Heritage Site
-          </Link>
-        </div>
+        <p>No heritage sites found.</p>
       ) : (
-        <div className="heritage-grid">
-          {heritage.map((item) => (
-            <div key={item._id} className="heritage-card">
-              <div className="heritage-card-header">
-                <h3 className="heritage-name">{item.name}</h3>
-                <div className="heritage-actions">
-                  <Link to={`edit/${item._id}`} className="action-button edit" title="Edit site">
-                    ✏️
-                  </Link>
-                  <button
-                    onClick={() => handleDelete(item._id, item.name)}
-                    className="action-button delete"
-                    title="Delete site"
-                  >
-                    🗑️
-                  </button>
-                </div>
-              </div>
-
-              {item.description && (
-                <p className="heritage-description">
-                  {item.description.length > 100 ? `${item.description.substring(0, 100)}...` : item.description}
-                </p>
-              )}
-
-              <div className="heritage-meta">
-                <span className="heritage-status">Active</span>
-                <span className="heritage-date">
-                  Added {new Date(item.createdAt || Date.now()).toLocaleDateString()}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Location</th>
+              <th>Entry Fee</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {heritage.map(item => (
+              <tr key={item._id}>
+                <td>{item.name}</td>
+                <td>{item.location}</td>
+                <td>{item.entryFee}</td>
+                <td>
+                  <Link to={`edit/${item._id}`} style={{ marginRight: 10 }}>Edit</Link>
+                  <button onClick={() => handleDelete(item._id)}>Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default HeritageList
+export default HeritageList;

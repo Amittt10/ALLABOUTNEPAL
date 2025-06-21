@@ -20,7 +20,7 @@ export const setAuthToken = (token) => {
   }
 }
 
-// Request interceptor
+// Attach token for every request
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("adminToken")
@@ -32,7 +32,7 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error),
 )
 
-// Response interceptor
+// Handle 401s globally
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -41,7 +41,6 @@ axiosInstance.interceptors.response.use(
       window.location.href = "/login"
     }
 
-    // Handle network errors
     if (!error.response) {
       console.error("Network error:", error.message)
       return Promise.reject(new Error("Network error. Please check your connection."))
@@ -55,7 +54,7 @@ axiosInstance.interceptors.response.use(
 export const api = {
   // Auth
   login: (credentials) => axiosInstance.post("/login", credentials),
-  verifyToken: () => axiosInstance.get("/verify"),
+  verifyToken: () => axiosInstance.get("/verify"), // ✅ matches backend
 
   // Heritage
   getHeritage: (params = {}) => axiosInstance.get("/heritage", { params }),

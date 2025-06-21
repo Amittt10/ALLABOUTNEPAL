@@ -16,11 +16,14 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Allowed origins for CORS (frontend dev servers)
 const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174'];
 
 app.use(cors({
   origin: function(origin, callback) {
+    // allow requests with no origin (like mobile apps or curl)
     if (!origin) return callback(null, true);
+
     if (!allowedOrigins.includes(origin)) {
       return callback(new Error(`CORS: ${origin} not allowed`), false);
     }
@@ -29,13 +32,16 @@ app.use(cors({
   credentials: true,
 }));
 
+// Parse incoming JSON requests
 app.use(express.json());
+
+// Serve uploaded files statically from /uploads
 app.use('/uploads', express.static('uploads'));
 
-// Connect to MongoDB, then setup collections, middleware, routes, and listen
+// Connect to MongoDB, get collections, and then start server & setup middleware/routes
 connectDB()
   .then(({ usersCollection, heritageCollection, festivalCollection }) => {
-    // Middleware to attach DB collections and mail functions to req object
+    // Middleware to attach DB collections and mail functions to req
     app.use((req, res, next) => {
       req.db = { usersCollection, heritageCollection, festivalCollection };
       req.sendVerificationEmail = sendVerificationEmail;
@@ -43,7 +49,7 @@ connectDB()
       next();
     });
 
-    // Routes
+    // Mount API routes
     app.use('/api', authRoutes);
     app.use('/api', profileRoutes);
     app.use('/api', heritageRoutes);
@@ -51,7 +57,7 @@ connectDB()
     app.use('/api/admin', adminRoutes);
     app.use('/api', passwordRoutes);
 
-    // Start server
+    // Start listening on the specified port
     app.listen(PORT, () => {
       console.log(`🚀 Server running at http://localhost:${PORT}`);
     });

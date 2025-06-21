@@ -22,8 +22,8 @@ export const AuthProvider = ({ children }) => {
     const initAuth = async () => {
       const token = localStorage.getItem("adminToken")
       if (token) {
+        setAuthToken(token)
         try {
-          setAuthToken(token)
           const response = await api.verifyToken()
           setUser(response.data.user)
         } catch (err) {
@@ -34,7 +34,6 @@ export const AuthProvider = ({ children }) => {
       }
       setLoading(false)
     }
-
     initAuth()
   }, [])
 
@@ -44,6 +43,8 @@ export const AuthProvider = ({ children }) => {
       const response = await api.login(credentials)
       const { token, user } = response.data
 
+      // ✅ Save token so it persists
+      localStorage.setItem("adminToken", token)
       setAuthToken(token)
       setUser(user)
 
@@ -56,6 +57,8 @@ export const AuthProvider = ({ children }) => {
   }
 
   const logout = () => {
+    // ✅ Remove token
+    localStorage.removeItem("adminToken")
     setAuthToken(null)
     setUser(null)
     setError(null)

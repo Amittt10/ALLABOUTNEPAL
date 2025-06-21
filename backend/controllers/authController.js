@@ -83,3 +83,16 @@ export const verifyEmail = async (req, res) => {
     res.status(500).send("Email verification failed.");
   }
 };
+
+export const verifyToken = async (req, res) => {
+  try {
+    // `req.user` is set by authenticateJWT
+    const { user } = req;
+    if (!user) return res.status(401).json({ message: 'Unauthorized' });
+
+    res.status(200).json({ user }); // return the decoded user data
+  } catch (err) {
+    console.error('Verify token error:', err);
+    res.status(500).json({ error: 'Token verification failed' });
+  }
+};
