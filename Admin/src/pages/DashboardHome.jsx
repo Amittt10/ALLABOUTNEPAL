@@ -10,20 +10,26 @@ const DashboardHome = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const response = await api.getStats()
-        setStats(response.data)
-      } catch (err) {
-        setError("Failed to load dashboard statistics")
-        console.error("Stats error:", err)
-      } finally {
-        setLoading(false)
-      }
+  const fetchStats = async () => {
+    setError(null)
+    try {
+      const response = await api.getStats() // Ensure this is implemented in api.js
+      setStats(response.data)
+    } catch (err) {
+      setError("Failed to load dashboard statistics")
+      console.error("Stats error:", err)
+    } finally {
+      setLoading(false)
     }
+  }
 
+  useEffect(() => {
     fetchStats()
+
+    // Set up periodic updates (every 60 seconds)
+    const interval = setInterval(fetchStats, 60000)
+
+    return () => clearInterval(interval) // cleanup on unmount
   }, [])
 
   if (loading) {
@@ -36,7 +42,7 @@ const DashboardHome = () => {
         <div className="error-icon">⚠️</div>
         <h2>Error Loading Dashboard</h2>
         <p>{error}</p>
-        <button onClick={() => window.location.reload()} className="retry-button">
+        <button onClick={fetchStats} className="retry-button">
           Retry
         </button>
       </div>
@@ -79,6 +85,7 @@ const DashboardHome = () => {
       <div className="dashboard-header">
         <h1 className="dashboard-title">Dashboard Overview</h1>
         <p className="dashboard-subtitle">Welcome to the Heritage Sites Admin Panel</p>
+        <button className="refresh-button" onClick={fetchStats}>🔄 Refresh</button>
       </div>
 
       <div className="stats-grid">
@@ -89,7 +96,11 @@ const DashboardHome = () => {
               <h3 className="stat-value">{stat.value}</h3>
               <p className="stat-title">{stat.title}</p>
               <span
-                className={`stat-change ${stat.change.startsWith("+") ? "positive" : stat.change.startsWith("-") ? "negative" : "neutral"}`}
+                className={`stat-change ${
+                  stat.change.startsWith("+") ? "positive" :
+                  stat.change.startsWith("-") ? "negative" :
+                  "neutral"
+                }`}
               >
                 {stat.change}
               </span>
@@ -116,16 +127,20 @@ const DashboardHome = () => {
         <div className="action-card">
           <h3 className="action-title">Recent Activity</h3>
           <div className="activity-list">
-            {stats?.recentSites?.map((site, index) => (
-              <div key={site._id} className="activity-item">
-                <span className="activity-icon">🏛️</span>
-                <div className="activity-content">
-                  <p className="activity-text">{site.name} was added</p>
-                  <span className="activity-time">{new Date(site.createdAt).toLocaleDateString()}</span>
+            {stats?.recentSites?.length ? (
+              stats.recentSites.map((site) => (
+                <div key={site._id} className="activity-item">
+                  <span className="activity-icon">🏛️</span>
+                  <div className="activity-content">
+                    <p className="activity-text">{site.name} was added</p>
+                    <span className="activity-time">
+                      {new Date(site.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                  <span className={`activity-status status-${site.status}`}>{site.status}</span>
                 </div>
-                <span className={`activity-status status-${site.status}`}>{site.status}</span>
-              </div>
-            )) || (
+              ))
+            ) : (
               <div className="activity-item">
                 <span className="activity-icon">📝</span>
                 <div className="activity-content">

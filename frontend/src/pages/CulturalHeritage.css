@@ -26,6 +26,12 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
+}
+
+.heritage-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transform: translateY(-5px);
 }
 
 .heritage-card img {
@@ -41,105 +47,23 @@
   font-size: 1.1rem;
 }
 
+.heritage-card p {
+  font-size: 0.9rem;
+  color: #555;
+  flex: 1;
+}
+
 .read-more-btn {
-  margin-top: auto;
+  margin-top: 0.5rem;
   background: #f57c00;
   color: white;
   border: none;
   padding: 0.4rem 1rem;
   border-radius: 5px;
   cursor: pointer;
+  transition: background 0.2s;
 }
 
-.heritage-modal {
-  position: fixed;
-  top: 80px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.6);
-  z-index: 2000;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  overflow-y: auto;
-  padding: 2rem 0;
-}
-
-.heritage-modal-content {
-  background: #fff;
-  width: 90%;
-  max-width: 800px;
-  padding: 2rem;
-  border-radius: 12px;
-  position: relative;
-  animation: fadeIn 0.3s ease-in-out;
-}
-
-.close-btn {
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
-  background: #f57c00;
-  color: white;
-  border: none;
-  padding: 0.4rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.gallery-images {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 0.5rem;
-}
-
-.gallery-images img {
-  width: 120px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.gallery-images img:hover {
-  transform: scale(1.05);
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.heritage-modal-content.large {
-  max-width: 950px;
-}
-
-.fullscreen-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.95);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 3000;
-}
-
-.fullscreen-modal img {
-  max-width: 90%;
-  max-height: 90%;
-  border-radius: 8px;
-  box-shadow: 0 0 20px rgba(255,255,255,0.2);
-  cursor: pointer;
+.read-more-btn:hover {
+  background: #e66b00;
 }

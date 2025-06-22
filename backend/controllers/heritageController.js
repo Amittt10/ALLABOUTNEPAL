@@ -15,15 +15,22 @@ const deleteFilesIfExist = (filePaths) => {
 };
 
 export const getHeritageSites = async (req, res) => {
-  const heritageCollection = req.db.heritageCollection;
   try {
-    const heritage = await heritageCollection.find().toArray();
-    res.json(heritage);
-  } catch (err) {
-    console.error('Fetch heritage error:', err);
-    res.status(500).json({ success: false, message: 'Failed to fetch heritage sites' });
+    const { location } = req.query;
+    const filter = location ? { location_en: location } : {};
+    const heritageSites = await req.db.heritageCollection.find(filter).toArray();
+
+    if (heritageSites.length === 0) {
+      return res.status(404).json({ message: `No heritage sites found for ${location}.` });
+    }
+
+    res.status(200).json(heritageSites);
+  } catch (error) {
+    console.error('Error fetching heritage sites:', error);
+    res.status(500).json({ message: "Error fetching heritage sites" });
   }
 };
+
 
 export const getHeritageSiteById = async (req, res) => {
   const heritageCollection = req.db.heritageCollection;

@@ -1,74 +1,59 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import './CulturalHeritage.css';
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { axiosInstance } from "../api/axiosConfig";
+import "./CulturalHeritage.css";
 
 const CulturalHeritage = () => {
+  const location = useLocation();
   const navigate = useNavigate();
-  const { i18n } = useTranslation();
-  const [heritageSites, setHeritageSites] = useState([]);
+  const params = new URLSearchParams(location.search);
+  const selectedLocation = params.get("location");
+
+  const [sites, setSites] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  // console.log("Current language in CulturalHeritage:", i18n.language);
-
 
   useEffect(() => {
-    const fetchHeritageSites = async () => {
+    const fetchSites = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
-        const res = await fetch('http://localhost:3000/api/heritage'); // your backend URL
-        if (!res.ok) throw new Error('Failed to fetch heritage sites');
-        const data = await res.json();
-        setHeritageSites(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+        const res = await axiosInstance.get(
+          `/heritage${selectedLocation ? `?location=${selectedLocation}` : ""}`
+        );
+        setSites(res.data);
+      } catch (error) {
+        console.error(error);
       }
+      setLoading(false);
     };
-    fetchHeritageSites();
-  }, []);
+    fetchSites();
+  }, [selectedLocation]);
 
   if (loading) return <p>Loading heritage sites...</p>;
-  if (error) return <p>Error: {error}</p>;
-
-  // Decide language suffix for fields: 'en' or 'np'
-  const lang = i18n.language || 'en';
+  if (sites.length === 0) return <p>No heritage sites found for {selectedLocation}.</p>;
 
   return (
     <div className="heritage-container">
       <h2 className="heritage-title">
-        {lang === 'np' ? 'नेपालका सांस्कृतिक सम्पदाहरू' : 'Cultural Heritage Sites of Nepal'}
+        {selectedLocation ? `Heritage Sites in ${selectedLocation}` : "All Heritage Sites"}
       </h2>
-
       <div className="heritage-grid">
-        {heritageSites.map((site) => {
-          // Show name and description based on current language, fallback to English if missing
-          const name = site[`name_${lang}`] || site.name_en || 'No Name';
-          const shortDescription =
-            site[`shortDescription_${lang}`]?.substring(0, 100) ||
-            site.shortDescription_en?.substring(0, 100) ||
-            'No description';
-
-          return (
-            <div
-              key={site._id}
-              className="heritage-card"
-              onClick={() => navigate(`/heritage/${site._id}`)}
-              style={{ cursor: 'pointer' }}
-            >
+        {sites.map((site) => (
+          <div
+            key={site._id}
+            className="heritage-card"
+            onClick={() => navigate(`/heritage/${site._id}`)}
+          >
+            {site.image && (
               <img
                 src={`http://localhost:3000/${site.image}`}
-                alt={name}
-                className="heritage-card-image"
+                alt={site.name_en}
               />
-              <h3 className="heritage-card-title">{name}</h3>
-              <p className="heritage-card-description">{shortDescription}</p>
-              <button className="read-more-btn">Read More</button>
-            </div>
-          );
-        })}
+            )}
+            <h3>{site.name_en}</h3>
+            <p>{site.shortDescription_en}</p>
+            <button className="read-more-btn">Read more</button>
+          </div>
+        ))}
       </div>
     </div>
   );
