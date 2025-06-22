@@ -5,14 +5,16 @@ import { api } from '../api/axiosConfig';
 const HeritageAdd = () => {
   const navigate = useNavigate();
 
-  // Form state
-  const [name, setName] = useState('');
-  const [shortDescription, setShortDescription] = useState('');
+  // Multilingual form state
+  const [nameEn, setNameEn] = useState('');
+  const [nameNp, setNameNp] = useState('');
+  const [shortDescriptionEn, setShortDescriptionEn] = useState('');
+  const [shortDescriptionNp, setShortDescriptionNp] = useState('');
   const [history, setHistory] = useState('');
   const [location, setLocation] = useState('');
   const [entryFee, setEntryFee] = useState('');
-  
-  // File inputs state
+
+  // File inputs
   const [imageFile, setImageFile] = useState(null);
   const [galleryFiles, setGalleryFiles] = useState([]);
 
@@ -20,8 +22,10 @@ const HeritageAdd = () => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append('name', name);
-    formData.append('shortDescription', shortDescription);
+    formData.append('name_en', nameEn);
+    formData.append('name_np', nameNp);
+    formData.append('shortDescription_en', shortDescriptionEn);
+    formData.append('shortDescription_np', shortDescriptionNp);
     formData.append('history', history);
     formData.append('location', location);
     formData.append('entryFee', entryFee);
@@ -47,17 +51,31 @@ const HeritageAdd = () => {
     <div style={{ maxWidth: 600, margin: '2rem auto' }}>
       <h2>Add Heritage Site</h2>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
-        <label>Name</label>
+
+        <label>Name (English)</label>
         <input
-          value={name}
-          onChange={e => setName(e.target.value)}
+          value={nameEn}
+          onChange={e => setNameEn(e.target.value)}
           required
         />
 
-        <label>Short Description</label>
+        <label>Name (Nepali)</label>
+        <input
+          value={nameNp}
+          onChange={e => setNameNp(e.target.value)}
+          required
+        />
+
+        <label>Short Description (English)</label>
         <textarea
-          value={shortDescription}
-          onChange={e => setShortDescription(e.target.value)}
+          value={shortDescriptionEn}
+          onChange={e => setShortDescriptionEn(e.target.value)}
+        />
+
+        <label>Short Description (Nepali)</label>
+        <textarea
+          value={shortDescriptionNp}
+          onChange={e => setShortDescriptionNp(e.target.value)}
         />
 
         <label>History</label>

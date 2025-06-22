@@ -1,74 +1,68 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { axiosInstance } from '../api/axiosConfig';
-import './HeritageList.css'; // Assuming you have some styles for the component
+import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { axiosInstance } from '../api/axiosConfig'
+import { useTranslation } from 'react-i18next'
+import './HeritageList.css'
 
 const HeritageList = () => {
-  const [heritage, setHeritage] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  const fetchHeritage = async () => {
-    try {
-      const res = await axiosInstance.get('/admin/heritage');
-      setHeritage(res.data);
-    } catch {
-      alert('Failed to fetch heritage sites');
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { i18n } = useTranslation()
+  const [heritage, setHeritage] = useState([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetchHeritage();
-  }, []);
+    async function fetchHeritage() {
+      try {
+        const { data } = await axiosInstance.get('/admin/heritage')
+        setHeritage(data)
+      } catch (err) {
+        alert('Failed to fetch heritage sites')
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchHeritage()
+  }, []) // <--- No async on the callback itself
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this heritage site?')) return;
+    if (!window.confirm('Delete this heritage site?')) return
     try {
-      await axiosInstance.delete(`/admin/heritage/${id}`);
-      setHeritage(heritage.filter(item => item._id !== id));
+      await axiosInstance.delete(`/admin/heritage/${id}`)
+      setHeritage((prev) => prev.filter((item) => item._id !== id))
     } catch {
-      alert('Failed to delete heritage site');
+      alert('Error deleting')
     }
-  };
+  }
 
-  if (loading) return <p>Loading heritage sites...</p>;
+  if (loading) return <p>Loading heritage sites...</p>
 
   return (
-    <div style={{ maxWidth: 700, margin: '2rem auto', color: '#eee', fontFamily: 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif' }}>
+    <div style={{ maxWidth: 700, margin: '2rem auto', color: '#eee' }}>
       <h2>Heritage Sites</h2>
-      <Link to="add" style={{ marginBottom: 12, display: 'inline-block', color: '#f0a500', fontWeight: '600' }}>
-        + Add New Heritage Site
-      </Link>
-      {heritage.length === 0 ? (
-        <p>No heritage sites found.</p>
-      ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Location</th>
-              <th>Entry Fee</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {heritage.map(item => (
-              <tr key={item._id}>
-                <td>{item.name}</td>
-                <td>{item.location}</td>
-                <td>{item.entryFee}</td>
+      <Link to="add" style={{ color: '#f0a500', fontWeight: '600' }}>+ Add New</Link>
+      <table>
+        <thead>
+          <tr><th>Name</th><th>Location</th><th>Entry Fee</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+          {heritage.map((site) => {
+            const name = site[`name_${i18n.language}`] || site.name_en
+            const location = site[`location_${i18n.language}`] || site.location_en
+            return (
+              <tr key={site._id}>
+                <td>{name}</td>
+                <td>{location}</td>
+                <td>{site.entryFee}</td>
                 <td>
-                  <Link to={`edit/${item._id}`} style={{ marginRight: 10 }}>Edit</Link>
-                  <button onClick={() => handleDelete(item._id)}>Delete</button>
+                  <Link to={`edit/${site._id}`}>Edit</Link>{' '}
+                  <button onClick={() => handleDelete(site._id)}>Delete</button>
                 </td>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+            )
+          })}
+        </tbody>
+      </table>
     </div>
-  );
-};
+  )
+}
 
-export default HeritageList;
+export default HeritageList

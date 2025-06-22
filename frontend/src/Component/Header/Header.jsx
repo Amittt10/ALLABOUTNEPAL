@@ -138,7 +138,7 @@ const Header = () => {
           </div>
 
           <div className="nav_btns">
-            {!user.email ? (
+            {!user?.email ? (
               <>
                 <Link to="/login" className="btn secondary_btn" onClick={() => setMenuOpen(false)}>
                   {t('auth.login')}
