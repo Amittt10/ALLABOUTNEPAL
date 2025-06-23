@@ -16,17 +16,21 @@ const CulturalHeritage = () => {
     const fetchSites = async () => {
       setLoading(true);
       try {
+
+        const params = new URLSearchParams(location.search);
+        const selectedLocation = params.get("location");
         const res = await axiosInstance.get(
           `/heritage${selectedLocation ? `?location=${selectedLocation}` : ""}`
         );
         setSites(res.data);
       } catch (error) {
         console.error(error);
+        setSites([]);
       }
       setLoading(false);
     };
     fetchSites();
-  }, [selectedLocation]);
+  }, [location.search]);
 
   if (loading) return <p>Loading heritage sites...</p>;
   if (sites.length === 0) return <p>No heritage sites found for {selectedLocation}.</p>;
