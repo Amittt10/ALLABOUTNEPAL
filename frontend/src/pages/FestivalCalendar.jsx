@@ -65,17 +65,16 @@ export default function FestivalCalendar() {
 
           <div className="calendar-right">
             <h2>{t("festival.upcoming")}</h2>
-            <div className="festival-cards">
-              {upcomingFestivals.length === 0 && (
+            <div className="festival-list">
+              {upcomingFestivals.length === 0 ? (
                 <p>{t("festival.noUpcoming")}</p>
-              )}
-              {upcomingFestivals.map((festival) => (
-                <div
-                  key={festival._id}
-                  className="festival-card"
-                  onClick={() => handleFestivalClick(festival._id)}
-                >
-                  <div className="festival-thumb-wrapper">
+              ) : (
+                upcomingFestivals.map((festival) => (
+                  <div
+                    key={festival._id}
+                    className="festival-item"
+                    onClick={() => handleFestivalClick(festival._id)}
+                  >
                     <img
                       src={
                         festival.image
@@ -83,13 +82,17 @@ export default function FestivalCalendar() {
                           : "/default-festival.jpg"
                       }
                       alt={festival.name_en}
-                      className="festival-thumb"
+                      className="festival-photo"
                     />
+                    <div className="festival-info">
+                      <span className="festival-name">{festival.name_en}</span>
+                      <span className="festival-date">
+                        {formatDateShort(festival.dateAD)}
+                      </span>
+                    </div>
                   </div>
-                  <h3>{festival.name_en}</h3>
-                  <p>{formatDateShort(festival.dateAD)}</p>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
         </div>

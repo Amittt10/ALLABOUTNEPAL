@@ -52,115 +52,61 @@
   letter-spacing: 0.03em;
 }
 
-/* Festival cards grid with 3 cards per row */
-.festival-cards {
-  margin-top: 1rem;
+/* ✨ Grid layout for festival list ✨ */
+.festival-list {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
+  grid-template-columns: repeat(3, 1fr); /* 3 per row */
+  gap: 1rem;
 }
 
-/* Updated festival card styling */
-.festival-card {
-  background: linear-gradient(145deg, #ffffff, #e0e7ff);
-  border-radius: 15px;
-  box-shadow:
-    6px 6px 12px #b0b8d4,
-    -6px -6px 12px #ffffff;
-  cursor: pointer;
-  padding: 1rem;
+.festival-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  user-select: none;
+  cursor: pointer;
+  padding: 0;             /* remove padding */
+  border-radius: 0;        /* remove border radius */
+  background: transparent; /* no background */
+  box-shadow: none;        /* no shadow */
+  transition: none;        /* no hover effects */
 }
 
-.festival-card:hover {
-  transform: translateY(-6px);
-  box-shadow:
-    10px 10px 20px #9aade8,
-    -10px -10px 20px #ffffff;
-}
-
-/* Thumbnail wrapper with fixed height and rounded corners */
-.festival-thumb-wrapper {
+.festival-photo {
   width: 100%;
-  height: 140px;
-  overflow: hidden;
-  border-radius: 15px;
-  margin-bottom: 0.75rem;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-  background-color: #d9e2ff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Thumbnail image fits container */
-.festival-thumb {
-  width: 100%;
-  height: 100%;
+  max-width: 180px;        /* optional max width for image */
+  height: 120px;
+  border-radius: 8px;      /* optional slight rounding on image itself */
   object-fit: cover;
-  border-radius: 15px;
-  transition: transform 0.3s ease;
+  margin-bottom: 0.5rem;
 }
 
-.festival-card:hover .festival-thumb {
-  transform: scale(1.07);
+.festival-info {
+  text-align: center;
 }
 
-/* Festival title */
-.festival-card h3 {
-  font-size: 1.1rem;
+.festival-name {
+  display: block;
   font-weight: 600;
-  margin: 0 0 0.4rem;
   color: #1a237e;
-  text-align: center;
-  min-height: 48px; /* to keep consistent card height */
+  margin-bottom: 0.25rem;
 }
 
-/* Date text */
-.festival-card p {
-  font-size: 0.95rem;
+.festival-date {
+  display: block;
   color: #3949ab;
-  margin: 0;
+  font-size: 0.9rem;
   font-weight: 500;
-  letter-spacing: 0.02em;
-}
-
-/* Error and loading text */
-.error {
-  color: red;
-  font-weight: 600;
-  text-align: center;
-  margin: 2rem 0;
 }
 
 /* Responsive tweaks */
 @media (max-width: 920px) {
-  .calendar-content {
-    flex-direction: column;
-    align-items: center;
-  }
-  .calendar-left {
-    flex: 0 0 auto;
-    width: 100%;
-    max-width: 350px;
-    margin-bottom: 2rem;
-  }
-  .calendar-right {
-    width: 100%;
-    max-width: 720px;
-  }
-  .festival-cards {
+  .festival-list {
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.2rem;
   }
 }
 
 @media (max-width: 540px) {
-  .festival-cards {
+  .festival-list {
     grid-template-columns: 1fr;
   }
 }
