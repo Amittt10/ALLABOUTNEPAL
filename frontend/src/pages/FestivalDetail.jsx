@@ -1,79 +1,62 @@
+// src/pages/FestivalDetail.jsx
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import festivalsData from "../data/festivalsData";
+import { useParams } from "react-router-dom";
+import { axiosInstance } from "../api/axiosConfig";
+import { useTranslation } from "react-i18next";
 import "./FestivalDetails.css";
 
 export default function FestivalDetail() {
-  const { slug } = useParams();
-  const navigate = useNavigate();
-
+  const { id } = useParams();
+  const { i18n, t } = useTranslation();
   const [festival, setFestival] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Load festival data from static festivalsData.js by slug
-    if (slug && festivalsData[slug]) {
-      setFestival(festivalsData[slug]);
-    } else {
-      setFestival(null);
-    }
-  }, [slug]);
+    const fetchFestival = async () => {
+      try {
+        const { data } = await axiosInstance.get(`/festivals/${id}`);
+        setFestival(data);
+      } catch (error) {
+        console.error("Error fetching festival:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchFestival();
+  }, [id]);
 
-  const formatDate = (dateStr) => {
-    if (!dateStr) return "";
-    const d = new Date(dateStr);
-    return d.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
+  if (loading) return <div className="loading">Loading festival details…</div>;
+  if (!festival) return <div className="error">Festival not found.</div>;
 
-  if (!festival) {
-    return (
-      <div className="festival-detail-page">
-        <button className="back-button" onClick={() => navigate(-1)}>
-          &larr; Back
-        </button>
-        <p>Festival not found.</p>
-      </div>
-    );
-  }
+  // Language-specific content
+  const title = i18n.language === "np" ? festival.name_np : festival.name_en;
+  const description = i18n.language === "np" ? festival.description_np : festival.description_en;
+  const significance = i18n.language === "np" ? festival.significance_np : festival.significance_en;
+  const location = i18n.language === "np" ? festival.location_np : festival.location_en;
 
   return (
-    <div className="festival-detail-page">
-      <button className="back-button" onClick={() => navigate(-1)}>
-        &larr; Back
-      </button>
+    <section className="festival-detail-container">
+      <img
+        src={`http://localhost:3000/${festival.image}`}
+        alt={title}
+        className="festival-detail-image"
+      />
 
-      <div className="festival-detail-card">
-        <img
-          src={festival.image}
-          alt={festival.name_en}
-          className="festival-detail-image"
-        />
-        <h1 className="festival-detail-title">{festival.name_en}</h1>
-        <p className="festival-detail-date">{formatDate(festival.dateAD)}</p>
+      <h1 className="festival-detail-title">{title}</h1>
 
-        <div className="festival-detail-section">
-          <h3>Description</h3>
-          <p>{festival.description_en}</p>
-        </div>
-
-        <div className="festival-detail-section">
-          <h3>Significance</h3>
-          <p>{festival.significance_en}</p>
-        </div>
-
-        <div className="festival-detail-section">
-          <h3>Location</h3>
-          <p>{festival.location_en}</p>
-        </div>
-
-        <div className="festival-detail-section">
-          <h3>Category</h3>
-          <p>{festival.category}</p>
-        </div>
+      <div className="festival-detail-meta">
+        <span className="festival-detail-date">
+          📅 {festival.dateBS}{" "}
+          {festival.dateAD && `(${new Date(festival.dateAD).toDateString()})`}
+        </span>
+        <span className="festival-detail-location">📍 {location}</span>
       </div>
-    </div>
+
+      <h2 className="festival-detail-heading">{t("Description")}</h2>
+      <p className="festival-detail-paragraph">{description}</p>
+
+      <h2 className="festival-detail-heading">{t("Significance")}</h2>
+      <p className="festival-detail-paragraph">{significance}</p>
+    </section>
   );
 }

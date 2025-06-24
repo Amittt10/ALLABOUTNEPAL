@@ -238,93 +238,91 @@
   z-index: 9999;
 }
 
-/* Left side - 2x2 grid for festivals */
+/* Left side grid for festivals */
 .mega-menu-left {
-  flex: 1 1 65%;
-  padding-right: 1.5rem;
-  max-height: none;
-  overflow: visible;
+  flex: 0 0 65%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, auto);
-  gap: 1rem 2rem;
-  align-items: center;
+  grid-auto-rows: auto;
+  gap: 1.5rem 2rem;
+  padding-right: 1.5rem;
+  min-width: 0;
 }
 
-/* Remove heavy card styling from list items */
+/* Festival items */
 .mega-menu-left ul {
   list-style: none;
   padding: 0;
   margin: 0;
-  display: contents; /* So li's become grid items */
+  display: contents; /* allow li to become grid items */
 }
 
-/* Festival list items as flex rows */
-.mega-menu-left ul li {
-  background: none;
-  box-shadow: none;
-  padding: 0;
-  cursor: pointer;
+/* Festival link - vertical layout */
+.festival-dropdown-link {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  border-radius: 0;
-  height: auto;
-  width: auto;
-  transition: background-color 0.2s ease;
-  text-align: left;
+  flex-direction: column;
+  align-items: center;    /* center horizontally */
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  gap: 0.5rem;
   user-select: none;
+  width: 100%;
+  padding: 0.5rem 0;
+  transition: color 0.3s ease;
 }
 
-.mega-menu-left ul li:hover {
-  background-color: #f0f0f0;
-  border-radius: 4px;
+.festival-dropdown-link:hover {
+  color: #007bff;
 }
 
 /* Festival thumbnail */
 .festival-thumb {
-  width: 50px;
-  height: 50px;
-  border-radius: 8px; /* Or 50% for circle */
+  width: 200px;
+  height: 130px;
   object-fit: cover;
-  margin: 0;
+  border-radius: 14px;
+  user-select: none;
   pointer-events: none;
-  box-shadow: none;
+  margin: 0;
 }
 
-/* Festival title text */
-.mega-menu-left ul li span.festival-title {
-  font-weight: 600;
+/* Festival title */
+.festival-dropdown-link span {
+  font-weight: 400;
   font-size: 1.1rem;
   color: #333;
+  margin: 0;
+  padding: 0;
+  width: 100%;
   user-select: none;
 }
 
-/* Right side simplified — no container background, padding, or shadow */
+/* Right side: thumbnail + buttons */
 .mega-menu-right {
   flex: 0 0 35%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem; /* smaller gap for tighter layout */
+  gap: 1rem;
   background: none;
-  padding: 0;
+  padding-right: 1.5rem;
   border-radius: 0;
   box-shadow: none;
 }
 
-/* Rectangle thumbnail */
+/* Right side image */
 .mega-menu-right img {
   width: 100%;
   height: 140px;
   object-fit: cover;
-  border-radius: 14px; /* keep subtle rounding on image */
-  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.1); /* keep subtle shadow on image */
+  border-radius: 14px;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.1);
   user-select: none;
   pointer-events: none;
 }
 
-/* Buttons container - single row */
+/* Buttons container */
 .mega-menu-buttons {
   display: flex;
   gap: 1rem;
@@ -332,7 +330,7 @@
   justify-content: center;
 }
 
-/* Buttons styling */
+/* Buttons style */
 .mega-menu-buttons button {
   flex: 1;
   padding: 0.6rem 0;
@@ -340,7 +338,7 @@
   border: none;
   border-radius: 14px;
   font-weight: 600;
-  font-size: 0.75rem;  /* slightly bigger font for better readability */
+  font-size: 0.75rem;
   color: white;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -356,8 +354,23 @@
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+  .mega-menu {
+    width: 100vw;
+    left: 0;
+    transform: none;
+    flex-direction: column;
+    padding: 1.5rem;
+    border-radius: 0;
+  }
+  .mega-menu-left {
+    grid-template-columns: repeat(2, 1fr);
+    padding-right: 0;
+    gap: 1rem;
+  }
   .mega-menu-right {
-    padding: 0;
+    flex: none;
+    width: 100%;
+    margin-top: 1rem;
   }
   .mega-menu-buttons {
     flex-direction: column;
