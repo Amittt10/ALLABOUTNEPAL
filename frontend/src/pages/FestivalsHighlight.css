@@ -1,78 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+
 .festivals-highlight-container {
   max-width: 1200px;
   margin: 2rem auto;
   padding: 0 1rem;
+  font-family: 'Poppins', sans-serif;
+  color: #222;
 }
 
 .page-title {
-  font-size: 2.5rem;
-  font-weight: 700;
+  font-size: 2.2rem;
+  font-weight: 300;
   text-align: center;
   margin-bottom: 2rem;
   color: #222;
 }
 
-.festivals-grid {
+/* ==================== MASONRY GRID ==================== */
+.masonry {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-auto-rows: 200px; /* baseline row height */
+  grid-auto-flow: dense;
+  grid-gap: 1rem;
 }
 
-.festival-card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-  overflow: hidden;
+/* Base item styles */
+.masonry-item {
+  position: relative;
   cursor: pointer;
-  display: flex;
-  flex-direction: column;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  outline: none;
 }
 
-.festival-card:focus,
-.festival-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
+.masonry-item:hover {
+  transform: scale(1.03);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.2);
 }
 
-.festival-image {
+/* Random sizes — use JS to add one of these classes per item */
+.masonry-item.tall {
+  grid-row: span 2;
+}
+.masonry-item.wide {
+  grid-column: span 2;
+}
+.masonry-item.big {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+/* Image inside masonry items */
+.masonry-image {
   width: 100%;
-  height: 180px;
+  height: 100%;
   object-fit: cover;
+  border-radius: 12px;
   user-select: none;
+  display: block;
 }
 
-.festival-info {
-  padding: 1rem 1.25rem 1.5rem;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
+/* ==================== OVERLAY ==================== */
+.masonry-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 0.8rem;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.7),
+    rgba(0, 0, 0, 0.0)
+  );
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.7);
+  opacity: 1;
+  transition: opacity 0.3s ease;
 }
 
-.festival-name {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin: 0 0 0.5rem 0;
-  color: #007bff;
+.masonry-item:hover .masonry-overlay {
+  opacity: 1;
 }
 
-.festival-date {
-  font-size: 0.9rem;
-  color: #666;
-  margin: 0 0 0.75rem 0;
+.masonry-overlay h2 {
+  font-size: 1rem;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
 }
 
-.festival-desc {
-  font-size: 0.95rem;
-  color: #444;
-  flex-grow: 1;
+.masonry-overlay span {
+  font-size: 0.85rem;
+  opacity: 0.9;
 }
 
-.loading,
-.error {
-  text-align: center;
-  font-size: 1.2rem;
-  margin-top: 3rem;
-  color: #555;
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 900px) {
+  .masonry {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+  .page-title {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .masonry {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
 }

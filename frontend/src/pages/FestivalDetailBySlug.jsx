@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import festivalsData from "../data/festivalsData";
@@ -9,15 +9,7 @@ export default function FestivalDetailBySlug() {
   const navigate = useNavigate();
   const { i18n, t } = useTranslation();
 
-  const [festival, setFestival] = useState(null);
-
-  useEffect(() => {
-    if (slug && festivalsData[slug]) {
-      setFestival(festivalsData[slug]);
-    } else {
-      setFestival(null);
-    }
-  }, [slug]);
+  const festival = festivalsData[slug];
 
   const formatDate = (dateStr) => {
     if (!dateStr) return "";
@@ -38,7 +30,7 @@ export default function FestivalDetailBySlug() {
     );
   }
 
-  const isNepali = i18n.language === "ne";
+  const isNepali = i18n.language === "np";
 
   return (
     <div className="festival-detail-page">
