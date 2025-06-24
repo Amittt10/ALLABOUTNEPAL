@@ -32,6 +32,7 @@ import FestivalDetailBySlug from "./pages/FestivalDetailBySlug";
 import FestivalDetailById from "./pages/FestivalDetailById";
 import FestivalsHighlight from './pages/FestivalsHighlight';
 
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -49,13 +50,16 @@ const router = createBrowserRouter(
         <Route path="/festivals/:slug" element={<FestivalDetailBySlug />} />
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/about" element={<Aboutus />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/search" element={<SearchResults />} />
+        <Route path="/profile" element={<Profile />} />        
         <Route path="/verify" element={<Verify />} />
         <Route path="/forgot" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/heritage/:id" element={<HeritageDetails />} />
         <Route path="/festivals-highlight" element={<FestivalsHighlight />} />
+
+         {/* ✅ Search and detail routes */}
+          <Route path="/search" element={<SearchResults />} />
+
 
       </Route>
     </>

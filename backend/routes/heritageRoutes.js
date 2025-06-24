@@ -9,4 +9,20 @@ router.get('/heritage', getHeritageSites);
 // Get a single heritage site by ID
 router.get('/heritage/:id', getHeritageSiteById);
 
+// Fetch heritage site by name_en
+router.get('/heritage/by-name/:name', async (req, res) => {
+  try {
+    const { heritageCollection } = req.db;
+    const name = decodeURIComponent(req.params.name);
+    const heritageSite = await heritageCollection.findOne({ name_en: name });
+    if (!heritageSite) {
+      return res.status(404).json({ message: 'Heritage site not found' });
+    }
+    res.json(heritageSite);
+  } catch (error) {
+    console.error('Error fetching heritage site by name:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 export default router;

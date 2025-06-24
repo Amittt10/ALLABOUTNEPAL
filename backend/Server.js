@@ -10,6 +10,7 @@ import heritageRoutes from './routes/heritageRoutes.js';
 import festivalRoutes from './routes/festivalRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import passwordRoutes from './routes/passwordRoutes.js';
+import searchRoutes from './routes/searchRoutes.js';
 
 dotenv.config();
 
@@ -56,6 +57,7 @@ connectDB()
     app.use('/api', festivalRoutes);
     app.use('/api/admin', adminRoutes);
     app.use('/api', passwordRoutes);
+    app.use('/api', searchRoutes);
 
     // Start listening on the specified port
     app.listen(PORT, () => {
