@@ -10,12 +10,22 @@ import {
   adminGetHeritageSiteById
 } from '../controllers/heritageController.js';
 
-import { getStats, verifyUser } from '../controllers/statsController.js';
+import {
+  adminAddFestival,
+  adminUpdateFestival,
+  adminDeleteFestival
+} from '../controllers/festivalController.js';
+
+import { 
+  getStats, 
+  verifyUser 
+} from '../controllers/statsController.js';
+
 import { authenticateJWT, authorizeAdmin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-// Multer storage setup
+// Multer storage setup for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const dir = './uploads';
@@ -30,15 +40,16 @@ const storage = multer.diskStorage({
     cb(null, `${uniqueSuffix}-${sanitizedOriginalName}`);
   },
 });
+
 const upload = multer({ storage });
 
-// Protect all routes with JWT and admin role
+// Protect all routes with authentication and admin authorization
 router.use(authenticateJWT);
 router.use(authorizeAdmin);
 
 // Heritage CRUD routes
 router.get('/heritage', adminGetHeritageSites);
-router.get('/heritage/:id', adminGetHeritageSiteById); // <-- NEW: get by ID
+router.get('/heritage/:id', adminGetHeritageSiteById);
 
 router.post(
   '/heritage',
@@ -59,6 +70,21 @@ router.put(
 );
 
 router.delete('/heritage/:id', adminDeleteHeritageSite);
+
+// Festival admin routes
+router.post(
+  '/festivals',
+  upload.single('image'), // festival image upload single
+  adminAddFestival
+);
+
+router.put(
+  '/festivals/:id',
+  upload.single('image'),
+  adminUpdateFestival
+);
+
+router.delete('/festivals/:id', adminDeleteFestival);
 
 // Stats & verify routes
 router.get('/stats', getStats);

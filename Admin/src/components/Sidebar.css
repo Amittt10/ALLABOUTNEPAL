@@ -133,3 +133,10 @@
     display: block;
   }
 }
+
+.sidebar-link:focus,
+.sidebar-close:focus,
+.sidebar-logout:focus {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+}

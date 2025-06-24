@@ -15,7 +15,7 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true)  // loading while verifying token
   const [error, setError] = useState(null)
 
   useEffect(() => {
@@ -24,15 +24,23 @@ export const AuthProvider = ({ children }) => {
       if (token) {
         setAuthToken(token)
         try {
+          console.log("Verifying token...")
           const response = await api.verifyToken()
+          console.log("Token verification succeeded:", response.data)
           setUser(response.data.user)
+          setError(null)
         } catch (err) {
           console.error("Token verification failed:", err)
           localStorage.removeItem("adminToken")
           setAuthToken(null)
+          setUser(null)
+          setError("Session expired, please login again.")
         }
+      } else {
+        console.log("No token found in localStorage")
+        setUser(null)
       }
-      setLoading(false)
+      setLoading(false) // always set loading false when done
     }
     initAuth()
   }, [])
@@ -43,7 +51,6 @@ export const AuthProvider = ({ children }) => {
       const response = await api.login(credentials)
       const { token, user } = response.data
 
-      // ✅ Save token so it persists
       localStorage.setItem("adminToken", token)
       setAuthToken(token)
       setUser(user)
@@ -57,7 +64,6 @@ export const AuthProvider = ({ children }) => {
   }
 
   const logout = () => {
-    // ✅ Remove token
     localStorage.removeItem("adminToken")
     setAuthToken(null)
     setUser(null)

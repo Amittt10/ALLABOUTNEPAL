@@ -5,9 +5,10 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api"
 export const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000,
-  // Removed global "Content-Type" header to allow axios/browser to set it dynamically
+  // No global Content-Type header here, axios sets it automatically
 });
 
+// Manage token in headers and localStorage
 export const setAuthToken = (token) => {
   if (token) {
     axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -18,7 +19,7 @@ export const setAuthToken = (token) => {
   }
 };
 
-// Attach token for every request
+// Attach token to every request automatically
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("adminToken");
@@ -30,7 +31,7 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Handle 401s globally
+// Handle 401 errors globally
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -48,34 +49,39 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-// API methods
+// Exported api object with all your API methods
 export const api = {
   // Auth
   login: (credentials) => axiosInstance.post("/login", credentials),
   verifyToken: () => axiosInstance.get("/verify"),
 
+  // Stats (needed by DashboardHome.jsx)
+  getStats: () => axiosInstance.get("/admin/stats"),
+
   // Heritage
   getHeritage: (params = {}) => axiosInstance.get("/heritage", { params }),
-
-  // Admin Heritage
   getAdminHeritage: (params = {}) => axiosInstance.get("/admin/heritage", { params }),
   getAdminHeritageById: (id) => axiosInstance.get(`/admin/heritage/${id}`),
-
   createHeritage: (data) =>
     axiosInstance.post("/admin/heritage", data, {
       headers: data instanceof FormData ? { "Content-Type": "multipart/form-data" } : {},
     }),
-
- updateHeritage: (id, data) =>
-  axiosInstance.put(`/admin/heritage/${id}`, data, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  }),
-
-
+  updateHeritage: (id, data) =>
+    axiosInstance.put(`/admin/heritage/${id}`, data, {
+      headers: data instanceof FormData ? { "Content-Type": "multipart/form-data" } : {},
+    }),
   deleteHeritage: (id) => axiosInstance.delete(`/admin/heritage/${id}`),
 
-  // Stats
-  getStats: () => axiosInstance.get("/admin/stats"),
+  // Festivals
+  fetchFestivals: () => axiosInstance.get("/festivals"),
+  getFestivalById: (id) => axiosInstance.get(`/festivals/${id}`),
+  createFestival: (data) =>
+    axiosInstance.post("/admin/festivals", data, {
+      headers: data instanceof FormData ? { "Content-Type": "multipart/form-data" } : {},
+    }),
+  updateFestival: (id, data) =>
+    axiosInstance.put(`/admin/festivals/${id}`, data, {
+      headers: data instanceof FormData ? { "Content-Type": "multipart/form-data" } : {},
+    }),
+  deleteFestival: (id) => axiosInstance.delete(`/admin/festivals/${id}`),
 };

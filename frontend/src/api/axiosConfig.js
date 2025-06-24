@@ -12,5 +12,13 @@ export const axiosInstance = axios.create({
 
 export const api = {
   getHeritageSiteById: (id) => axiosInstance.get(`/heritage/${id}`),
-  // Add any other public endpoints your frontend needs
+
+  // Festival APIs:
+  getFestivals: () => axiosInstance.get("/festivals"),
+  getFestivalById: (id) => axiosInstance.get(`/festivals/${id}`),
+  
+  // For admin panel (if needed)
+  addFestival: (data) => axiosInstance.post("/festivals", data),
+  updateFestival: (id, data) => axiosInstance.put(`/festivals/${id}`, data),
+  deleteFestival: (id) => axiosInstance.delete(`/festivals/${id}`),
 };

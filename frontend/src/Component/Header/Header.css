@@ -9,118 +9,83 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   padding: 0.5rem 1rem;
 }
-
 .nav_wrapper {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-
-/* Logo */
 .logo img {
   height: 50px;
   cursor: pointer;
 }
-
-/* Navigation container */
 .navigation {
   display: flex;
   align-items: center;
   gap: 1.5rem;
 }
-
 .navigation.active {
-  display: flex;
   flex-direction: column;
 }
-
-/* Menu list */
 .menu {
   list-style: none;
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin: 0;
   padding: 0;
+  margin: 0;
 }
-
 .nav_item a,
 .dropdown-toggle {
   color: #333;
-  text-decoration: none;
   padding: 0.5rem;
-  transition: color 0.3s ease;
-}
-.nav_item a {
-  color: #333;
-  padding: 0.5rem;
+  cursor: pointer;
   text-decoration: none;
   transition: color 0.3s ease;
+  user-select: none;
 }
-
-
 .nav_item a:hover {
   color: #007bff;
   text-decoration: underline;
   text-underline-offset: 4px;
 }
-
-
 .active_link {
   color: #007bff;
   text-decoration: underline;
   text-underline-offset: 4px;
   text-decoration-thickness: 2px;
-  font-weight: normal;
 }
-
-
-
-/* Dropdowns */
+/* Dropdown base */
 .dropdown {
   position: relative;
 }
-
-.dropdown-toggle {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
+/* Center dropdown horizontally below toggle */
+.centered-dropdown {
+  position: absolute !important;
+  top: 100% !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
   background: white;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   padding: 0.5rem 0;
   min-width: 160px;
-  z-index: 999;
-  display: none;
-}
-
-.dropdown:hover .dropdown-menu {
-  display: block;
-}
-
-.dropdown-menu li {
+  z-index: 9999;
   list-style: none;
+  max-height: none !important;
+  overflow-y: visible !important;
 }
-
+/* Dropdown menu items */
 .dropdown-menu li a {
   padding: 0.5rem 1rem;
   color: #333;
   text-decoration: none;
   display: block;
+  user-select: none;
 }
-
 .dropdown-menu li a:hover {
   background: #f0f0f0;
   border-radius: 4px;
 }
-
 /* Search bar */
 .search-bar {
   position: relative;
@@ -129,9 +94,7 @@
   background: #f7f7f7;
   padding: 0.25rem 0.5rem;
   border-radius: 999px;
-  margin-left: 1rem;
 }
-
 .search-bar input {
   border: none;
   background: none;
@@ -139,189 +102,97 @@
   width: 140px;
   outline: none;
 }
-
 .search-bar button {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0;
 }
-
-/* Calendar dropdown */
-.calendar-dropdown {
-  position: relative;
-  margin-left: 1rem;
-}
-
-.calendar-btn {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-}
-
-.calendar-panel {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background: white;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  border-radius: 8px;
-  padding: 0.5rem;
-  min-width: 280px;
-  z-index: 999;
-}
-
-.calendar-tabs {
-  display: flex;
-  justify-content: space-evenly;
-  margin-bottom: 0.5rem;
-}
-
-.calendar-tabs button {
-  padding: 0.25rem 0.75rem;
-  border: none;
-  background: none;
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-}
-
-.calendar-tabs .active {
-  border-bottom: 2px solid #007bff;
-  color: #007bff;
-}
-
 /* Language switcher */
 .language-switcher {
   position: relative;
   margin-left: 1rem;
 }
-
 .lang-btn {
   background: none;
   border: none;
   cursor: pointer;
   font-size: 1.5rem;
+  user-select: none;
 }
-
-.lang-dropdown {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background: white;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  border-radius: 8px;
-  padding: 0.5rem 0;
-  min-width: 120px;
-  z-index: 999;
-  list-style: none;
-}
-
 .lang-dropdown li button {
   padding: 0.5rem 1rem;
   width: 100%;
-  text-align: left;
-  background: none;
   border: none;
+  background: none;
   cursor: pointer;
+  text-align: left;
+  user-select: none;
 }
-
 .lang-dropdown li button:hover {
   background: #f0f0f0;
   border-radius: 4px;
 }
-
 .lang-dropdown .active {
   font-weight: bold;
 }
-
 /* User profile */
 .profile-menu {
   position: relative;
   margin-left: 1rem;
 }
-
 .avatar {
   width: 36px;
   height: 36px;
   border-radius: 50%;
   cursor: pointer;
-  object-fit: cover;
   border: 1px solid #ccc;
+  object-fit: cover;
+  user-select: none;
 }
-
 .profile-menu .dropdown {
-  position: absolute;
-  top: 100%;
-  right: 0;
+  position: absolute !important;
+  top: 100% !important;
+  right: 0 !important;
   background: white;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   border-radius: 8px;
   padding: 0.5rem 0;
-  min-width: 160px;
-  z-index: 999;
   list-style: none;
+  min-width: 160px;
+  z-index: 9999;
+  max-height: none !important;
+  overflow-y: visible !important;
 }
-
 .profile-menu .dropdown ul {
+  padding: 0;
   margin: 0;
-  padding: 0;
 }
-
-.profile-menu .dropdown li {
-  padding: 0;
-}
-
-.profile-menu .dropdown a,
-.profile-menu .dropdown button {
+.profile-menu .dropdown li a,
+.profile-menu .dropdown li button {
   width: 100%;
   padding: 0.5rem 1rem;
-  text-align: left;
-  background: none;
   border: none;
+  background: none;
   cursor: pointer;
-  text-decoration: none;
+  text-align: left;
   color: #333;
+  text-decoration: none;
   display: block;
+  user-select: none;
 }
-
-.profile-menu .dropdown a:hover,
-.profile-menu .dropdown button:hover {
+.profile-menu .dropdown li a:hover,
+.profile-menu .dropdown li button:hover {
   background: #f0f0f0;
   border-radius: 4px;
 }
-
-/* Mobile menu toggle */
+/* Mobile menu */
 .mobile_menu {
   font-size: 1.5rem;
   cursor: pointer;
   display: none;
+  user-select: none;
 }
-
-@media (max-width: 768px) {
-  .navigation {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: white;
-    flex-direction: column;
-    padding: 1rem;
-    display: none;
-  }
-  .navigation.active {
-    display: flex;
-  }
-  .menu {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  .mobile_menu {
-    display: block;
-  }
-}
-
-/* Login & Signup Buttons */
+/* Login/Signup btns */
 .nav_btns .btn {
   padding: 6px 16px;
   font-size: 14px;
@@ -332,29 +203,167 @@
   margin-left: 10px;
   transition: background-color 0.3s ease, color 0.3s ease;
   display: inline-block;
+  user-select: none;
 }
-
-/* Primary button (signup) */
-.nav_btns .primary_btn {
-  background-color: #007bff;
+.primary_btn {
+  background: #007bff;
   color: white;
   border: 1px solid #007bff;
 }
-
-.nav_btns .primary_btn:hover {
-  background-color: #0056b3;
-  border-color: #0056b3;
+.primary_btn:hover {
+  background: #0056b3;
 }
-
-/* Secondary button (login) */
-.nav_btns .secondary_btn {
-  background-color: transparent;
+.secondary_btn {
+  background: transparent;
   color: #007bff;
   border: 1px solid #007bff;
 }
-
-.nav_btns .secondary_btn:hover {
-  background-color: #007bff;
+.secondary_btn:hover {
+  background: #007bff;
   color: white;
 }
+/* Mega dropdown container */
+.mega-menu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  padding: 2rem 2.5rem;
+  background: white;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.18);
+  border-radius: 14px;
+  display: flex;
+  gap: 2.5rem;
+  z-index: 9999;
+}
 
+/* Left side - 2x2 grid for festivals */
+.mega-menu-left {
+  flex: 1 1 65%;
+  padding-right: 1.5rem;
+  max-height: none;
+  overflow: visible;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, auto);
+  gap: 1rem 2rem;
+  align-items: center;
+}
+
+/* Remove heavy card styling from list items */
+.mega-menu-left ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: contents; /* So li's become grid items */
+}
+
+/* Festival list items as flex rows */
+.mega-menu-left ul li {
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-radius: 0;
+  height: auto;
+  width: auto;
+  transition: background-color 0.2s ease;
+  text-align: left;
+  user-select: none;
+}
+
+.mega-menu-left ul li:hover {
+  background-color: #f0f0f0;
+  border-radius: 4px;
+}
+
+/* Festival thumbnail */
+.festival-thumb {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px; /* Or 50% for circle */
+  object-fit: cover;
+  margin: 0;
+  pointer-events: none;
+  box-shadow: none;
+}
+
+/* Festival title text */
+.mega-menu-left ul li span.festival-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #333;
+  user-select: none;
+}
+
+/* Right side simplified — no container background, padding, or shadow */
+.mega-menu-right {
+  flex: 0 0 35%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem; /* smaller gap for tighter layout */
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* Rectangle thumbnail */
+.mega-menu-right img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 14px; /* keep subtle rounding on image */
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.1); /* keep subtle shadow on image */
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Buttons container - single row */
+.mega-menu-buttons {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  justify-content: center;
+}
+
+/* Buttons styling */
+.mega-menu-buttons button {
+  flex: 1;
+  padding: 0.6rem 0;
+  background-color: #007bff;
+  border: none;
+  border-radius: 14px;
+  font-weight: 600;
+  font-size: 0.75rem;  /* slightly bigger font for better readability */
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  user-select: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mega-menu-buttons button:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .mega-menu-right {
+    padding: 0;
+  }
+  .mega-menu-buttons {
+    flex-direction: column;
+  }
+  .mega-menu-buttons button {
+    width: 100%;
+    white-space: normal;
+  }
+}

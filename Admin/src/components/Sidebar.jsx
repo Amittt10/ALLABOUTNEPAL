@@ -18,6 +18,11 @@ const Sidebar = ({ isOpen, onClose }) => {
       label: "Heritage Sites",
       icon: "🏛️",
     },
+    {
+      path: "/admin/festivals",
+      label: "Festivals",
+      icon: "🎉",
+    },
   ]
 
   const handleLogout = () => {
@@ -30,7 +35,11 @@ const Sidebar = ({ isOpen, onClose }) => {
       <aside className={`sidebar ${isOpen ? "sidebar-open" : ""}`}>
         <div className="sidebar-header">
           <h2 className="sidebar-title">Admin Panel</h2>
-          <button className="sidebar-close" onClick={onClose} aria-label="Close sidebar">
+          <button
+            className="sidebar-close"
+            onClick={onClose}
+            aria-label="Close sidebar"
+          >
             ✕
           </button>
         </div>
@@ -41,7 +50,11 @@ const Sidebar = ({ isOpen, onClose }) => {
               <li key={item.path}>
                 <Link
                   to={item.path}
-                  className={`sidebar-link ${location.pathname === item.path ? "sidebar-link-active" : ""}`}
+                  className={`sidebar-link ${
+                    location.pathname.startsWith(item.path)
+                      ? "sidebar-link-active"
+                      : ""
+                  }`}
                   onClick={onClose}
                 >
                   <span className="sidebar-icon">{item.icon}</span>

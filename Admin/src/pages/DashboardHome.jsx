@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { api } from "../api/axiosConfig"
 import LoadingSpinner from "../components/LoadingSpinner"
 import "./DashboardHome.css"
+import FestivalAdd from "./FestivalAdd"
 
 const DashboardHome = () => {
   const [stats, setStats] = useState(null)

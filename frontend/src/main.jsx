@@ -26,6 +26,10 @@ import Verify from './pages/Verify';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import HeritageDetails from './pages/HeritageDetails';
+import FestivalCalendar from './pages/FestivalCalendar';
+// import FestivalDetail from './pages/FestivalDetail';
+import FestivalDetailBySlug from "./pages/FestivalDetailBySlug";
+import FestivalDetailById from "./pages/FestivalDetailById";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -38,6 +42,9 @@ const router = createBrowserRouter(
         <Route path="/home" element={<Home />} />
         <Route path="/cultural-heritage" element={<CulturalHeritage />} />
         <Route path="/festivals" element={<Festivals />} />
+        <Route path="/festival-detail/:id" element={<FestivalDetailById />} />
+        <Route path="/festival-calendar" element={<FestivalCalendar />} />
+        <Route path="/festivals/:slug" element={<FestivalDetailBySlug />} />
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/about" element={<Aboutus />} />
         <Route path="/profile" element={<Profile />} />
