@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { places } from "../../data/staticPlaces"; // new static data file
+import { places } from "../../data/staticPlaces";
 import "./Home.css";
 
 export default function Home() {
@@ -16,61 +16,85 @@ export default function Home() {
     { key: "pilgrims", label_en: "Pilgrimage Sites", label_np: "तीर्थ स्थल" },
   ];
 
-  const filteredPlaces = places.filter((p) => p.category === category);
+  const filteredPlaces = places.filter((p) => p.category === category).slice(0, 9); // Limit to 9
 
   return (
     <div className="home-page">
-
-      {/* Big hero section with video */}
+      {/* Main video hero */}
       <section className="video-hero-section">
         <video autoPlay loop muted playsInline className="background-video">
           <source src="/videos/intro-loop.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
         <div className="video-overlay">
-          <h1>{i18n.language === "np" ? "नेपालको जीवित सम्पदा अनुभव गर्नुहोस्" : "Experience the Living Heritage of Nepal"}</h1>
+          <h1>
+            {i18n.language === "np"
+              ? "नेपालको जीवित सम्पदा अनुभव गर्नुहोस्"
+              : "Experience the Living Heritage of Nepal"}
+          </h1>
         </div>
       </section>
 
-      {/* Category + cards section */}
-      <section className="category-hero-section">
-        <aside className="category-sidebar">
-          {categories.map((cat) => (
-            <button
-              key={cat.key}
-              className={`category-btn ${category === cat.key ? "active" : ""}`}
-              onClick={() => setCategory(cat.key)}
-            >
-              {i18n.language === "np" ? cat.label_np : cat.label_en}
-            </button>
-          ))}
-        </aside>
+      {/* Places to explore hero */}
+      <section
+        className="explore-hero-section"
+        style={{ backgroundImage: "url('/images/holi.jpg')" }}
+      >
+        <div className="explore-hero-overlay"></div>
 
-        <div className="places-grid">
-          {filteredPlaces.map((place) => (
-            <div
-              className="place-card"
-              key={place.id}
-              onClick={() => navigate(`/places/${place.id}`)}
-            >
-              <img
-                src={place.images[0]}
-                alt={i18n.language === "np" ? place.title_np : place.title_en}
-                className="place-thumbnail"
-              />
-              <h2>{i18n.language === "np" ? place.title_np : place.title_en}</h2>
-              <p>
-                {(i18n.language === "np"
-                  ? place.description_np
-                  : place.description_en
-                ).slice(0, 100)}
-                ...
-              </p>
+        {/* Left container */}
+        <div className="explore-left">
+          <h2 className="explore-title">
+            {i18n.language === "np" ? "अन्वेषण गर्न ठाउँहरू" : "Places to explore"}
+          </h2>
+
+          <aside className="explore-sidebar">
+            <div className="category-row">
+              <button
+                className={`category-btn ${category === "unesco" ? "active" : ""}`}
+                onClick={() => setCategory("unesco")}
+              >
+                {i18n.language === "np" ? "विश्व सम्पदा" : "World Heritage"}
+              </button>
+              <button
+                className={`category-btn ${category === "province" ? "active" : ""}`}
+                onClick={() => setCategory("province")}
+              >
+                {i18n.language === "np" ? "प्रदेशहरू" : "Provinces"}
+              </button>
             </div>
-          ))}
-        </div>
-      </section>
+            <div className="category-row centered">
+              <button
+                className={`category-btn ${category === "pilgrims" ? "active" : ""}`}
+                onClick={() => setCategory("pilgrims")}
+              >
+                {i18n.language === "np" ? "तीर्थ स्थल" : "Pilgrimage Sites"}
+              </button>
+            </div>
+          </aside>
 
+          <div className="explore-places-grid">
+            {filteredPlaces.map((place) => (
+              <div
+                className="place-card"
+                key={place.id}
+                onClick={() => navigate(`/places/${place.id}`)}
+              >
+                <img
+                  src={place.thumbnail}
+                  alt={i18n.language === "np" ? place.title_np : place.title_en}
+                  className="place-thumbnail"
+                  loading="lazy"
+                />
+                <h2>{i18n.language === "np" ? place.title_np : place.title_en}</h2>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Empty right container */}
+        <div className="explore-right"></div>
+      </section>
     </div>
   );
 }
