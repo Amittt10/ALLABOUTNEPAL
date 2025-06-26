@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { places } from "../../data/staticPlaces";
+import SubscribeForm from "../../Component/SubscribeForm/SubscribeForm";
 import "./Home.css";
 
 export default function Home() {
   const navigate = useNavigate();
   const { i18n } = useTranslation();
-
   const [category, setCategory] = useState("unesco");
 
   const categories = [
@@ -16,11 +16,12 @@ export default function Home() {
     { key: "pilgrims", label_en: "Pilgrimage Sites", label_np: "तीर्थ स्थल" },
   ];
 
-  const filteredPlaces = places.filter((p) => p.category === category).slice(0, 9); // Limit to 9
+  const filteredPlaces = places
+    .filter((p) => p.category === category)
+    .slice(0, 9);
 
   return (
     <div className="home-page">
-      {/* Main video hero */}
       <section className="video-hero-section">
         <video autoPlay loop muted playsInline className="background-video">
           <source src="/videos/intro-loop.mp4" type="video/mp4" />
@@ -35,33 +36,26 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Places to explore hero */}
       <section
         className="explore-hero-section"
         style={{ backgroundImage: "url('/images/holi.jpg')" }}
       >
         <div className="explore-hero-overlay"></div>
-
-        {/* Left container */}
         <div className="explore-left">
           <h2 className="explore-title">
             {i18n.language === "np" ? "अन्वेषण गर्न ठाउँहरू" : "Places to explore"}
           </h2>
-
           <aside className="explore-sidebar">
             <div className="category-row">
-              <button
-                className={`category-btn ${category === "unesco" ? "active" : ""}`}
-                onClick={() => setCategory("unesco")}
-              >
-                {i18n.language === "np" ? "विश्व सम्पदा" : "World Heritage"}
-              </button>
-              <button
-                className={`category-btn ${category === "province" ? "active" : ""}`}
-                onClick={() => setCategory("province")}
-              >
-                {i18n.language === "np" ? "प्रदेशहरू" : "Provinces"}
-              </button>
+              {categories.slice(0, 2).map((c) => (
+                <button
+                  key={c.key}
+                  className={`category-btn ${category === c.key ? "active" : ""}`}
+                  onClick={() => setCategory(c.key)}
+                >
+                  {i18n.language === "np" ? c.label_np : c.label_en}
+                </button>
+              ))}
             </div>
             <div className="category-row centered">
               <button
@@ -72,7 +66,6 @@ export default function Home() {
               </button>
             </div>
           </aside>
-
           <div className="explore-places-grid">
             {filteredPlaces.map((place) => (
               <div
@@ -91,10 +84,11 @@ export default function Home() {
             ))}
           </div>
         </div>
-
-        {/* Empty right container */}
         <div className="explore-right"></div>
       </section>
+
+      {/* Subscribe form component */}
+      <SubscribeForm />
     </div>
   );
 }

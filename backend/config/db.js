@@ -14,5 +14,6 @@ export async function connectDB() {
     usersCollection: db.collection('users'),
     heritageCollection: db.collection('heritage_sites'),
     festivalCollection: db.collection('festivals'),
+    subscribersCollection: db.collection('subscribers'), 
   };
 }

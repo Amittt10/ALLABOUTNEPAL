@@ -11,6 +11,7 @@ import festivalRoutes from './routes/festivalRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import passwordRoutes from './routes/passwordRoutes.js';
 import searchRoutes from './routes/searchRoutes.js';
+import subscriberRoutes from './routes/subscriberRoutes.js';
 
 
 dotenv.config();
@@ -42,10 +43,10 @@ app.use('/uploads', express.static('uploads'));
 
 // Connect to MongoDB, get collections, and then start server & setup middleware/routes
 connectDB()
-  .then(({ usersCollection, heritageCollection, festivalCollection }) => {
+  .then(({ usersCollection, heritageCollection, festivalCollection, subscribersCollection }) => {
     // Middleware to attach DB collections and mail functions to req
     app.use((req, res, next) => {
-      req.db = { usersCollection, heritageCollection, festivalCollection };
+      req.db = { usersCollection, heritageCollection, festivalCollection, subscribersCollection };
       req.sendVerificationEmail = sendVerificationEmail;
       req.sendPasswordResetEmail = sendPasswordResetEmail;
       next();
@@ -59,6 +60,7 @@ connectDB()
     app.use('/api/admin', adminRoutes);
     app.use('/api', passwordRoutes);
     app.use('/api', searchRoutes);
+    app.use("/api/subscribers", subscriberRoutes);
     
 
     // Start listening on the specified port
