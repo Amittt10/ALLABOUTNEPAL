@@ -1,0 +1,96 @@
+/* Video wrapper to break out of container and full viewport width */
+.video-wrapper {
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  overflow: hidden;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 2px 10px rgb(0 0 0 / 0.1);
+  z-index: 1;
+}
+
+/* Video styles */
+.place-video-top {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+  display: block;
+}
+
+.place-detail-page {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.video-wrapper {
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  border-radius: 0;
+}
+
+.place-video-top {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin: 1.5rem 0 1rem;
+  text-align: center;
+}
+
+.featured-image {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+}
+
+.description-content p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 1.2rem;
+  color: #333;
+}
+
+.inline-image {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  margin: 1rem 0 2rem;
+  border-radius: 12px;
+}
+
+.map-container {
+  margin-top: 3rem;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .video-wrapper {
+    height: 250px;
+  }
+  h1 {
+    font-size: 2rem;
+  }
+  .featured-image {
+    max-height: 250px;
+  }
+  .inline-image {
+    max-height: 180px;
+  }
+  .place-detail-page {
+    margin: 1rem;
+  }
+}

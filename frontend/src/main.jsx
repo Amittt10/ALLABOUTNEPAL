@@ -31,6 +31,8 @@ import FestivalDetail from './pages/FestivalDetail';
 import FestivalDetailBySlug from "./pages/FestivalDetailBySlug";
 import FestivalDetailById from "./pages/FestivalDetailById";
 import FestivalsHighlight from './pages/FestivalsHighlight';
+import PlaceDetail from './pages/Places/PlaceDetail';
+
 
 
 const router = createBrowserRouter(
@@ -59,6 +61,9 @@ const router = createBrowserRouter(
 
          {/* ✅ Search and detail routes */}
           <Route path="/search" element={<SearchResults />} />
+
+        {/* ✅ Places routes */}
+        <Route path="/places/:placeId" element={<PlaceDetail />} />
 
 
       </Route>
