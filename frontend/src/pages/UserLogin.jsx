@@ -1,11 +1,11 @@
 import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import './Login.css';
 import { AuthContext } from '../context/AuthContext';
-import { Eye, EyeOff } from 'lucide-react'; // 👈 Import Lucide icons
+import { Eye, EyeOff } from 'lucide-react';
 
-const UserLogin = () => {
+const UserLogin = ({ onSuccess }) => {
   const { login } = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -13,6 +13,10 @@ const UserLogin = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Get "from" location or fallback to '/'
+  const from = location.state?.from?.pathname || '/';
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -33,7 +37,14 @@ const UserLogin = () => {
       });
 
       login(profileRes.data, token);
-      navigate('/');
+
+      if (onSuccess) {
+        // If onSuccess callback is provided (modal use), call it instead of redirecting
+        onSuccess();
+      } else {
+        // Normal redirect after login on standalone login page
+        navigate(from, { replace: true });
+      }
     } catch (err) {
       console.log('Login error:', err.response?.data || err.message);
       const message = err.response?.data?.message || 'Login failed.';

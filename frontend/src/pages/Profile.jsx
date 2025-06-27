@@ -11,10 +11,12 @@ const Profile = () => {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  // Load profile data on mount or when user changes
+  // Load profile data if not available
   useEffect(() => {
-    if (!user.email) {
+    if (!user || !user.email) {
       const token = localStorage.getItem("token");
+      if (!token) return;
+
       setLoading(true);
       axios
         .get("http://localhost:3000/api/profile", {
@@ -29,7 +31,7 @@ const Profile = () => {
           setLoading(false);
         });
     }
-  }, [user.email, setUser]);
+  }, [user, setUser]);
 
   // Handle image drop
   const onDrop = async (acceptedFiles) => {
@@ -67,6 +69,10 @@ const Profile = () => {
     accept: { "image/*": [] },
   });
 
+  if (!user) {
+    return <div className="profile-container">Loading profile...</div>;
+  }
+
   return (
     <div className="profile-container">
       <h2>Your Profile</h2>
@@ -88,7 +94,6 @@ const Profile = () => {
           alt="profile"
           className="profile-img"
         />
-      
       </div>
 
       <form className="profile-form">

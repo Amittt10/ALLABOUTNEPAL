@@ -6,6 +6,7 @@ import Logo from "../../assets/logo.png";
 import { useTranslation } from "react-i18next";
 import festivalsData from "../../data/festivalsData";
 
+
 const Header = () => {
   const { t, i18n } = useTranslation();
   const { user, logout } = useContext(AuthContext);
@@ -267,6 +268,7 @@ const Header = () => {
                 </>
               ) : (
                 <div className="profile-menu">
+                  <div className="avatar-wrapper">
                   <img
                     src={user.photo ? `http://localhost:3000/${user.photo}` : "/default-avatar.png"}
                     alt="Profile"
@@ -280,6 +282,10 @@ const Header = () => {
                       if (e.key === "Enter") setProfileMenuOpen(!profileMenuOpen);
                     }}
                   />
+                  {user?.username && (
+                    <span className="header-greeting">Hi, {user.username}!</span>
+                  )}
+                  </div>
                   {profileMenuOpen && (
                     <div className="dropdown">
                       <ul>

@@ -4,17 +4,11 @@ import axios from "axios";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  // Track user info
   const [user, setUser] = useState(null);
-
-  // Track auth token from localStorage and in state for reactivity
   const [token, setToken] = useState(() => localStorage.getItem("token"));
-
-  // Loading and error states for profile fetching
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Effect to fetch user profile when token changes
   useEffect(() => {
     const fetchProfile = async () => {
       if (!token) {
@@ -36,7 +30,7 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
         setError("Unauthorized or failed to fetch profile");
 
-        // Optionally clear invalid token
+        // Clear invalid token
         setToken(null);
         localStorage.removeItem("token");
       } finally {
@@ -47,14 +41,12 @@ export const AuthProvider = ({ children }) => {
     fetchProfile();
   }, [token]);
 
-  // Login function sets user and token
   const login = (userData, token) => {
     setUser(userData);
     setToken(token);
     localStorage.setItem("token", token);
   };
 
-  // Logout function clears user and token
   const logout = () => {
     setUser(null);
     setToken(null);
@@ -62,7 +54,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, error, login, logout }}>
+    <AuthContext.Provider value={{ user, setUser, loading, error, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
