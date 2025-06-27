@@ -5,7 +5,7 @@ export const places = [
     category: "unesco",
     title_en: "Lumbini",
     title_np: "लुम्बिनी",
-    video_url: "/images/videos/lumbini.mp4",
+    video_url: "/videos/intro-loop.mp4",
     thumbnail: "/images/patan.jpg",
     description_en: [
       "Lumbini is the birthplace of Lord Buddha and one of the most significant spiritual sites in the world.",

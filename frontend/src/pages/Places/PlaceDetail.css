@@ -26,19 +26,7 @@
   padding: 0 1rem;
 }
 
-.video-wrapper {
-  width: 100%;
-  height: 400px;
-  overflow: hidden;
-  border-radius: 0;
-}
 
-.place-video-top {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
 
 h1 {
   font-size: 2.5rem;

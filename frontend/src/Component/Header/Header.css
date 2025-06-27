@@ -354,29 +354,149 @@
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .mega-menu {
-    width: 100vw;
+  /* Show hamburger menu on mobile */
+  .mobile_menu {
+    display: block;
+  }
+
+  /* Hide desktop nav by default */
+  .navigation {
+    display: none;
+    width: 100%;
+    background: white;
+    position: absolute;
+    top: 5rem; /* below header */
     left: 0;
-    transform: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-radius: 0 0 10px 10px;
+    max-height: calc(100vh - 5rem);
+    overflow-y: auto;
+    z-index: 10000;
     flex-direction: column;
-    padding: 1.5rem;
+    padding: 1rem 0;
+  }
+  /* Show nav when active */
+  .navigation.active {
+    display: flex;
+  }
+
+  /* Vertical menu items */
+  .menu {
+    flex-direction: column;
+    gap: 0;
+    padding-left: 0;
+  }
+
+  .nav_item {
+    width: 100%;
+    border-bottom: 1px solid #eee;
+  }
+
+  .nav_item a,
+  .dropdown-toggle {
+    display: block;
+    padding: 1rem 1.5rem;
+    width: 100%;
+  }
+
+  /* Dropdown menus become full width and relative */
+  .dropdown-menu,
+  .centered-dropdown {
+    position: relative !important;
+    top: 0 !important;
+    left: 0 !important;
+    transform: none !important;
+    box-shadow: none;
+    background: transparent;
+    padding: 0;
+    min-width: auto;
     border-radius: 0;
   }
+
+  .dropdown-menu li a {
+    padding-left: 3rem;
+    color: #555;
+  }
+  .dropdown-menu li a:hover {
+    background: #f9f9f9;
+  }
+
+  /* Mega menu adjustments */
+  .mega-menu {
+    position: relative;
+    top: 0;
+    left: 0;
+    transform: none;
+    width: 100%;
+    flex-direction: column;
+    box-shadow: none;
+    padding: 0.5rem 0;
+    border-radius: 0;
+  }
+
   .mega-menu-left {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr !important;
     padding-right: 0;
     gap: 1rem;
   }
+  .festival-thumb {
+    width: 100% !important;
+    height: auto !important;
+    border-radius: 8px;
+  }
+
   .mega-menu-right {
     flex: none;
     width: 100%;
     margin-top: 1rem;
+    padding: 0 1.5rem;
   }
+
+  .mega-menu-right img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: none;
+  }
+
   .mega-menu-buttons {
     flex-direction: column;
+    padding: 0 1.5rem;
   }
+
   .mega-menu-buttons button {
     width: 100%;
-    white-space: normal;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Language switcher */
+  .language-switcher {
+    margin-left: 0;
+    padding: 1rem 1.5rem;
+  }
+
+  /* Profile menu */
+  .profile-menu {
+    margin-left: 0;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #eee;
+  }
+
+  /* Search bar full width */
+  .search-bar {
+    margin: 1rem 1.5rem;
+    width: calc(100% - 3rem);
+  }
+  .search-bar input {
+    width: 100%;
+  }
+}
+
+/* Optional smaller font size on very small mobile */
+@media (max-width: 480px) {
+  .nav_item a,
+  .dropdown-toggle {
+    padding: 0.75rem 1rem;
+    font-size: 14px;
   }
 }
