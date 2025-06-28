@@ -1,18 +1,21 @@
-// backend/routes/festivalRoutes.js
 import express from 'express';
 import {
   getFestivals,
   getFestivalById,
+  getUpcomingFestivals,
 } from '../controllers/festivalController.js';
 
 const router = express.Router();
 
-// Public routes
-router.get('/festivals', getFestivals);
-router.get('/festivals/:id', getFestivalById);
+// GET /api/festivals/           ✅ All festivals
+router.get('/', getFestivals);
 
-// Fetch festival by name_en
-router.get('/festivals/by-name/:name', async (req, res) => {
+// ✅ Place more specific routes BEFORE /:id
+// GET /api/festivals/upcoming   ✅ Upcoming festivals (within 7 days)
+router.get('/upcoming', getUpcomingFestivals);
+
+// GET /api/festivals/by-name/:name   ✅ Festival by name_en
+router.get('/by-name/:name', async (req, res) => {
   try {
     const { festivalCollection } = req.db;
     const name = decodeURIComponent(req.params.name);
@@ -27,5 +30,8 @@ router.get('/festivals/by-name/:name', async (req, res) => {
   }
 });
 
+// ❗ This must come last
+// GET /api/festivals/:id        ✅ Single festival by ID
+router.get('/:id', getFestivalById);
 
 export default router;

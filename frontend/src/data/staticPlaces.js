@@ -3,12 +3,12 @@ export const places = [
   {   
     id: "lumbini",
     category: "unesco",
-    title_en: "Lumbini",
+    title_en: "Lumbini – The Birthplace of Lord Buddha",
     title_np: "लुम्बिनी",
     video_url: "/videos/intro-loop.mp4",
     thumbnail: "/images/patan.jpg",
     description_en: [
-      { type: "title", content: "Lumbini – The Birthplace of Lord Buddha" },
+      // { type: "title", content: "Lumbini – The Birthplace of Lord Buddha" },
       { type: "subtitle", content: "A Spiritual Journey to Peace and Harmony" },
 
       {

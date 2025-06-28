@@ -14,6 +14,7 @@ import searchRoutes from './routes/searchRoutes.js';
 import subscriberRoutes from './routes/subscriberRoutes.js';
 
 
+
 dotenv.config();
 
 const app = express();
@@ -56,12 +57,12 @@ connectDB()
     app.use('/api', authRoutes);
     app.use('/api', profileRoutes);
     app.use('/api', heritageRoutes);
-    app.use('/api', festivalRoutes);
+    app.use("/api/festivals", festivalRoutes);
     app.use('/api/admin', adminRoutes);
     app.use('/api', passwordRoutes);
     app.use('/api', searchRoutes);
     app.use("/api/subscribers", subscriberRoutes);
-    
+    app.use("/api/festivals", festivalRoutes);
 
     // Start listening on the specified port
     app.listen(PORT, () => {

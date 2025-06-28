@@ -5,6 +5,7 @@ import "./Header.css";
 import Logo from "../../assets/logo.png";
 import { useTranslation } from "react-i18next";
 import festivalsData from "../../data/festivalsData";
+import FestivalBell from "../../Component/FestivalBell";
 
 
 const Header = () => {
@@ -254,6 +255,12 @@ const Header = () => {
                 </ul>
               )}
             </div>
+
+          
+                {/* Notification bell */}
+              <div className="festival-bell-wrapper">
+                <FestivalBell />
+              </div>
 
             {/* User profile */}
             <div className="nav_btns" ref={profileRef}>

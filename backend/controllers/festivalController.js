@@ -29,6 +29,11 @@ export const getFestivalById = async (req, res) => {
   const festivalCollection = req.db.festivalCollection;
   const id = req.params.id;
 
+  // Validate id before using it
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).json({ success: false, message: 'Invalid festival ID' });
+  }
+
   try {
     const festival = await festivalCollection.findOne({ _id: new ObjectId(id) });
     if (!festival) {
@@ -40,6 +45,7 @@ export const getFestivalById = async (req, res) => {
     res.status(500).json({ success: false, message: 'Failed to fetch festival' });
   }
 };
+
 
 export const adminAddFestival = async (req, res) => {
   const festivalCollection = req.db.festivalCollection;
@@ -160,5 +166,36 @@ export const adminDeleteFestival = async (req, res) => {
   } catch (err) {
     console.error('Delete festival error:', err);
     res.status(500).json({ success: false, message: 'Failed to delete festival' });
+  }
+};
+
+
+// Fetch upcoming festivals within the next 7 days
+export const getUpcomingFestivals = async (req, res) => {
+  const festivalCollection = req.db.festivalCollection;
+
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const nextWeek = new Date();
+    nextWeek.setDate(today.getDate() + 7);
+    nextWeek.setHours(23, 59, 59, 999);
+
+    const festivals = await festivalCollection.find().toArray();
+
+    const upcoming = festivals.filter(festival => {
+      if (!festival.dateAD) return false;
+
+      const festDate = new Date(festival.dateAD);
+      return festDate >= today && festDate <= nextWeek;
+    });
+
+    upcoming.sort((a, b) => new Date(a.dateAD) - new Date(b.dateAD));
+
+    res.status(200).json(upcoming);
+  } catch (error) {
+    console.error("Error fetching upcoming festivals:", error);
+    res.status(500).json({ error: "Failed to fetch upcoming festivals" });
   }
 };

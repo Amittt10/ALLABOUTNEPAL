@@ -48,6 +48,7 @@ const router = createBrowserRouter(
         <Route path="/festivals" element={<Festivals />} />
         <Route path="/festival-detail" element={<FestivalDetail />} />
         <Route path="/festival-detail/:id" element={<FestivalDetailById />} />
+        <Route path="/festivals/:id" element={<FestivalDetailById />} />
         <Route path="/festival-calendar" element={<FestivalCalendar />} />
         <Route path="/festivals/:slug" element={<FestivalDetailBySlug />} />
         <Route path="/quiz" element={<Quiz />} />

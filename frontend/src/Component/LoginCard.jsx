@@ -45,7 +45,7 @@ const LoginCard = ({ onSuccess }) => {
 
   return (
     <div className="login-card">
-      <h2>Login</h2>
+      <h2>Login for further access!</h2>
 
       {(status || authError) && (
         <p

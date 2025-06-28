@@ -1,0 +1,123 @@
+.festival-bell-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  user-select: none;
+  margin-left: 1rem;
+}
+
+.bell-icon {
+  position: relative;
+  font-size: 1.5rem;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.bell-icon:hover,
+.bell-icon:focus {
+  background-color: #f0f0f0;
+  outline: none;
+}
+
+.red-dot {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 9px;
+  height: 9px;
+  background-color: #e53935;
+  border-radius: 50%;
+  box-shadow: 0 0 2px #b71c1c;
+  pointer-events: none;
+}
+
+/* Dropdown container */
+.festival-dropdown {
+  position: absolute;
+  top: 120%;
+  right: 0;
+  background: white;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+  border-radius: 8px;
+  padding: 0.5rem 0;
+  min-width: 250px;
+  max-height: 320px;
+  overflow-y: auto;
+  z-index: 10000;
+  user-select: none;
+}
+
+/* Individual festival item */
+.festival-item {
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #eee;
+  color: #444;
+  font-size: 0.9rem;
+  cursor: default;
+}
+
+.festival-item strong {
+  font-weight: 600;
+  color: #222;
+}
+
+.festival-item small {
+  color: #666;
+  font-weight: 400;
+}
+
+.festival-item:last-child {
+  border-bottom: none;
+}
+
+/* When no festivals */
+.festival-dropdown .festival-item {
+  text-align: center;
+  font-style: italic;
+  color: #888;
+  cursor: default;
+}
+
+/* Scrollbar styling for webkit browsers */
+.festival-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.festival-dropdown::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.festival-dropdown::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.1);
+  border-radius: 3px;
+}
+
+/* Link wrapper styles */
+.festival-item-link {
+  text-decoration: none;  /* remove underline */
+  color: inherit;         /* keep text color */
+  display: block;         /* fill the container */
+}
+
+.festival-item-link:hover .festival-item {
+  background-color: #f0f0f0;  /* highlight on hover */
+  cursor: pointer;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .festival-dropdown {
+    min-width: 200px;
+    max-height: 240px;
+  }
+
+  .festival-item {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
