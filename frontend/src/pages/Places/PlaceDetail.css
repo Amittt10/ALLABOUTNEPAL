@@ -1,197 +1,178 @@
-/* Video wrapper to break out of container and full viewport width */
+/* Container and font */
+.place-detail-page {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 1rem;
+  background-color: #fff;
+  color: #333;
+}
+
+/* Video wrapper full width breakout */
 .video-wrapper {
   position: relative;
-  width: 100vw;
+  width: 100vw; /* full viewport width */
   left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
+  margin-left: -50vw; /* breakout */
+  height: 70vh;
   overflow: hidden;
   border-radius: 0 0 12px 12px;
   box-shadow: 0 2px 10px rgb(0 0 0 / 0.1);
   z-index: 1;
 }
 
-/* Video styles */
+/* Video element fills wrapper */
 .place-video-top {
   width: 100%;
-  height: 500px;
+  height: 100%;
   object-fit: cover;
   display: block;
+  border-radius: 0 0 12px 12px;
 }
 
-.place-detail-page {
-  max-width: 900px;
-  margin: 2rem auto;
-  padding: 0 1rem;
-}
-
-
-
-h1 {
+/* Title styles */
+.main-title {
   font-size: 2.5rem;
-  margin: 1.5rem 0 1rem;
+  font-weight: 700;
   text-align: center;
+  margin: 1.5rem auto 2rem;
 }
 
-.featured-image {
-  width: 100%;
-  max-height: 400px;
-  object-fit: cover;
-  border-radius: 12px;
-  margin-bottom: 2rem;
+/* Description container */
+.description-content {
+  max-width: 900px;
+  margin: 0 auto 2rem;
 }
 
-.description-content p {
-  font-size: 1.1rem;
-  line-height: 1.7;
-  margin-bottom: 1.2rem;
-  color: #333;
+/* Text blocks */
+.desc-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.5rem;
 }
 
+.desc-subtitle {
+  font-size: 1.2rem;
+  font-style: italic;
+  margin-bottom: 1rem;
+  color: #555;
+}
+
+.desc-heading {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 1.2rem 0 0.5rem;
+}
+
+.desc-paragraph {
+  text-align: justify;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  color: #444;
+}
+
+/* Images inside description */
 .inline-image {
+  display: block;
   width: 100%;
-  max-height: 300px;
+  aspect-ratio: 16 / 9; /* or 4 / 3, or any other */
   object-fit: cover;
-  margin: 1rem 0 2rem;
-  border-radius: 12px;
+  margin: 1rem auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.map-container {
-  margin-top: 3rem;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
-}
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .video-wrapper {
-    height: 250px;
-  }
-  h1 {
-    font-size: 2rem;
-  }
-  .featured-image {
-    max-height: 250px;
-  }
-  .inline-image {
-    max-height: 180px;
-  }
-  .place-detail-page {
-    margin: 1rem;
-  }
-}
-
-/* Blurred content styling */
-.blurred {
-  filter: blur(6px);
+/* Blur for guest content */
+.blurred-section {
+  filter: blur(5px);
   pointer-events: none;
   user-select: none;
-  opacity: 0.6;
+  transition: filter 0.3s ease;
 }
 
-/* Login card modal overlay */
+/* Map container */
+.map-container {
+  max-width: 900px;
+  height: 400px;
+  margin: 0 auto 3rem;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgb(0 0 0 / 0.12);
+}
+
+/* Modal overlay */
 .auth-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
   z-index: 9999;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  padding: 1rem;
 }
 
-/* Login card box */
-.login-card {
-  background: #ffffff;
-  padding: 2rem 2.5rem;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 400px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  animation: fadeInScale 0.3s ease;
-}
-
-/* Title */
-.login-card h2 {
-  margin-bottom: 1.2rem;
-  font-size: 1.5rem;
-  color: #333;
-  text-align: center;
-}
-
-/* Input labels */
-.login-card label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-  color: #444;
-}
-
-/* Inputs */
-.login-card input {
-  width: 100%;
-  padding: 0.5rem 0.75rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  margin-bottom: 1rem;
-  font-size: 1rem;
-}
-
-/* Password visibility toggle */
-.password-wrapper {
+/* Modal content */
+.auth-modal {
   position: relative;
-}
-.password-input {
-  padding-right: 2.5rem;
-}
-.password-toggle {
-  position: absolute;
-  right: 0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #555;
-}
-
-/* Submit button */
-.login-btn {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem 2.5rem;
+  max-width: 420px;
   width: 100%;
-  padding: 0.6rem;
-  background-color: #007BFF;
-  color: white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Close modal button */
+.close-modal-btn {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 1.8rem;
+  background: transparent;
   border: none;
-  border-radius: 6px;
-  font-size: 1rem;
   cursor: pointer;
-  transition: background 0.2s;
+  color: #666;
+  transition: color 0.2s ease;
 }
-.login-btn:hover {
-  background-color: #005dc1;
-}
-
-/* Error message */
-.error-message {
-  color: #d10000;
-  font-size: 0.9rem;
-  margin-bottom: 0.75rem;
-  text-align: center;
+.close-modal-btn:hover {
+  color: #111;
 }
 
-/* Optional animation */
-@keyframes fadeInScale {
-  from {
-    transform: scale(0.9);
-    opacity: 0;
+/* Responsive styles */
+@media (max-width: 900px) {
+  .main-title {
+    font-size: 2rem;
   }
-  to {
-    transform: scale(1);
-    opacity: 1;
+  .desc-title {
+    font-size: 1.5rem;
+  }
+  .desc-heading {
+    font-size: 1.3rem;
+  }
+  .desc-subtitle {
+    font-size: 1rem;
+  }
+  .desc-paragraph {
+    font-size: 1rem;
+  }
+  .map-container {
+    height: 300px;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-title {
+    font-size: 1.6rem;
+  }
+  .map-container {
+    height: 220px;
+  }
+  .auth-modal {
+    padding: 1.5rem 1.8rem;
+    max-width: 95%;
   }
 }

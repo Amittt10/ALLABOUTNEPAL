@@ -21,12 +21,13 @@ body, html, #root {
 /* Outer login container */
 .login-box {
   width: 720px;
-  height: 380px;
+  height: auto;
   display: flex;
   background: white;
   border-radius: 6px;
   overflow: hidden;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  flex-wrap: wrap;
 }
 
 /* Left green welcome panel */
@@ -67,7 +68,7 @@ body, html, #root {
 }
 
 .signup-button:hover {
-  background-color: transparent;
+  background-color: rgba(255, 255, 255, 0.15);
 }
 
 /* Right form panel */
@@ -78,6 +79,7 @@ body, html, #root {
   flex-direction: column;
   justify-content: center;
   color: #4a4a4a;
+  min-width: 300px;
 }
 
 .login-right h3 {
@@ -92,6 +94,7 @@ body, html, #root {
   font-size: 0.95rem;
   display: block;
   color: #555;
+  text-align: left;
 }
 
 .required {
@@ -117,14 +120,17 @@ body, html, #root {
 .password-wrapper {
   position: relative;
   margin-bottom: 20px;
+  height: 44px; /* Match input height */
 }
 
 .password-input {
   width: 100%;
-  padding: 10px 44px 10px 14px;
+  height: 44px; /* Fixed height */
+  padding: 10px 44px 10px 14px; /* Right padding for eye button */
+  font-size: 1rem;
   border: 1.5px solid #ddd;
   border-radius: 18px;
-  font-size: 1rem;
+  box-sizing: border-box;
 }
 
 .password-input:focus {
@@ -134,9 +140,12 @@ body, html, #root {
 
 .password-toggle {
   position: absolute;
-  top: 20%;
-  right: 14px;
-  background: none;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  height: 24px;
+  width: 24px;
+  background: transparent;
   border: none;
   cursor: pointer;
   padding: 0;
@@ -146,17 +155,16 @@ body, html, #root {
   color: #666;
 }
 
-.password-toggle:focus {
-  outline: none; /* Removes the default focus outline */
-  box-shadow: none; /* Ensures no custom shadow is applied on focus */
-}
-
-/* 👁 Lucide Icon sizing */
 .password-toggle svg {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   display: block;
 }
+
+.password-toggle:hover {
+  color: #0a9254;
+}
+
 
 /* Submit button */
 .login-btn {
@@ -201,7 +209,7 @@ body, html, #root {
   margin-bottom: 10px;
 }
 
-/* Optional spinner animation */
+/* Spinner animation */
 .animate-spin {
   animation: spin 1s linear infinite;
   height: 20px;
@@ -211,5 +219,26 @@ body, html, #root {
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .login-box {
+    flex-direction: column;
+    height: auto;
+    width: 90%;
+  }
+
+  .login-left {
+    clip-path: none;
+    width: 100%;
+    padding: 20px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .login-right {
+    padding: 30px;
   }
 }

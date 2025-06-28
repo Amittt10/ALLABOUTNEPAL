@@ -56,7 +56,8 @@ const Profile = () => {
       });
       setUser(res.data);
       setMessage("Profile photo updated successfully!");
-    } catch {
+    } catch(err) {
+      console.error("Error updating profile photo:", err.response || err.message);
       setError("Error updating profile photo.");
       setPreview(null);
     } finally {
