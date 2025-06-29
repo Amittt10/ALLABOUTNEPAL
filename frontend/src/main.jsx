@@ -1,3 +1,5 @@
+// src/main.jsx
+
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import {
@@ -7,7 +9,6 @@ import {
   createRoutesFromElements,
 } from 'react-router-dom';
 import './i18n';
-
 
 import { AuthProvider } from './context/AuthContext';
 
@@ -20,20 +21,17 @@ import Aboutus from './pages/Aboutus';
 import Festivals from './pages/Festivals';
 import Profile from './pages/Profile';
 import SearchResults from './pages/SearchResults';
-
 import Layout from './Component/Layout/Layout';
 import Verify from './pages/Verify';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import HeritageDetails from './pages/HeritageDetails';
 import FestivalCalendar from './pages/FestivalCalendar';
-import FestivalDetail from './pages/FestivalDetail';
-import FestivalDetailBySlug from "./pages/FestivalDetailBySlug";
-import FestivalDetailById from "./pages/FestivalDetailById";
+import FestivalDetail from './pages/FestivalDetail'; // dynamic
+import FestivalDetailBySlug from "./pages/FestivalDetailBySlug"; // static
+import FestivalDetailById from './pages/FestivalDetailById'; // dynamic
 import FestivalsHighlight from './pages/FestivalsHighlight';
 import PlaceDetail from './pages/Places/PlaceDetail';
-
-
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -46,27 +44,22 @@ const router = createBrowserRouter(
         <Route path="/home" element={<Home />} />
         <Route path="/cultural-heritage" element={<CulturalHeritage />} />
         <Route path="/festivals" element={<Festivals />} />
-        <Route path="/festival-detail" element={<FestivalDetail />} />
-        <Route path="/festival-detail/:id" element={<FestivalDetailById />} />
-        <Route path="/festivals/:id" element={<FestivalDetailById />} />
         <Route path="/festival-calendar" element={<FestivalCalendar />} />
-        <Route path="/festivals/:slug" element={<FestivalDetailBySlug />} />
+
+        {/* 📦 Detail pages */}
+        <Route path="/festivals/:slug" element={<FestivalDetailBySlug />} /> {/* Static */}
+        <Route path="/festival-detail/:id" element={<FestivalDetailById />} />       {/* Dynamic */}
+
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/about" element={<Aboutus />} />
-        <Route path="/profile" element={<Profile />} />        
+        <Route path="/profile" element={<Profile />} />
         <Route path="/verify" element={<Verify />} />
         <Route path="/forgot" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/heritage/:id" element={<HeritageDetails />} />
         <Route path="/festivals-highlight" element={<FestivalsHighlight />} />
-
-         {/* ✅ Search and detail routes */}
-          <Route path="/search" element={<SearchResults />} />
-
-        {/* ✅ Places routes */}
+        <Route path="/search" element={<SearchResults />} />
         <Route path="/places/:placeId" element={<PlaceDetail />} />
-
-
       </Route>
     </>
   ),

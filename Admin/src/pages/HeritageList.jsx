@@ -1,3 +1,4 @@
+// src/pages/HeritageList.jsx
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { axiosInstance } from '../api/axiosConfig'
@@ -21,7 +22,7 @@ const HeritageList = () => {
       }
     }
     fetchHeritage()
-  }, []) // <--- No async on the callback itself
+  }, [])
 
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this heritage site?')) return
@@ -41,24 +42,35 @@ const HeritageList = () => {
       <Link to="add" style={{ color: '#f0a500', fontWeight: '600' }}>+ Add New</Link>
       <table>
         <thead>
-          <tr><th>Name</th><th>Location</th><th>Entry Fee</th><th>Actions</th></tr>
+          <tr>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Entry Fee</th>
+            <th>Actions</th>
+          </tr>
         </thead>
         <tbody>
-          {heritage.map((site) => {
-            const name = site[`name_${i18n.language}`] || site.name_en
-            const location = site[`location_${i18n.language}`] || site.location_en
-            return (
-              <tr key={site._id}>
-                <td>{name}</td>
-                <td>{location}</td>
-                <td>{site.entryFee}</td>
-                <td>
-                  <Link to={`edit/${site._id}`}>Edit</Link>{' '}
-                  <button onClick={() => handleDelete(site._id)}>Delete</button>
-                </td>
-              </tr>
-            )
-          })}
+          {heritage.length === 0 ? (
+            <tr>
+              <td colSpan="4" style={{ textAlign: 'center' }}>No heritage sites found.</td>
+            </tr>
+          ) : (
+            heritage.map((site) => {
+              const name = site[`name_${i18n.language}`] || site.name_en
+              const location = site.location_en || 'Unknown location'
+              return (
+                <tr key={site._id}>
+                  <td>{name}</td>
+                  <td>{location}</td>
+                  <td>{site.entryFee ? `₹${site.entryFee}` : 'Free'}</td>
+                  <td>
+                    <Link to={`edit/${site._id}`} style={{ marginRight: 10 }}>Edit</Link>
+                    <button onClick={() => handleDelete(site._id)}>Delete</button>
+                  </td>
+                </tr>
+              )
+            })
+          )}
         </tbody>
       </table>
     </div>

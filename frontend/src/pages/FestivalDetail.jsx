@@ -1,62 +1,71 @@
-// src/pages/FestivalDetail.jsx
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { axiosInstance } from "../api/axiosConfig";
-import { useTranslation } from "react-i18next";
-import "./FestivalDetails.css";
+// src/pages/Festivals.jsx
 
-export default function FestivalDetail() {
-  const { id } = useParams();
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { axiosInstance } from "../api/axiosConfig";
+import festivalsData from "../data/festivalsData";
+import "./Festivals.css";
+
+export default function Festivals() {
   const { i18n, t } = useTranslation();
-  const [festival, setFestival] = useState(null);
+  const [dynamicFestivals, setDynamicFestivals] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const isNepali = i18n.language === "ne";
+
   useEffect(() => {
-    const fetchFestival = async () => {
+    const fetchDynamicFestivals = async () => {
       try {
-        const { data } = await axiosInstance.get(`/festivals/${id}`);
-        setFestival(data);
+        const { data } = await axiosInstance.get("/festivals");
+        setDynamicFestivals(data);
       } catch (error) {
-        console.error("Error fetching festival:", error);
+        console.error("Error fetching dynamic festivals:", error);
       } finally {
         setLoading(false);
       }
     };
-    fetchFestival();
-  }, [id]);
-
-  if (loading) return <div className="loading">Loading festival details…</div>;
-  if (!festival) return <div className="error">Festival not found.</div>;
-
-  // Language-specific content
-  const title = i18n.language === "np" ? festival.name_np : festival.name_en;
-  const description = i18n.language === "np" ? festival.description_np : festival.description_en;
-  const significance = i18n.language === "np" ? festival.significance_np : festival.significance_en;
-  const location = i18n.language === "np" ? festival.location_np : festival.location_en;
+    fetchDynamicFestivals();
+  }, []);
 
   return (
-    <section className="festival-detail-container">
-      <img
-        src={`http://localhost:3000/${festival.image}`}
-        alt={title}
-        className="festival-detail-image"
-      />
+    <div className="festivals-page">
+      <h1>{t("festivals.title")}</h1>
 
-      <h1 className="festival-detail-title">{title}</h1>
+      {/* Static Festivals Section */}
+      <section className="festivals-section">
+        <h2>{t("festivals.staticFestivals")}</h2>
+        <ul className="festivals-list">
+          {Object.values(festivalsData).map((festival) => (
+            <li key={festival.slug} className="festival-item">
+              <Link to={`/festivals/static/${festival.slug}`}>
+                {isNepali ? festival.name_np : festival.name_en}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
 
-      <div className="festival-detail-meta">
-        <span className="festival-detail-date">
-          📅 {festival.dateBS}{" "}
-          {festival.dateAD && `(${new Date(festival.dateAD).toDateString()})`}
-        </span>
-        <span className="festival-detail-location">📍 {location}</span>
-      </div>
+      {/* Dynamic Festivals Section */}
+      <section className="festivals-section">
+        <h2>{t("festivals.dynamicFestivals")}</h2>
 
-      <h2 className="festival-detail-heading">{t("Description")}</h2>
-      <p className="festival-detail-paragraph">{description}</p>
-
-      <h2 className="festival-detail-heading">{t("Significance")}</h2>
-      <p className="festival-detail-paragraph">{significance}</p>
-    </section>
+        {loading ? (
+          <p>{t("loading")}</p>
+        ) : dynamicFestivals.length === 0 ? (
+          <p>{t("festivals.noDynamicFestivals")}</p>
+        ) : (
+          <ul className="festivals-list">
+            {dynamicFestivals.map((festival) => (
+              <li key={festival._id} className="festival-item">
+                <Link to={`/festivals/dynamic/${festival._id}`}>
+                  {isNepali ? festival.name_np : festival.name_en}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    </div>
   );
 }

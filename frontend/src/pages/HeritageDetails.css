@@ -1,109 +1,186 @@
+/* Container */
 .heritage-details-container {
   max-width: 900px;
   margin: 2rem auto;
-  padding: 1rem;
+  padding: 0 1rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #222;
+  color: #333;
 }
 
+/* Back button */
 .back-btn {
-  background: #333;
-  color: #fff;
+  background-color: transparent;
   border: none;
-  padding: 0.4rem 1rem;
-  border-radius: 4px;
+  color: #0077cc;
+  font-size: 1rem;
   cursor: pointer;
   margin-bottom: 1rem;
-  font-size: 1rem;
+  transition: color 0.3s ease;
 }
 
 .back-btn:hover {
-  background: #555;
+  color: #005fa3;
 }
 
-.heritage-name {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-  text-align: center;
-}
-
+/* Main image */
 .heritage-main-image {
   width: 100%;
   max-height: 400px;
   object-fit: cover;
-  border-radius: 8px;
-  cursor: pointer;
+  border-radius: 6px;
   margin-bottom: 1rem;
-  box-shadow: 0 4px 10px rgb(0 0 0 / 0.1);
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Title (h2) */
+.desc-title {
+  font-size: 2.4rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #222;
+}
+
+/* Heading (h3) */
+.desc-heading {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.6rem;
+  color: #111;
+}
+
+/* Subtitle (h4) */
+.desc-subtitle {
+  font-size: 1.3rem;
+  font-style: italic;
+  font-weight: 500;
+  margin: 1rem 0 0.5rem;
+  color: #555;
+}
+
+/* Paragraph */
+.desc-paragraph {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  text-align: justify;
+  color: #444;
+}
+
+/* Inline images */
+.inline-image {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1rem auto;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+  cursor: pointer;
   transition: transform 0.3s ease;
 }
 
-.heritage-main-image:hover {
-  transform: scale(1.02);
+.inline-image:hover {
+  transform: scale(1.03);
 }
 
-.heritage-info p {
-  margin: 0.6rem 0;
-  font-size: 1.1rem;
-  line-height: 1.5;
+/* Location and Entry Fee section */
+.location-entryfee {
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  color: #666;
 }
 
-.heritage-gallery {
+.location-text {
+  font-style: italic;
+  font-size: 0.9rem;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.entryfee-heading {
+  font-weight: 700;
+  color: #333;
+}
+
+.entryfee-text {
+  font-size: 0.9rem;
+}
+
+/* Map container */
+.map-container {
   margin-top: 2rem;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
 }
 
-.heritage-gallery h2 {
-  margin-bottom: 0.8rem;
-  border-bottom: 2px solid #555;
-  padding-bottom: 0.4rem;
+/* Blurred section (for non-logged in users) */
+.blurred-section {
+  filter: blur(4px);
+  pointer-events: none;
+  user-select: none;
+  position: relative;
 }
 
-.gallery-images {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  justify-content: center;
-}
-
-.gallery-images img {
-  width: 150px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 6px;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgb(0 0 0 / 0.15);
-  transition: transform 0.25s ease;
-}
-
-.gallery-images img:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgb(0 0 0 / 0.3);
-}
-
+/* Fullscreen modal for images */
 .fullscreen-modal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0,0,0,0.85);
+  background-color: rgba(0,0,0,0.85);
   display: flex;
-  align-items: center;
   justify-content: center;
-  cursor: zoom-out;
+  align-items: center;
   z-index: 9999;
+  cursor: zoom-out;
 }
 
 .fullscreen-modal img {
   max-width: 90%;
   max-height: 90%;
-  border-radius: 10px;
-  box-shadow: 0 6px 18px rgb(255 255 255 / 0.4);
+  border-radius: 8px;
 }
 
-.loading, .error {
-  text-align: center;
-  margin-top: 3rem;
-  font-size: 1.2rem;
+/* Login modal overlay */
+.auth-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+/* Login modal content */
+.auth-modal {
+  background: #fff;
+  border-radius: 8px;
+  padding: 2rem;
+  width: 350px;
+  max-width: 90%;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+  position: relative;
+}
+
+/* Close modal button */
+.close-modal-btn {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
   color: #666;
+  transition: color 0.3s ease;
+}
+
+.close-modal-btn:hover {
+  color: #000;
 }

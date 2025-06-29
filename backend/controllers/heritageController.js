@@ -14,6 +14,7 @@ const deleteFilesIfExist = (filePaths) => {
   filePaths.forEach((filePath) => deleteFileIfExists(filePath));
 };
 
+// ================= Public GET =================
 export const getHeritageSites = async (req, res) => {
   try {
     const { location } = req.query;
@@ -31,7 +32,6 @@ export const getHeritageSites = async (req, res) => {
   }
 };
 
-
 export const getHeritageSiteById = async (req, res) => {
   const heritageCollection = req.db.heritageCollection;
   const id = req.params.id;
@@ -41,7 +41,6 @@ export const getHeritageSiteById = async (req, res) => {
     if (!site) {
       return res.status(404).json({ success: false, message: 'Heritage site not found' });
     }
-    // Return full multilingual data
     res.json(site);
   } catch (err) {
     console.error('Public fetch heritage by ID error:', err);
@@ -49,10 +48,11 @@ export const getHeritageSiteById = async (req, res) => {
   }
 };
 
-
+// ================= Admin GET =================
 export const adminGetHeritageSiteById = async (req, res) => {
   const heritageCollection = req.db.heritageCollection;
   const id = req.params.id;
+
   try {
     const site = await heritageCollection.findOne({ _id: new ObjectId(id) });
     if (!site) return res.status(404).json({ success: false, message: 'Heritage site not found' });
@@ -65,6 +65,7 @@ export const adminGetHeritageSiteById = async (req, res) => {
 
 export const adminGetHeritageSites = async (req, res) => {
   const heritageCollection = req.db.heritageCollection;
+
   try {
     const heritage = await heritageCollection.find().toArray();
     res.json(heritage);
@@ -73,6 +74,7 @@ export const adminGetHeritageSites = async (req, res) => {
   }
 };
 
+// ================= Admin POST =================
 export const adminAddHeritageSite = async (req, res) => {
   const heritageCollection = req.db.heritageCollection;
   const {
@@ -81,6 +83,7 @@ export const adminAddHeritageSite = async (req, res) => {
     history_en, history_np,
     location_en, location_np,
     entryFee,
+    lat, lng // ✅ NEW
   } = req.body;
 
   if (!name_en || !name_np) {
@@ -100,10 +103,13 @@ export const adminAddHeritageSite = async (req, res) => {
       history_np,
       location_en,
       location_np,
-      entryFee: entryFee || null,
+      entryFee: entryFee ? parseFloat(entryFee) : null,
+      lat: lat ? parseFloat(lat) : null, // ✅ NEW
+      lng: lng ? parseFloat(lng) : null, // ✅ NEW
       image,
       gallery,
     };
+
     const result = await heritageCollection.insertOne(newHeritage);
     res.status(201).json({ success: true, _id: result.insertedId, ...newHeritage });
   } catch (err) {
@@ -112,6 +118,7 @@ export const adminAddHeritageSite = async (req, res) => {
   }
 };
 
+// ================= Admin PUT =================
 export const adminUpdateHeritageSite = async (req, res) => {
   const heritageCollection = req.db.heritageCollection;
   const id = req.params.id;
@@ -122,6 +129,7 @@ export const adminUpdateHeritageSite = async (req, res) => {
     history_en, history_np,
     location_en, location_np,
     entryFee,
+    lat, lng // ✅ NEW
   } = req.body;
 
   try {
@@ -129,20 +137,26 @@ export const adminUpdateHeritageSite = async (req, res) => {
     if (!existing) return res.status(404).json({ success: false, message: 'Heritage site not found' });
 
     const updateFields = {
-      name_en, name_np,
-      shortDescription_en, shortDescription_np,
-      history_en, history_np,
-      location_en, location_np,
-      entryFee: entryFee || null,
+      name_en,
+      name_np,
+      shortDescription_en,
+      shortDescription_np,
+      history_en,
+      history_np,
+      location_en,
+      location_np,
+      entryFee: entryFee ? parseFloat(entryFee) : null,
+      lat: lat ? parseFloat(lat) : null, // ✅ NEW
+      lng: lng ? parseFloat(lng) : null, // ✅ NEW
     };
 
-    // Delete old image if new one uploaded
+    // Image
     if (req.files?.image) {
       deleteFileIfExists(existing.image);
       updateFields.image = req.files.image[0].path;
     }
 
-    // Delete old gallery if new one uploaded
+    // Gallery
     if (req.files?.gallery) {
       deleteFilesIfExist(existing.gallery || []);
       updateFields.gallery = req.files.gallery.map(f => f.path);
@@ -161,6 +175,7 @@ export const adminUpdateHeritageSite = async (req, res) => {
   }
 };
 
+// ================= Admin DELETE =================
 export const adminDeleteHeritageSite = async (req, res) => {
   const heritageCollection = req.db.heritageCollection;
   const id = req.params.id;

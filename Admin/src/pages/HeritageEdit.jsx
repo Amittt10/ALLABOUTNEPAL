@@ -1,3 +1,4 @@
+// / src/pages/HeritageEdit.jsx
 import React, { useState, useEffect } from 'react'
 import { axiosInstance } from '../api/axiosConfig'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -17,6 +18,8 @@ const HeritageEdit = () => {
     location_en: '',
     location_np: '',
     entryFee: '',
+    lat: '',
+    lng: ''
   })
   const [imageFile, setImageFile] = useState(null)
   const [galleryFiles, setGalleryFiles] = useState([])
@@ -35,6 +38,8 @@ const HeritageEdit = () => {
           location_en: data.location_en || '',
           location_np: data.location_np || '',
           entryFee: data.entryFee || '',
+          lat: data.lat || '',
+          lng: data.lng || ''
         })
       } catch (err) {
         alert('Failed to load heritage site')
@@ -96,6 +101,12 @@ const HeritageEdit = () => {
 
         <label>Location (Nepali) *</label>
         <input name="location_np" value={formData.location_np} onChange={handleChange} required />
+
+        <label>Latitude *</label>
+        <input name="lat" value={formData.lat} onChange={handleChange} required />
+
+        <label>Longitude *</label>
+        <input name="lng" value={formData.lng} onChange={handleChange} required />
 
         <label>Entry Fee *</label>
         <input name="entryFee" value={formData.entryFee} onChange={handleChange} required />

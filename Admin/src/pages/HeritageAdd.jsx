@@ -16,6 +16,8 @@ const HeritageAdd = () => {
     location_en: '',
     location_np: '',
     entryFee: '',
+    lat: '',    // <-- Add latitude
+    lng: '',    // <-- Add longitude
   })
   const [imageFile, setImageFile] = useState(null)
   const [galleryFiles, setGalleryFiles] = useState([])
@@ -50,40 +52,122 @@ const HeritageAdd = () => {
   return (
     <div className="heritage-form-container">
       <h2 className="heritage-form-title">Add New Heritage Site</h2>
-      <form className="heritage-form" onSubmit={handleSubmit}>
+      <form className="heritage-form" onSubmit={handleSubmit} encType="multipart/form-data">
 
         <label>Name (English) *</label>
-        <input name="name_en" value={formData.name_en} onChange={handleChange} required />
+        <input
+          type="text"
+          name="name_en"
+          value={formData.name_en}
+          onChange={handleChange}
+          required
+        />
 
         <label>Name (Nepali) *</label>
-        <input name="name_np" value={formData.name_np} onChange={handleChange} required />
+        <input
+          type="text"
+          name="name_np"
+          value={formData.name_np}
+          onChange={handleChange}
+          required
+        />
 
         <label>Short Description (English) *</label>
-        <textarea name="shortDescription_en" value={formData.shortDescription_en} onChange={handleChange} required />
+        <textarea
+          name="shortDescription_en"
+          value={formData.shortDescription_en}
+          onChange={handleChange}
+          required
+        />
 
         <label>Short Description (Nepali) *</label>
-        <textarea name="shortDescription_np" value={formData.shortDescription_np} onChange={handleChange} required />
+        <textarea
+          name="shortDescription_np"
+          value={formData.shortDescription_np}
+          onChange={handleChange}
+          required
+        />
 
         <label>History (English) *</label>
-        <textarea name="history_en" value={formData.history_en} onChange={handleChange} required />
+        <textarea
+          name="history_en"
+          value={formData.history_en}
+          onChange={handleChange}
+          required
+        />
 
         <label>History (Nepali) *</label>
-        <textarea name="history_np" value={formData.history_np} onChange={handleChange} required />
+        <textarea
+          name="history_np"
+          value={formData.history_np}
+          onChange={handleChange}
+          required
+        />
 
         <label>Location (English) *</label>
-        <input name="location_en" value={formData.location_en} onChange={handleChange} required />
+        <input
+          type="text"
+          name="location_en"
+          value={formData.location_en}
+          onChange={handleChange}
+          required
+        />
 
         <label>Location (Nepali) *</label>
-        <input name="location_np" value={formData.location_np} onChange={handleChange} required />
+        <input
+          type="text"
+          name="location_np"
+          value={formData.location_np}
+          onChange={handleChange}
+          required
+        />
+
+        {/* New latitude input */}
+        <label>Latitude (English) *</label>
+        <input
+          type="number"
+          name="lat"
+          value={formData.lat}
+          onChange={handleChange}
+          step="any"
+          required
+        />
+
+        {/* New longitude input */}
+        <label>Longitude (English) *</label>
+        <input
+          type="number"
+          name="lng"
+          value={formData.lng}
+          onChange={handleChange}
+          step="any"
+          required
+        />
 
         <label>Entry Fee *</label>
-        <input type="text" name="entryFee" value={formData.entryFee} onChange={handleChange} required />
+        <input
+          type="text"
+          name="entryFee"
+          value={formData.entryFee}
+          onChange={handleChange}
+          required
+        />
 
         <label>Main Image *</label>
-        <input type="file" accept="image/*" onChange={handleImageChange} required />
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          required
+        />
 
         <label>Gallery Images</label>
-        <input type="file" accept="image/*" multiple onChange={handleGalleryChange} />
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={handleGalleryChange}
+        />
 
         <button type="submit" className="submit-btn">Add Site</button>
       </form>
