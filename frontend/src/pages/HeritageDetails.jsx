@@ -49,51 +49,38 @@ const HeritageDetails = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  // 👇 Scroll triggers login modal for non-authenticated users
   useEffect(() => {
-    const onScroll = () => {
-      if (!user && !showLogin && window.scrollY > 300) {
+    if (user) return;
+
+    const handleScroll = () => {
+      if (!showLogin && window.scrollY > 600) {
         setShowLogin(true);
       }
     };
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [user, showLogin]);
 
-  if (loading) return <p className="loading">Loading heritage site...</p>;
-  if (error) return <p className="error">{error}</p>;
-  if (!site) return <p className="error">No heritage site found</p>;
+  const name = site?.[`name_${lang}`] || site?.name_en || site?.name || 'No Name';
+  const historyRaw = site?.[`history_${lang}`] || site?.history_en || site?.history || 'No history available.';
+  const location = site?.[`location_${lang}`] || site?.location || 'Unknown';
+  const entryFee = site?.entryFee;
+  const images = site?.gallery || [];
 
-  const name = site[`name_${lang}`] || site.name_en || site.name || 'No Name';
-  const historyRaw = site[`history_${lang}`] || site.history_en || site.history || 'No history available.';
-  const location = site[`location_${lang}`] || site.location || 'Unknown';
-  const entryFee = site.entryFee;
-  const images = site.gallery || [];
-
-  // --- Parse history lines for multi-level headings and paragraphs
   const rawLines = historyRaw.split('\n').map(line => line.trim()).filter(Boolean);
 
   const parsedBlocks = rawLines.map(line => {
-    // Check for markdown heading style
-    if (line.startsWith('### ')) {
-      return { type: 'subtitle', content: line.slice(4).trim() };  // h4
-    }
-    if (line.startsWith('## ')) {
-      return { type: 'heading', content: line.slice(3).trim() };   // h3
-    }
-    if (line.startsWith('# ')) {
-      return { type: 'title', content: line.slice(2).trim() };     // h2
-    }
-
-    // Fallback: ALL CAPS line is heading (h3)
+    if (line.startsWith('### ')) return { type: 'subtitle', content: line.slice(4).trim() };
+    if (line.startsWith('## ')) return { type: 'heading', content: line.slice(3).trim() };
+    if (line.startsWith('# ')) return { type: 'title', content: line.slice(2).trim() };
     if (/^[A-Z\s\-:]+$/.test(line) && line.length < 30) {
       return { type: 'heading', content: line.trim() };
     }
-
-    // Else normal paragraph
     return { type: 'paragraph', content: line };
   });
 
-  // --- Insert gallery images after every 2 paragraphs
   const descriptionBlocks = [];
   let paragraphCount = 0;
   let imageIndex = 0;
@@ -114,7 +101,6 @@ const HeritageDetails = () => {
     }
   });
 
-  // --- Render function
   const renderBlock = (block, key) => {
     switch (block.type) {
       case "paragraph":
@@ -126,21 +112,24 @@ const HeritageDetails = () => {
             src={block.src}
             alt={block.alt || "Image"}
             className="inline-image"
-            style={{ cursor: "pointer" }}
             onClick={() => setFullscreenImg(block.src)}
-            title="Click to enlarge"
+            style={{ cursor: "pointer" }}
           />
         );
-      case "title": // h2
+      case "title":
         return <h2 key={key} className="desc-title semibold">{block.content}</h2>;
-      case "heading": // h3
+      case "heading":
         return <h3 key={key} className="desc-heading bold">{block.content}</h3>;
-      case "subtitle": // h4
+      case "subtitle":
         return <h4 key={key} className="desc-subtitle italics">{block.content}</h4>;
       default:
         return null;
     }
   };
+
+  if (loading) return <p className="loading">Loading heritage site...</p>;
+  if (error) return <p className="error">{error}</p>;
+  if (!site) return <p className="error">No heritage site found</p>;
 
   return (
     <div className="heritage-details-container">
@@ -148,22 +137,18 @@ const HeritageDetails = () => {
         &larr; Back
       </button>
 
-      {/* Main profile/thumbnail image */}
       {site.image && (
         <img
           className="heritage-main-image"
           src={`http://localhost:3000/${site.image}`}
           alt={name}
           onClick={() => setFullscreenImg(`http://localhost:3000/${site.image}`)}
-          title="Click to enlarge"
           style={{ cursor: 'pointer' }}
         />
       )}
 
-      {/* Title (main site name) */}
       <h2 className="desc-title semibold">{name}</h2>
 
-      {/* Location and Entry Fee */}
       <p className="location-entryfee">
         <span className="location-text italics small-font">{location}</span><br />
         <span className="entryfee-heading bold">{lang === 'np' ? 'प्रवेश शुल्क:' : 'Entry Fee:'}</span> {' '}
@@ -172,14 +157,18 @@ const HeritageDetails = () => {
         </span>
       </p>
 
-      {/* Description Content */}
+      {/* Description */}
       <div className="description-content">
-        {!user && (
-          <div className="blurred-section">
-            {descriptionBlocks.map((block, idx) => renderBlock(block, idx))}
-          </div>
+        {!user ? (
+          <>
+            {descriptionBlocks.slice(0, 4).map((block, idx) => renderBlock(block, idx))}
+            <div className="blurred-section">
+              {descriptionBlocks.slice(4).map((block, idx) => renderBlock(block, idx + 4))}
+            </div>
+          </>
+        ) : (
+          descriptionBlocks.map((block, idx) => renderBlock(block, idx))
         )}
-        {user && descriptionBlocks.map((block, idx) => renderBlock(block, idx))}
       </div>
 
       {/* Map */}

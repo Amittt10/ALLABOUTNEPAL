@@ -72,17 +72,8 @@ router.put(
 router.delete('/heritage/:id', adminDeleteHeritageSite);
 
 // Festival admin routes
-router.post(
-  '/festivals',
-  upload.single('image'), // festival image upload single
-  adminAddFestival
-);
-
-router.put(
-  '/festivals/:id',
-  upload.single('image'),
-  adminUpdateFestival
-);
+router.post('/festivals', upload.single('image'), adminAddFestival);
+router.put('/festivals/:id', upload.single('image'), adminUpdateFestival);
 
 router.delete('/festivals/:id', adminDeleteFestival);
 

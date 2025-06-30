@@ -1,7 +1,7 @@
-// backend/controllers/festivalController.js
 import { ObjectId } from 'mongodb';
 import fs from 'fs';
 
+// Helper: delete file from disk
 const deleteFileIfExists = (filePath) => {
   if (filePath && fs.existsSync(filePath)) {
     fs.unlink(filePath, (err) => {
@@ -10,6 +10,7 @@ const deleteFileIfExists = (filePath) => {
   }
 };
 
+// GET all festivals
 export const getFestivals = async (req, res) => {
   try {
     const festivalCollection = req.db.festivalCollection;
@@ -24,12 +25,11 @@ export const getFestivals = async (req, res) => {
   }
 };
 
-
+// GET festival by ID
 export const getFestivalById = async (req, res) => {
   const festivalCollection = req.db.festivalCollection;
   const id = req.params.id;
 
-  // Validate id before using it
   if (!ObjectId.isValid(id)) {
     return res.status(400).json({ success: false, message: 'Invalid festival ID' });
   }
@@ -46,7 +46,7 @@ export const getFestivalById = async (req, res) => {
   }
 };
 
-
+// ADD new festival (Admin)
 export const adminAddFestival = async (req, res) => {
   const festivalCollection = req.db.festivalCollection;
 
@@ -57,8 +57,6 @@ export const adminAddFestival = async (req, res) => {
     dateAD,
     description_en,
     description_np,
-    significance_en,
-    significance_np,
     location_en,
     location_np,
     category,
@@ -68,8 +66,7 @@ export const adminAddFestival = async (req, res) => {
     return res.status(400).json({ success: false, message: 'name_en, name_np, and dateBS are required' });
   }
 
-  // Correct multer single file usage here
-  const image = req.file ? req.file.path : null;
+  const image = req.file ? req.file.filename : null;
 
   try {
     const newFestival = {
@@ -79,8 +76,6 @@ export const adminAddFestival = async (req, res) => {
       dateAD: dateAD || null,
       description_en: description_en || '',
       description_np: description_np || '',
-      significance_en: significance_en || '',
-      significance_np: significance_np || '',
       location_en: location_en || '',
       location_np: location_np || '',
       category: category || 'general',
@@ -96,6 +91,7 @@ export const adminAddFestival = async (req, res) => {
   }
 };
 
+// UPDATE festival (Admin)
 export const adminUpdateFestival = async (req, res) => {
   const festivalCollection = req.db.festivalCollection;
   const id = req.params.id;
@@ -107,8 +103,6 @@ export const adminUpdateFestival = async (req, res) => {
     dateAD,
     description_en,
     description_np,
-    significance_en,
-    significance_np,
     location_en,
     location_np,
     category,
@@ -125,16 +119,14 @@ export const adminUpdateFestival = async (req, res) => {
       dateAD: dateAD || null,
       description_en: description_en || '',
       description_np: description_np || '',
-      significance_en: significance_en || '',
-      significance_np: significance_np || '',
       location_en: location_en || '',
       location_np: location_np || '',
       category: category || 'general',
     };
 
     if (req.file) {
-      deleteFileIfExists(existing.image);
-      updateFields.image = req.file.path;
+      deleteFileIfExists(`uploads/${existing.image}`);
+      updateFields.image = req.file.filename;
     }
 
     const result = await festivalCollection.findOneAndUpdate(
@@ -150,6 +142,7 @@ export const adminUpdateFestival = async (req, res) => {
   }
 };
 
+// DELETE festival (Admin)
 export const adminDeleteFestival = async (req, res) => {
   const festivalCollection = req.db.festivalCollection;
   const id = req.params.id;
@@ -158,7 +151,7 @@ export const adminDeleteFestival = async (req, res) => {
     const existing = await festivalCollection.findOne({ _id: new ObjectId(id) });
     if (!existing) return res.status(404).json({ success: false, message: 'Festival not found' });
 
-    deleteFileIfExists(existing.image);
+    deleteFileIfExists(`uploads/${existing.image}`);
 
     await festivalCollection.deleteOne({ _id: new ObjectId(id) });
 
@@ -169,8 +162,7 @@ export const adminDeleteFestival = async (req, res) => {
   }
 };
 
-
-// Fetch upcoming festivals within the next 7 days
+// GET festivals in next 7 days
 export const getUpcomingFestivals = async (req, res) => {
   const festivalCollection = req.db.festivalCollection;
 
@@ -186,7 +178,6 @@ export const getUpcomingFestivals = async (req, res) => {
 
     const upcoming = festivals.filter(festival => {
       if (!festival.dateAD) return false;
-
       const festDate = new Date(festival.dateAD);
       return festDate >= today && festDate <= nextWeek;
     });

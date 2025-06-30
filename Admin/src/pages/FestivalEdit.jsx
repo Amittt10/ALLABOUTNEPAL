@@ -1,12 +1,14 @@
-// src/pages/FestivalEdit.jsx
 import React, { useEffect, useState } from 'react';
 import { fetchFestivalById, updateFestival } from '../api/festivalApi';
 import { useParams, useNavigate } from 'react-router-dom';
 import './FestivalForm.css';
 
+const categories = ['general', 'religious', 'cultural', 'festival'];
+
 const FestivalEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const [form, setForm] = useState({
     name_en: '',
     name_np: '',
@@ -14,23 +16,32 @@ const FestivalEdit = () => {
     dateAD: '',
     description_en: '',
     description_np: '',
-    significance_en: '',
-    significance_np: '',
     location_en: '',
     location_np: '',
     category: 'general',
     image: null,
   });
+
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    fetchFestivalById(id).then(data => {
-      setForm({
-        ...data,
-        image: null, // reset file input
-      });
-      setLoading(false);
-    });
+    const loadFestival = async () => {
+      try {
+        const data = await fetchFestivalById(id);
+        setForm({
+          ...data,
+          image: null, // reset image file input
+        });
+        setError('');
+      } catch {
+        setError('Failed to load festival data.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadFestival();
   }, [id]);
 
   const handleChange = (e) => {
@@ -43,127 +54,98 @@ const FestivalEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = new FormData();
-    Object.entries(form).forEach(([key, value]) => {
-      if(value !== null) data.append(key, value);
-    });
+    setError('');
+    setSaving(true);
+
+    if (!form.name_en || !form.name_np || !form.dateBS || !form.category) {
+      setError('Please fill all required fields.');
+      setSaving(false);
+      return;
+    }
+
     try {
-      await updateFestival(id, data);
+      const formData = new FormData();
+      for (const key in form) {
+        if (form[key] !== null && form[key] !== '') {
+          formData.append(key, form[key]);
+        }
+      }
+
+      await updateFestival(id, formData);
       navigate('/admin/festivals');
-    } catch (err) {
-      alert('Failed to update festival. Please try again.');
+    } catch {
+      setError('Failed to update festival. Please try again.');
+    } finally {
+      setSaving(false);
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div>Loading festival data...</div>;
 
   return (
-    <div className="festival-form">
-      <h2>Edit Festival</h2>
-      <form onSubmit={handleSubmit}>
+    <div className="festival-form-container">
+      <h1>Edit Festival</h1>
 
-        <label>Name (EN)*</label>
-        <input
-          name="name_en"
-          value={form.name_en}
-          onChange={handleChange}
-          required
-          placeholder="English name"
-        />
+      {error && <p className="error-text">{error}</p>}
 
-        <label>Name (NP)*</label>
-        <input
-          name="name_np"
-          value={form.name_np}
-          onChange={handleChange}
-          required
-          placeholder="नेपाली नाम"
-        />
+      <form onSubmit={handleSubmit} className="festival-form" encType="multipart/form-data">
+        <label>
+          Name (English)*
+          <input type="text" name="name_en" value={form.name_en} onChange={handleChange} required />
+        </label>
 
-        <label>Date (BS)*</label>
-        <input
-          name="dateBS"
-          type="text"
-          value={form.dateBS}
-          onChange={handleChange}
-          required
-          placeholder="YYYY-MM-DD"
-        />
+        <label>
+          Name (Nepali)*
+          <input type="text" name="name_np" value={form.name_np} onChange={handleChange} required />
+        </label>
 
-        <label>Date (AD)</label>
-        <input
-          name="dateAD"
-          type="text"
-          value={form.dateAD}
-          onChange={handleChange}
-          placeholder="YYYY-MM-DD"
-        />
+        <label>
+          Date (BS)*
+          <input type="text" name="dateBS" value={form.dateBS} onChange={handleChange} placeholder="YYYY-MM-DD" required />
+        </label>
 
-        <label>Description (EN)</label>
-        <textarea
-          name="description_en"
-          value={form.description_en}
-          onChange={handleChange}
-          placeholder="Description in English"
-        />
+        <label>
+          Date (AD)
+          <input type="text" name="dateAD" value={form.dateAD} onChange={handleChange} placeholder="YYYY-MM-DD" />
+        </label>
 
-        <label>Description (NP)</label>
-        <textarea
-          name="description_np"
-          value={form.description_np}
-          onChange={handleChange}
-          placeholder="नेपालीमा वर्णन"
-        />
+        <label>
+          Description (English)
+          <textarea name="description_en" value={form.description_en} onChange={handleChange} />
+        </label>
 
-        <label>Significance (EN)</label>
-        <textarea
-          name="significance_en"
-          value={form.significance_en}
-          onChange={handleChange}
-          placeholder="Significance in English"
-        />
+        <label>
+          Description (Nepali)
+          <textarea name="description_np" value={form.description_np} onChange={handleChange} />
+        </label>
 
-        <label>Significance (NP)</label>
-        <textarea
-          name="significance_np"
-          value={form.significance_np}
-          onChange={handleChange}
-          placeholder="महत्त्व नेपालीमा"
-        />
+        <label>
+          Location (English)
+          <input type="text" name="location_en" value={form.location_en} onChange={handleChange} />
+        </label>
 
-        <label>Location (EN)</label>
-        <input
-          name="location_en"
-          value={form.location_en}
-          onChange={handleChange}
-          placeholder="Location in English"
-        />
+        <label>
+          Location (Nepali)
+          <input type="text" name="location_np" value={form.location_np} onChange={handleChange} />
+        </label>
 
-        <label>Location (NP)</label>
-        <input
-          name="location_np"
-          value={form.location_np}
-          onChange={handleChange}
-          placeholder="स्थान नेपालीमा"
-        />
+        <label>
+          Category*
+          <select name="category" value={form.category} onChange={handleChange} required>
+            {categories.map(cat => (
+              <option key={cat} value={cat}>{cat.charAt(0).toUpperCase() + cat.slice(1)}</option>
+            ))}
+          </select>
+        </label>
 
-        <label>Category</label>
-        <select name="category" value={form.category} onChange={handleChange}>
-          <option value="general">General</option>
-          <option value="religious">Religious</option>
-          <option value="cultural">Cultural</option>
-          <option value="festival">Festival</option>
-        </select>
+        <label>
+          Change Festival Image (leave blank to keep current)
+          <input type="file" name="image" accept="image/*" onChange={handleChange} />
+        </label>
 
-        <label>Image (leave blank to keep existing)</label>
-        <input
-          name="image"
-          type="file"
-          accept="image/*"
-          onChange={handleChange}
-        />
-
-        <button type="submit" className="btn save-btn">Update</button>
+        <button type="submit" disabled={saving} className="festival-btn">
+          {saving ? 'Saving...' : 'Update Festival'}
+        </button>
       </form>
     </div>
   );

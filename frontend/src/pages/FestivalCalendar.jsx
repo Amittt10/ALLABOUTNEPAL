@@ -4,9 +4,11 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import "./FestivalCalendar.css"; // updated CSS below
+import "./FestivalCalendar.css"; // your CSS file
 
+// Get API base URL and strip trailing "/api" if present, for image URL base
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const IMAGE_BASE_URL = API_BASE_URL.replace(/\/api$/, "");
 
 export default function FestivalCalendar() {
   const { t, i18n } = useTranslation();
@@ -37,14 +39,6 @@ export default function FestivalCalendar() {
   const upcomingFestivals = festivals
     .filter((f) => f.dateAD && new Date(f.dateAD) >= today)
     .sort((a, b) => new Date(a.dateAD) - new Date(b.dateAD));
-
-  const formatDateShort = (dateStr) => {
-    const d = new Date(dateStr);
-    return d.toLocaleDateString(i18n.language === "np" ? "ne-NP" : "en-US", {
-      day: "numeric",
-      month: "short",
-    });
-  };
 
   const handleFestivalClick = (id) => {
     navigate(`/festival-detail/${id}`);
@@ -88,7 +82,7 @@ export default function FestivalCalendar() {
                     className="masonry-image"
                     src={
                       festival.image
-                        ? `${API_BASE_URL}/${festival.image}`
+                        ? `${API_BASE_URL}/uploads/${festival.image}`
                         : "/default-festival.jpg"
                     }
                     alt={i18n.language === "np" ? festival.name_np : festival.name_en}
