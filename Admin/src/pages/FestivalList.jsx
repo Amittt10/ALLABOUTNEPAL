@@ -57,7 +57,6 @@ const FestivalList = () => {
               <th>Name (EN)</th>
               <th>Name (NP)</th>
               <th>Date (BS)</th>
-              <th>Month</th>
               <th>Category</th>
               <th>Image</th>
               <th>Actions</th>
@@ -69,12 +68,11 @@ const FestivalList = () => {
                 <td>{festival.name_en}</td>
                 <td>{festival.name_np}</td>
                 <td>{festival.dateBS || festival.date}</td>
-                <td>{festival.month || ''}</td>
                 <td>{festival.category}</td>
                 <td>
                   {festival.image ? (
                     <img
-                      src={`/${festival.image.replace(/\\/g, '/')}`}
+                      src={`/uploads/${festival.image.replace(/\\/g, '/')}`}
                       alt={festival.name_en}
                       className="festival-img"
                     />

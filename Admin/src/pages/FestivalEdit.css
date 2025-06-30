@@ -1,4 +1,4 @@
-.festival-form {
+.festival-form-container {
   max-width: 600px;
   margin: 2rem auto;
   padding: 1.5rem 2rem;
@@ -8,14 +8,14 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.festival-form h2 {
+.festival-form-container h1 {
   text-align: center;
   margin-bottom: 1.5rem;
   font-weight: 700;
   color: #2c3e50;
 }
 
-.festival-form form {
+.festival-form {
   display: flex;
   flex-direction: column;
 }
@@ -27,10 +27,9 @@
 }
 
 .festival-form input[type='text'],
-.festival-form input[type='date'],
-.festival-form input[type='file'],
 .festival-form select,
-.festival-form textarea {
+.festival-form textarea,
+.festival-form input[type='file'] {
   padding: 0.5rem 0.75rem;
   font-size: 1rem;
   border: 1px solid #bdc3c7;
@@ -50,14 +49,13 @@
 }
 
 .festival-form input[type='text']:focus,
-.festival-form input[type='date']:focus,
 .festival-form select:focus,
 .festival-form textarea:focus {
   border-color: #2980b9;
   box-shadow: 0 0 5px rgba(41, 128, 185, 0.4);
 }
 
-.festival-form button {
+.festival-btn {
   margin-top: 1.5rem;
   padding: 0.75rem;
   background-color: #2980b9;
@@ -70,16 +68,16 @@
   transition: background-color 0.25s ease-in-out;
 }
 
-.festival-form button:disabled {
+.festival-btn:disabled {
   background-color: #7f8c8d;
   cursor: not-allowed;
 }
 
-.festival-form button:hover:not(:disabled) {
+.festival-btn:hover:not(:disabled) {
   background-color: #1f598a;
 }
 
-.error {
+.error-text {
   color: #e74c3c;
   margin-bottom: 1rem;
   font-weight: 600;
@@ -88,20 +86,19 @@
 
 /* Responsive */
 @media (max-width: 640px) {
-  .festival-form {
+  .festival-form-container {
     margin: 1rem 1rem;
     padding: 1rem 1.2rem;
   }
 
   .festival-form input[type='text'],
-  .festival-form input[type='date'],
   .festival-form select,
   .festival-form textarea,
   .festival-form input[type='file'] {
     font-size: 0.9rem;
   }
 
-  .festival-form button {
+  .festival-btn {
     font-size: 1rem;
     padding: 0.65rem;
   }

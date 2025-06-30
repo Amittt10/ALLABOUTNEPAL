@@ -66,7 +66,8 @@ export const adminAddFestival = async (req, res) => {
     return res.status(400).json({ success: false, message: 'name_en, name_np, and dateBS are required' });
   }
 
-  const image = req.file ? req.file.filename : null;
+  const image = req.files?.image ? req.files.image[0].filename : null;
+  const gallery = req.files?.gallery ? req.files.gallery.map(file => file.filename) : [];
 
   try {
     const newFestival = {
@@ -80,6 +81,7 @@ export const adminAddFestival = async (req, res) => {
       location_np: location_np || '',
       category: category || 'general',
       image,
+      gallery,
       createdAt: new Date(),
     };
 
@@ -90,6 +92,7 @@ export const adminAddFestival = async (req, res) => {
     res.status(500).json({ success: false, message: 'Failed to add festival' });
   }
 };
+
 
 // UPDATE festival (Admin)
 export const adminUpdateFestival = async (req, res) => {
@@ -124,9 +127,21 @@ export const adminUpdateFestival = async (req, res) => {
       category: category || 'general',
     };
 
-    if (req.file) {
+    // Handle main image update
+    if (req.files?.image) {
       deleteFileIfExists(`uploads/${existing.image}`);
-      updateFields.image = req.file.filename;
+      updateFields.image = req.files.image[0].filename;
+    }
+
+    // Handle gallery update - replace with new gallery files if uploaded
+    if (req.files?.gallery) {
+      // Delete old gallery images from disk
+      if (existing.gallery && Array.isArray(existing.gallery)) {
+        existing.gallery.forEach((filename) => {
+          deleteFileIfExists(`uploads/${filename}`);
+        });
+      }
+      updateFields.gallery = req.files.gallery.map(file => file.filename);
     }
 
     const result = await festivalCollection.findOneAndUpdate(
@@ -142,6 +157,7 @@ export const adminUpdateFestival = async (req, res) => {
   }
 };
 
+
 // DELETE festival (Admin)
 export const adminDeleteFestival = async (req, res) => {
   const festivalCollection = req.db.festivalCollection;
@@ -152,6 +168,12 @@ export const adminDeleteFestival = async (req, res) => {
     if (!existing) return res.status(404).json({ success: false, message: 'Festival not found' });
 
     deleteFileIfExists(`uploads/${existing.image}`);
+
+    if (existing.gallery && existing.gallery.length > 0) {
+      existing.gallery.forEach(filename => {
+        deleteFileIfExists(`uploads/${filename}`);
+      });
+    }
 
     await festivalCollection.deleteOne({ _id: new ObjectId(id) });
 

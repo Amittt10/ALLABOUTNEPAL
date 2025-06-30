@@ -1,31 +1,29 @@
+// backend/routes/adminRoutes.js
 import express from 'express';
 import multer from 'multer';
 import fs from 'fs';
 
-import { 
-  adminGetHeritageSites, 
-  adminAddHeritageSite, 
-  adminUpdateHeritageSite, 
+import {
+  adminGetHeritageSites,
+  adminAddHeritageSite,
+  adminUpdateHeritageSite,
   adminDeleteHeritageSite,
-  adminGetHeritageSiteById
+  adminGetHeritageSiteById,
 } from '../controllers/heritageController.js';
 
 import {
   adminAddFestival,
   adminUpdateFestival,
-  adminDeleteFestival
+  adminDeleteFestival,
 } from '../controllers/festivalController.js';
 
-import { 
-  getStats, 
-  verifyUser 
-} from '../controllers/statsController.js';
+import { getStats, verifyUser } from '../controllers/statsController.js';
 
 import { authenticateJWT, authorizeAdmin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-// Multer storage setup for file uploads
+// Setup multer storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const dir = './uploads';
@@ -43,11 +41,11 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Protect all routes with authentication and admin authorization
+// Protect all admin routes
 router.use(authenticateJWT);
 router.use(authorizeAdmin);
 
-// Heritage CRUD routes
+// Heritage routes
 router.get('/heritage', adminGetHeritageSites);
 router.get('/heritage/:id', adminGetHeritageSiteById);
 
@@ -71,13 +69,29 @@ router.put(
 
 router.delete('/heritage/:id', adminDeleteHeritageSite);
 
-// Festival admin routes
-router.post('/festivals', upload.single('image'), adminAddFestival);
-router.put('/festivals/:id', upload.single('image'), adminUpdateFestival);
+// Festival routes
+// Support main image + multiple gallery images if needed
+router.post(
+  '/festivals',
+  upload.fields([
+    { name: 'image', maxCount: 1 },
+    { name: 'gallery', maxCount: 10 },
+  ]),
+  adminAddFestival
+);
+
+router.put(
+  '/festivals/:id',
+  upload.fields([
+    { name: 'image', maxCount: 1 },
+    { name: 'gallery', maxCount: 10 },
+  ]),
+  adminUpdateFestival
+);
 
 router.delete('/festivals/:id', adminDeleteFestival);
 
-// Stats & verify routes
+// Stats & verify
 router.get('/stats', getStats);
 router.get('/verify', verifyUser);
 

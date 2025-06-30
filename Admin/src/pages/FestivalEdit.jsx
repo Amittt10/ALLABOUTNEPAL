@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { fetchFestivalById, updateFestival } from '../api/festivalApi';
 import { useParams, useNavigate } from 'react-router-dom';
-import './FestivalForm.css';
+import './FestivalEdit.css';
 
 const categories = ['general', 'religious', 'cultural', 'festival'];
 
@@ -20,6 +20,7 @@ const FestivalEdit = () => {
     location_np: '',
     category: 'general',
     image: null,
+    gallery: [],
   });
 
   const [loading, setLoading] = useState(true);
@@ -32,7 +33,8 @@ const FestivalEdit = () => {
         const data = await fetchFestivalById(id);
         setForm({
           ...data,
-          image: null, // reset image file input
+          image: null,  // Reset file inputs on load
+          gallery: [],
         });
         setError('');
       } catch {
@@ -46,10 +48,25 @@ const FestivalEdit = () => {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    setForm(prev => ({
-      ...prev,
-      [name]: files ? files[0] : value,
-    }));
+
+    if (files) {
+      if (name === 'gallery') {
+        setForm((prev) => ({
+          ...prev,
+          gallery: Array.from(files),
+        }));
+      } else {
+        setForm((prev) => ({
+          ...prev,
+          [name]: files[0],
+        }));
+      }
+    } else {
+      setForm((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -66,9 +83,21 @@ const FestivalEdit = () => {
     try {
       const formData = new FormData();
       for (const key in form) {
+        if (key === 'image' || key === 'gallery') continue; // handle separately
+
         if (form[key] !== null && form[key] !== '') {
           formData.append(key, form[key]);
         }
+      }
+
+      if (form.image) {
+        formData.append('image', form.image);
+      }
+
+      if (form.gallery.length > 0) {
+        form.gallery.forEach((file) => {
+          formData.append('gallery', file);
+        });
       }
 
       await updateFestival(id, formData);
@@ -132,8 +161,10 @@ const FestivalEdit = () => {
         <label>
           Category*
           <select name="category" value={form.category} onChange={handleChange} required>
-            {categories.map(cat => (
-              <option key={cat} value={cat}>{cat.charAt(0).toUpperCase() + cat.slice(1)}</option>
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat.charAt(0).toUpperCase() + cat.slice(1)}
+              </option>
             ))}
           </select>
         </label>
@@ -141,6 +172,11 @@ const FestivalEdit = () => {
         <label>
           Change Festival Image (leave blank to keep current)
           <input type="file" name="image" accept="image/*" onChange={handleChange} />
+        </label>
+
+        <label>
+          Upload New Gallery Images (multiple)
+          <input type="file" name="gallery" accept="image/*" multiple onChange={handleChange} />
         </label>
 
         <button type="submit" disabled={saving} className="festival-btn">

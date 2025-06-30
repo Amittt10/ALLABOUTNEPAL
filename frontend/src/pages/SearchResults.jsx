@@ -13,6 +13,26 @@ export default function SearchResults() {
   const queryParams = new URLSearchParams(location.search);
   const searchQuery = queryParams.get("q");
 
+  // Helper function to get correct image URL based on item type and image string
+  const getImageUrl = (item) => {
+    if (!item.image) return "/default-image.jpg";
+
+    if (item.type === "festival") {
+      // Festivals store just filename, so prepend /uploads/
+      return `http://localhost:3000/uploads/${item.image}`;
+    }
+
+    if (item.type === "heritage") {
+      // Heritage images may already include 'uploads/' prefix
+      return item.image.startsWith("uploads/")
+        ? `http://localhost:3000/${item.image}`
+        : `http://localhost:3000/uploads/${item.image}`;
+    }
+
+    // Default fallback
+    return `http://localhost:3000/uploads/${item.image}`;
+  };
+
   useEffect(() => {
     const fetchSearchResults = async () => {
       try {
@@ -57,14 +77,14 @@ export default function SearchResults() {
                 <div className="search-results-thumb">
                   {item.image && (
                     <img
-                      src={`http://localhost:3000/${item.image}`}
+                      src={getImageUrl(item)}
                       alt={item.name_en}
+                      loading="lazy"
                     />
                   )}
                 </div>
                 <div className="search-results-info">
                   <h3>{item.name_en}</h3>
-                  <p>{item.description?.substring(0, 100)}…</p>
                   <span className="search-results-type">
                     {item.type === "festival" ? "Festival" : "Heritage Site"}
                   </span>

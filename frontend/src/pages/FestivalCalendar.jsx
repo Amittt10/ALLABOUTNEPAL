@@ -90,7 +90,15 @@ export default function FestivalCalendar() {
                   />
                   <div className="masonry-overlay">
                     <h2>{i18n.language === "np" ? festival.name_np : festival.name_en}</h2>
-                    <span>{festival.dateBS || ""}</span>
+                   <span className="date">
+                      {festival.dateAD
+                       ? new Intl.DateTimeFormat(i18n.language === "np" ? "ne-NP" : "en-GB", {
+                        day: "numeric",
+                        month: "short",
+                       }).format(new Date(festival.dateAD))
+                      : ""}
+                    </span>
+
                   </div>
                 </div>
               ))}

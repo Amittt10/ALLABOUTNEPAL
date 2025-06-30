@@ -16,17 +16,36 @@ const FestivalAdd = () => {
     location_np: '',
     category: 'general',
     image: null,
+    gallery: [],
   });
 
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // Handles text inputs and file inputs differently
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    setForm((prev) => ({
-      ...prev,
-      [name]: files ? files[0] : value,
-    }));
+
+    if (files) {
+      if (name === 'gallery') {
+        // Multiple files for gallery
+        setForm((prev) => ({
+          ...prev,
+          gallery: Array.from(files),
+        }));
+      } else {
+        // Single file (main image)
+        setForm((prev) => ({
+          ...prev,
+          [name]: files[0],
+        }));
+      }
+    } else {
+      setForm((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -45,11 +64,26 @@ const FestivalAdd = () => {
 
     try {
       const data = new FormData();
+
+      // Append simple fields
       Object.entries(form).forEach(([key, value]) => {
+        if (key === 'image' || key === 'gallery') return; // Skip files here
         if (value !== null && value !== '') {
           data.append(key, value);
         }
       });
+
+      // Append main image file
+      if (form.image) {
+        data.append('image', form.image);
+      }
+
+      // Append gallery images files (multiple)
+      if (form.gallery.length > 0) {
+        form.gallery.forEach((file) => {
+          data.append('gallery', file);
+        });
+      }
 
       await addFestival(data);
       navigate('/admin/festivals');
@@ -74,7 +108,13 @@ const FestivalAdd = () => {
         <input name="name_np" value={form.name_np} onChange={handleChange} required />
 
         <label>Date (BS)*</label>
-        <input name="dateBS" value={form.dateBS} onChange={handleChange} required placeholder="2081-04-15" />
+        <input
+          name="dateBS"
+          value={form.dateBS}
+          onChange={handleChange}
+          required
+          placeholder="2081-04-15"
+        />
 
         <label>Date (AD)</label>
         <input name="dateAD" value={form.dateAD} onChange={handleChange} placeholder="2025-09-01" />
@@ -98,8 +138,17 @@ const FestivalAdd = () => {
           <option value="cultural">Cultural</option>
         </select>
 
-        <label>Festival Image</label>
+        <label>Festival Image (Main Image)</label>
         <input name="image" type="file" accept="image/*" onChange={handleChange} />
+
+        <label>Gallery Images (Multiple)</label>
+        <input
+          name="gallery"
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={handleChange}
+        />
 
         <button type="submit" disabled={loading}>
           {loading ? 'Saving...' : 'Add Festival'}

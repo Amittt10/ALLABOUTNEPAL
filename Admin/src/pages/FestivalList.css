@@ -1,85 +1,88 @@
+/* Container */
 .festival-list-container {
-  padding: 2rem;
-  max-width: 1000px;
-  margin: auto;
-  font-family: 'Segoe UI', sans-serif;
+  max-width: 1100px;
+  margin: 20px auto;
+  padding: 0 15px;
+  font-family: Arial, sans-serif;
 }
 
+/* Header */
 .festival-list-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 20px;
   flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
 }
 
 .festival-list-header h1 {
   font-size: 1.8rem;
   margin: 0;
-  color: #333;
 }
 
 .btn-add {
-  background-color: #28a745;
-  color: white;
+  background-color: #007bff;
   border: none;
-  padding: 0.6rem 1rem;
-  font-weight: bold;
-  border-radius: 6px;
+  color: white;
+  padding: 10px 18px;
+  font-size: 1rem;
+  border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.25s ease;
 }
 
 .btn-add:hover {
-  background-color: #218838;
+  background-color: #0056b3;
 }
 
+/* Table */
 .festival-table {
   width: 100%;
   border-collapse: collapse;
-  background: white;
-  border: 1px solid #ddd;
-  font-size: 0.95rem;
+  table-layout: fixed;
+  word-wrap: break-word;
 }
 
 .festival-table th,
 .festival-table td {
-  border: 1px solid #ccc;
-  padding: 0.75rem;
+  border: 1px solid #ddd;
+  padding: 10px;
   text-align: left;
   vertical-align: middle;
 }
 
 .festival-table th {
-  background-color: #f7f7f7;
-  font-weight: 600;
-  color: #333;
+  background-color: #f2f2f2;
+  font-weight: bold;
 }
 
+/* Festival image */
 .festival-img {
-  width: 60px;
+  width: 80px;
   height: 60px;
   object-fit: cover;
   border-radius: 4px;
 }
 
+/* Buttons */
 .btn-edit,
 .btn-delete {
-  padding: 0.4rem 0.8rem;
-  font-size: 0.85rem;
-  margin-right: 0.5rem;
+  padding: 6px 12px;
+  margin: 2px;
   border: none;
-  border-radius: 5px;
+  border-radius: 3px;
   cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.25s ease;
 }
 
 .btn-edit {
-  background-color: #007bff;
+  background-color: #28a745;
   color: white;
 }
 
 .btn-edit:hover {
-  background-color: #0056b3;
+  background-color: #1e7e34;
 }
 
 .btn-delete {
@@ -88,58 +91,77 @@
 }
 
 .btn-delete:hover {
-  background-color: #b02a37;
+  background-color: #bd2130;
 }
 
+/* Error text */
 .error-text {
-  color: red;
-  margin-top: 1rem;
-  text-align: center;
+  color: #dc3545;
+  font-weight: bold;
+  margin-bottom: 15px;
 }
 
-/* Mobile responsiveness */
-@media screen and (max-width: 768px) {
-  .festival-table {
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-
+/* Responsive styles */
+@media (max-width: 768px) {
   .festival-list-header {
     flex-direction: column;
     align-items: flex-start;
   }
 
   .btn-add {
+    margin-top: 10px;
     width: 100%;
-    text-align: center;
-  }
-}
-
-@media screen and (max-width: 500px) {
-  .festival-list-container {
-    padding: 1rem;
   }
 
-  .festival-list-header h1 {
-    font-size: 1.4rem;
-  }
-
+  .festival-table,
+  .festival-table thead,
+  .festival-table tbody,
   .festival-table th,
+  .festival-table td,
+  .festival-table tr {
+    display: block;
+  }
+
+  .festival-table thead tr {
+    display: none;
+  }
+
+  .festival-table tr {
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+  }
+
   .festival-table td {
-    padding: 0.5rem;
-    font-size: 0.85rem;
+    padding: 8px 10px;
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 50%;
+    text-align: left;
+  }
+
+  .festival-table td::before {
+    position: absolute;
+    top: 8px;
+    left: 15px;
+    width: 45%;
+    white-space: nowrap;
+    font-weight: bold;
+    content: attr(data-label);
+  }
+
+  .festival-img {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    margin: 10px 0;
   }
 
   .btn-edit,
   .btn-delete {
-    margin-right: 0.3rem;
-    font-size: 0.8rem;
-    padding: 0.35rem 0.6rem;
-  }
-
-  .festival-img {
-    width: 50px;
-    height: 50px;
+    width: 48%;
+    margin: 5px 1% 0 1%;
   }
 }

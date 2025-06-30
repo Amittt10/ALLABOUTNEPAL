@@ -91,7 +91,7 @@ const FestivalDetailById = () => {
       if (paragraphCount % 2 === 0 && imageIndex < gallery.length) {
         descriptionBlocks.push({
           type: "image",
-          src: `http://localhost:3000/${gallery[imageIndex]}`,
+          src: `http://localhost:3000/uploads/${gallery[imageIndex]}`,
           alt: `${name} image ${imageIndex + 1}`
         });
         imageIndex++;
