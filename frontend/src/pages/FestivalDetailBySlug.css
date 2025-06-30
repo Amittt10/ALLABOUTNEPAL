@@ -31,12 +31,14 @@
   font-size: 2rem;
   font-weight: 600;
   margin: 0.5rem 0;
+  text-align: center;
 }
 
 .festival-detail-date {
   font-style: italic;
   color: #555;
   margin-bottom: 0.5rem;
+  text-align: center;
 }
 
 .festival-detail-location {
@@ -44,6 +46,7 @@
   color: #444;
   margin-bottom: 2rem;
   font-style: italic;
+  text-align: center;
 }
 
 .description-content {

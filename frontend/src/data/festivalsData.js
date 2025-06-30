@@ -15,6 +15,8 @@ const festivalsData = {
 
 Holi is one of the most vibrant festivals celebrated with joy, color, and enthusiasm.
 
+[image:holi.jpg]
+
 ## Symbolism
 
 It marks the arrival of spring and is associated with the victory of good over evil.

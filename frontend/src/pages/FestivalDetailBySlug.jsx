@@ -15,14 +15,6 @@ export default function FestivalDetailBySlug() {
   const isNepali = i18n.language === "np";
   const lang = isNepali ? "np" : "en";
 
-  const formatDate = (dateStr) => {
-    if (!dateStr) return "";
-    return new Date(dateStr).toLocaleDateString(
-      isNepali ? "ne-NP" : "en-US",
-      { year: "numeric", month: "long", day: "numeric" }
-    );
-  };
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -40,35 +32,32 @@ export default function FestivalDetailBySlug() {
 
   const name = festival[`name_${lang}`] || festival.name_en;
   const descriptionRaw = festival[`description_${lang}`] || "";
+  const location = festival[`location_${lang}`] || festival.location_en || "";
 
-  const gallery = festival.gallery || []; // Optional: support if added
+  const formatDate = (dateStr) => {
+    if (!dateStr) return "";
+    return new Date(dateStr).toLocaleDateString(
+      isNepali ? "ne-NP" : "en-US",
+      { year: "numeric", month: "long", day: "numeric" }
+    );
+  };
+
   const rawLines = descriptionRaw.split("\n").map((line) => line.trim()).filter(Boolean);
 
   const parsedBlocks = rawLines.map((line) => {
+    if (line.startsWith("[image:") && line.endsWith("]")) {
+      const filename = line.slice(7, -1).trim();
+      return {
+        type: "image",
+        src: `/images/${filename}`, // Loaded from public/images/
+        alt: filename
+      };
+    }
+
     if (line.startsWith("### ")) return { type: "subtitle", content: line.slice(4).trim() };
     if (line.startsWith("## ")) return { type: "heading", content: line.slice(3).trim() };
     if (line.startsWith("# ")) return { type: "title", content: line.slice(2).trim() };
     return { type: "paragraph", content: line };
-  });
-
-  const descriptionBlocks = [];
-  let paragraphCount = 0;
-  let imageIndex = 0;
-
-  parsedBlocks.forEach((block) => {
-    descriptionBlocks.push(block);
-
-    if (block.type === "paragraph") {
-      paragraphCount++;
-      if (paragraphCount % 2 === 0 && imageIndex < gallery.length) {
-        descriptionBlocks.push({
-          type: "image",
-          src: gallery[imageIndex],
-          alt: `${name} image ${imageIndex + 1}`,
-        });
-        imageIndex++;
-      }
-    }
   });
 
   const renderBlock = (block, key) => {
@@ -113,13 +102,10 @@ export default function FestivalDetailBySlug() {
         />
         <h1 className="festival-detail-title">{name}</h1>
         <p className="festival-detail-date">{formatDate(festival.dateAD)}</p>
-
-        <p className="festival-detail-location">
-        {festival[`location_${lang}`]}
-        </p>
+        <p className="festival-detail-location">{location}</p>
 
         <div className="description-content">
-          {descriptionBlocks.map((block, idx) => renderBlock(block, idx))}
+          {parsedBlocks.map((block, idx) => renderBlock(block, idx))}
         </div>
       </div>
 
