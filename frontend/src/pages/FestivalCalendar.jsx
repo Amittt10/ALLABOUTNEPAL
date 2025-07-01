@@ -4,9 +4,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import "./FestivalCalendar.css"; // your CSS file
+import "./FestivalCalendar.css";
 
-// Get API base URL and strip trailing "/api" if present, for image URL base
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 const IMAGE_BASE_URL = API_BASE_URL.replace(/\/api$/, "");
 
@@ -36,9 +35,25 @@ export default function FestivalCalendar() {
   }, [t]);
 
   const today = new Date();
-  const upcomingFestivals = festivals
+
+  // All upcoming festivals
+  const futureFestivals = festivals
     .filter((f) => f.dateAD && new Date(f.dateAD) >= today)
     .sort((a, b) => new Date(a.dateAD) - new Date(b.dateAD));
+
+  // Check if user has clicked a different date (not today)
+  const isDateFiltered = selectedDate.toDateString() !== today.toDateString();
+
+  const upcomingFestivals = isDateFiltered
+    ? futureFestivals.filter((f) => {
+        const festDate = new Date(f.dateAD);
+        return (
+          festDate.getFullYear() === selectedDate.getFullYear() &&
+          festDate.getMonth() === selectedDate.getMonth() &&
+          festDate.getDate() === selectedDate.getDate()
+        );
+      })
+    : futureFestivals;
 
   const handleFestivalClick = (id) => {
     navigate(`/festival-detail/${id}`);
@@ -56,12 +71,22 @@ export default function FestivalCalendar() {
             selected={selectedDate}
             onChange={setSelectedDate}
             minDate={today}
-            highlightDates={upcomingFestivals.map((f) => new Date(f.dateAD))}
+            highlightDates={futureFestivals.map((f) => new Date(f.dateAD))}
           />
         </div>
 
         <div className="calendar-right">
-          <h2>{t("festival.upcoming")}</h2>
+          <h2>{isDateFiltered ? t("festival.eventsOnDate") : t("festival.upcoming")}</h2>
+
+          {isDateFiltered && (
+            <button
+              onClick={() => setSelectedDate(today)}
+              className="show-all-button"
+            >
+              {t("festival.showAll")}
+            </button>
+          )}
+
           {upcomingFestivals.length === 0 ? (
             <p>{t("festival.noUpcoming")}</p>
           ) : (
@@ -90,15 +115,14 @@ export default function FestivalCalendar() {
                   />
                   <div className="masonry-overlay">
                     <h2>{i18n.language === "np" ? festival.name_np : festival.name_en}</h2>
-                   <span className="date">
+                    <span className="date">
                       {festival.dateAD
-                       ? new Intl.DateTimeFormat(i18n.language === "np" ? "ne-NP" : "en-GB", {
-                        day: "numeric",
-                        month: "short",
-                       }).format(new Date(festival.dateAD))
-                      : ""}
+                        ? new Intl.DateTimeFormat(
+                            i18n.language === "np" ? "ne-NP" : "en-GB",
+                            { day: "numeric", month: "short" }
+                          ).format(new Date(festival.dateAD))
+                        : ""}
                     </span>
-
                   </div>
                 </div>
               ))}
