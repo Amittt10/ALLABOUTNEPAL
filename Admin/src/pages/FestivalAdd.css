@@ -1,10 +1,12 @@
+/* FestivalAdd.css */
+
 .festival-form {
   max-width: 600px;
   margin: 2rem auto;
-  padding: 1.5rem 2rem;
   background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgb(0 0 0 / 0.1);
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -12,97 +14,83 @@
   text-align: center;
   margin-bottom: 1.5rem;
   font-weight: 700;
-  color: #2c3e50;
-}
-
-.festival-form form {
-  display: flex;
-  flex-direction: column;
+  color: #222;
 }
 
 .festival-form label {
-  margin: 0.75rem 0 0.25rem 0;
+  display: block;
   font-weight: 600;
-  color: #34495e;
+  margin-top: 1rem;
+  margin-bottom: 0.3rem;
+  color: #444;
 }
 
-.festival-form input[type='text'],
-.festival-form input[type='date'],
-.festival-form input[type='file'],
+.festival-form input[type="text"],
+.festival-form input[type="file"],
 .festival-form select,
 .festival-form textarea {
+  width: 100%;
   padding: 0.5rem 0.75rem;
+  border: 1.8px solid #ccc;
+  border-radius: 6px;
   font-size: 1rem;
-  border: 1px solid #bdc3c7;
-  border-radius: 4px;
-  outline: none;
-  transition: border-color 0.2s ease-in-out;
-  font-family: inherit;
+  color: #333;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
 }
 
-.festival-form input[type='file'] {
-  padding: 0.3rem 0.75rem;
+.festival-form input[type="text"]:focus,
+.festival-form input[type="file"]:focus,
+.festival-form select:focus,
+.festival-form textarea:focus {
+  border-color: #5b9bd5;
+  outline: none;
 }
 
 .festival-form textarea {
-  min-height: 100px;
   resize: vertical;
-}
-
-.festival-form input[type='text']:focus,
-.festival-form input[type='date']:focus,
-.festival-form select:focus,
-.festival-form textarea:focus {
-  border-color: #2980b9;
-  box-shadow: 0 0 5px rgba(41, 128, 185, 0.4);
+  min-height: 80px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .festival-form button {
-  margin-top: 1.5rem;
+  margin-top: 1.8rem;
+  width: 100%;
   padding: 0.75rem;
-  background-color: #2980b9;
-  border: none;
-  border-radius: 5px;
-  color: white;
+  font-size: 1.2rem;
   font-weight: 700;
-  font-size: 1.1rem;
+  color: white;
+  background-color: #5b9bd5;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.25s ease-in-out;
+  transition: background-color 0.25s ease;
 }
 
 .festival-form button:disabled {
-  background-color: #7f8c8d;
+  background-color: #aac4f8;
   cursor: not-allowed;
 }
 
 .festival-form button:hover:not(:disabled) {
-  background-color: #1f598a;
+  background-color: #4178d0;
 }
 
 .error {
-  color: #e74c3c;
   margin-bottom: 1rem;
+  color: #d9534f;
   font-weight: 600;
   text-align: center;
 }
 
 /* Responsive */
-@media (max-width: 640px) {
+@media (max-width: 600px) {
   .festival-form {
-    margin: 1rem 1rem;
+    margin: 1rem;
     padding: 1rem 1.2rem;
-  }
-
-  .festival-form input[type='text'],
-  .festival-form input[type='date'],
-  .festival-form select,
-  .festival-form textarea,
-  .festival-form input[type='file'] {
-    font-size: 0.9rem;
   }
 
   .festival-form button {
     font-size: 1rem;
-    padding: 0.65rem;
   }
 }

@@ -1,11 +1,13 @@
-// admin/pages/PlaceAdd.jsx
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import "./PlaceAdd.css";
 
 const API = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 export default function PlaceAdd() {
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     title_en: "",
     title_np: "",
@@ -20,137 +22,172 @@ export default function PlaceAdd() {
   const [thumbnail, setThumbnail] = useState(null);
   const [videoFile, setVideoFile] = useState(null);
   const [images, setImages] = useState([]);
-  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    const { name, value, files } = e.target;
+
+    if (files) {
+      if (name === "images") {
+        // Multiple gallery images
+        setImages(Array.from(files));
+      } else if (name === "thumbnail") {
+        // Single thumbnail image
+        setThumbnail(files[0]);
+      } else if (name === "videoFile") {
+        // Single video file
+        setVideoFile(files[0]);
+      }
+    } else {
+      setForm((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
 
-    const data = new FormData();
-    Object.entries(form).forEach(([key, val]) => data.append(key, val));
-    if (thumbnail) data.append("thumbnail", thumbnail);
-    if (videoFile) data.append("video", videoFile);
-    images.forEach((img) => data.append("images", img));
+    // Validate required fields
+    if (!form.title_en || !form.title_np || !form.lat || !form.lng) {
+      setError("Please fill in all required fields.");
+      setLoading(false);
+      return;
+    }
 
     try {
-      await axios.post(`${API}/api/places`, data);
-      setMessage("Place created successfully!");
-      // Reset form if you want:
-      setForm({
-        title_en: "",
-        title_np: "",
-        category: "unesco",
-        lat: "",
-        lng: "",
-        video_url: "",
-        description_en: "",
-        description_np: "",
+      const data = new FormData();
+
+      // Append text fields
+      Object.entries(form).forEach(([key, val]) => {
+        if (val !== null && val !== "") {
+          data.append(key, val);
+        }
       });
-      setThumbnail(null);
-      setVideoFile(null);
-      setImages([]);
+
+      // Append files
+      if (thumbnail) data.append("thumbnail", thumbnail);
+      if (videoFile) data.append("video", videoFile);
+      images.forEach((img) => data.append("images", img));
+
+      await axios.post(`${API}/api/places`, data);
+
+      setLoading(false);
+      navigate("/admin/places"); // redirect after success
     } catch (err) {
       console.error(err);
-      setMessage("Failed to create place.");
+      setError("Failed to create place.");
+      setLoading(false);
     }
   };
 
   return (
     <div className="place-form-container">
       <h2>Add New Place</h2>
-      {message && <p className="message">{message}</p>}
-      <form onSubmit={handleSubmit} className="place-form">
+      {error && <p className="error">{error}</p>}
+      <form onSubmit={handleSubmit} encType="multipart/form-data" className="place-form">
+        <label>Title (EN)*</label>
         <input
           type="text"
           name="title_en"
-          placeholder="Title (EN)"
           value={form.title_en}
           onChange={handleChange}
           required
         />
+
+        <label>Title (NP)*</label>
         <input
           type="text"
           name="title_np"
-          placeholder="Title (NP)"
           value={form.title_np}
           onChange={handleChange}
           required
         />
+
+        <label>Video URL (optional)</label>
         <input
           type="text"
           name="video_url"
-          placeholder="Video URL (optional)"
           value={form.video_url}
           onChange={handleChange}
+          placeholder="http://example.com/video.mp4"
         />
 
+        <label>Category</label>
         <select name="category" value={form.category} onChange={handleChange}>
           <option value="unesco">UNESCO</option>
           <option value="province">Province</option>
           <option value="pilgrims">Pilgrims</option>
         </select>
 
-        <label>Thumbnail</label>
+        <label>Thumbnail Image</label>
         <input
           type="file"
+          name="thumbnail"
           accept="image/*"
-          onChange={(e) => setThumbnail(e.target.files[0])}
+          onChange={handleChange}
         />
 
         <label>Video File (optional)</label>
         <input
           type="file"
+          name="videoFile"
           accept="video/*"
-          onChange={(e) => setVideoFile(e.target.files[0])}
+          onChange={handleChange}
         />
 
-        <label>Gallery Images</label>
+        <label>Gallery Images (multiple)</label>
         <input
           type="file"
+          name="images"
           accept="image/*"
           multiple
-          onChange={(e) => setImages([...e.target.files])}
+          onChange={handleChange}
         />
 
+        <label>Description (EN)</label>
         <textarea
           name="description_en"
-          placeholder="Description (EN)"
           value={form.description_en}
           onChange={handleChange}
-          rows={3}
-        />
-        <textarea
-          name="description_np"
-          placeholder="Description (NP)"
-          value={form.description_np}
-          onChange={handleChange}
-          rows={3}
+          rows={4}
         />
 
+        <label>Description (NP)</label>
+        <textarea
+          name="description_np"
+          value={form.description_np}
+          onChange={handleChange}
+          rows={4}
+        />
+
+        <label>Latitude*</label>
         <input
           type="number"
           name="lat"
-          step="any"
-          placeholder="Latitude"
           value={form.lat}
           onChange={handleChange}
-          required
-        />
-        <input
-          type="number"
-          name="lng"
           step="any"
-          placeholder="Longitude"
-          value={form.lng}
-          onChange={handleChange}
           required
         />
 
-        <button type="submit">Add Place</button>
+        <label>Longitude*</label>
+        <input
+          type="number"
+          name="lng"
+          value={form.lng}
+          onChange={handleChange}
+          step="any"
+          required
+        />
+
+        <button type="submit" disabled={loading}>
+          {loading ? "Saving..." : "Add Place"}
+        </button>
       </form>
     </div>
   );
