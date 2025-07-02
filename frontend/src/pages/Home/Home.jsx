@@ -1,21 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { places } from "../../data/staticPlaces";
 import SubscribeForm from "../../Component/SubscribeForm/SubscribeForm";
+import axios from "axios";
 import "./Home.css";
+
+const API = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 export default function Home() {
   const navigate = useNavigate();
   const { i18n } = useTranslation();
   const [category, setCategory] = useState("unesco");
+  const [places, setPlaces] = useState([]);
+  const [message, setMessage] = useState("");
 
-  const categories = [
-    { key: "unesco", label_en: "World Heritage (UNESCO)", label_np: "विश्व सम्पदा" },
-    { key: "province", label_en: "Provinces", label_np: "प्रदेशहरू" },
-    { key: "pilgrims", label_en: "Pilgrimage Sites", label_np: "तीर्थ स्थल" },
-  ];
+  useEffect(() => {
+    const fetchPlaces = async () => {
+      try {
+        const res = await axios.get(`${API}/api/places`);
+        setPlaces(res.data);
+      } catch (err) {
+        setMessage("Failed to load places.");
+      }
+    };
+    fetchPlaces();
+  }, []);
 
+  // Filter places by selected category & limit to 9
   const filteredPlaces = places
     .filter((p) => p.category === category)
     .slice(0, 9);
@@ -47,7 +58,10 @@ export default function Home() {
           </h2>
           <aside className="explore-sidebar">
             <div className="category-row">
-              {categories.slice(0, 2).map((c) => (
+              {[
+                { key: "unesco", label_en: "World Heritage (UNESCO)", label_np: "विश्व सम्पदा" },
+                { key: "province", label_en: "Provinces", label_np: "प्रदेशहरू" }
+              ].map((c) => (
                 <button
                   key={c.key}
                   className={`category-btn ${category === c.key ? "active" : ""}`}
@@ -70,8 +84,8 @@ export default function Home() {
             {filteredPlaces.map((place) => (
               <div
                 className="place-card"
-                key={place.id}
-                onClick={() => navigate(`/places/${place.id}`)}
+                key={place._id}
+                onClick={() => navigate(`/places/${place._id}`)}
               >
                 <img
                   src={place.thumbnail}

@@ -1,0 +1,113 @@
+/* admin/pages/PlaceList.css */
+
+.place-list-container {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 20px;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header h2 {
+  font-size: 2rem;
+  color: #222;
+}
+
+.add-btn {
+  background-color: #2563eb;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.add-btn:hover {
+  background-color: #1e40af;
+}
+
+.message {
+  color: #dc2626;
+  font-weight: 600;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.place-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.place-card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgb(0 0 0 / 0.1);
+  padding: 15px;
+  text-align: center;
+}
+
+.place-card img {
+  max-width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+  height: 150px;
+  margin-bottom: 12px;
+}
+
+.place-card h3 {
+  margin: 10px 0 8px;
+  font-size: 1.2rem;
+  color: #111;
+}
+
+.place-card p {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 12px;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.edit-btn,
+.delete-btn {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+}
+
+.edit-btn {
+  background-color: #2563eb;
+  color: white;
+  text-decoration: none;
+  display: inline-block;
+  line-height: 1;
+}
+
+.edit-btn:hover {
+  background-color: #1e40af;
+}
+
+.delete-btn {
+  background-color: #dc2626;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #b91c1c;
+}

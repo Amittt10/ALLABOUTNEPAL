@@ -1,14 +1,22 @@
-// src/api/placeApi.js
-import { axiosInstance } from './axiosConfig';
+import axios from "./axiosConfig";
 
-export const placeApi = {
-  getPlaces: () => axiosInstance.get('/places'),
-  getPlaceById: (id) => axiosInstance.get(`/places/${id}`),
-  addPlace: (data) => axiosInstance.post('/places', data, {
-    headers: data instanceof FormData ? { 'Content-Type': 'multipart/form-data' } : {},
-  }),
-  updatePlace: (id, data) => axiosInstance.put(`/places/${id}`, data, {
-    headers: data instanceof FormData ? { 'Content-Type': 'multipart/form-data' } : {},
-  }),
-  deletePlace: (id) => axiosInstance.delete(`/places/${id}`),
-};
+const BASE_URL = "/api/places";
+
+export const getAllPlaces = () => axios.get(BASE_URL);
+
+export const getPlaceById = (id) => axios.get(`${BASE_URL}/${id}`);
+
+export const createPlace = (formData, token) =>
+  axios.post(BASE_URL, formData, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+export const updatePlace = (id, formData, token) =>
+  axios.put(`${BASE_URL}/${id}`, formData, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+export const deletePlace = (id, token) =>
+  axios.delete(`${BASE_URL}/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });

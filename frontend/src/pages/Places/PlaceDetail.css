@@ -1,87 +1,115 @@
-/* Container and font */
+/* ===== Base Layout ===== */
 .place-detail-page {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   padding: 1rem;
   background-color: #fff;
   color: #333;
+  position: relative;
 }
 
-/* Video wrapper full width breakout */
+/* ===== Back Button ===== */
+.back-btn {
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+.back-btn:hover {
+  text-decoration: underline;
+}
+
+/* ===== Fullscreen Top Video ===== */
 .video-wrapper {
   position: relative;
-  width: 100vw; /* full viewport width */
+  width: 100vw;
   left: 50%;
-  margin-left: -50vw; /* breakout */
+  margin-left: -50vw;
   height: 70vh;
   overflow: hidden;
   border-radius: 0 0 12px 12px;
-  box-shadow: 0 2px 10px rgb(0 0 0 / 0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   z-index: 1;
 }
-
-/* Video element fills wrapper */
 .place-video-top {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  border-radius: 0 0 12px 12px;
 }
 
-/* Title styles */
+/* ===== Title ===== */
 .main-title {
   font-size: 2.5rem;
   font-weight: 700;
   text-align: center;
-  margin: 1.5rem auto 2rem;
+  margin: 2rem auto 1.5rem;
+  max-width: 900px;
 }
 
-/* Description container */
+/* ===== Description & Typography ===== */
 .description-content {
   max-width: 900px;
   margin: 0 auto 2rem;
 }
-
-/* Text blocks */
 .desc-title {
   font-size: 1.8rem;
   font-weight: 600;
   margin: 1.5rem 0 0.5rem;
 }
-
+.desc-heading {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 1.2rem 0 0.5rem;
+}
 .desc-subtitle {
   font-size: 1.2rem;
   font-style: italic;
   margin-bottom: 1rem;
   color: #555;
 }
-
-.desc-heading {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin: 1.2rem 0 0.5rem;
-}
-
 .desc-paragraph {
   text-align: justify;
-  line-height: 1.6;
+  line-height: 1.7;
   margin-bottom: 1rem;
   color: #444;
 }
 
-/* Images inside description */
+/* ===== Inline Image Blocks ===== */
 .inline-image {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 9; /* or 4 / 3, or any other */
+  aspect-ratio: 16 / 9;
   object-fit: cover;
-  margin: 1rem auto;
+  margin: 1rem 0;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 }
 
+/* ===== Fullscreen Modal Image ===== */
+.fullscreen-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fullscreen-modal img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
 
-/* Blur for guest content */
+/* ===== Blurred Section for Guests ===== */
 .blurred-section {
   filter: blur(5px);
   pointer-events: none;
@@ -89,17 +117,17 @@
   transition: filter 0.3s ease;
 }
 
-/* Map container */
+/* ===== Google Map ===== */
 .map-container {
   max-width: 900px;
   height: 400px;
-  margin: 0 auto 3rem;
+  margin: 2rem auto 3rem;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 12px rgb(0 0 0 / 0.12);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
 }
 
-/* Modal overlay */
+/* ===== Auth Modal ===== */
 .auth-modal-overlay {
   position: fixed;
   top: 0;
@@ -113,19 +141,15 @@
   align-items: center;
   padding: 1rem;
 }
-
-/* Modal content */
 .auth-modal {
   position: relative;
-  background: white;
+  background: #fff;
   border-radius: 12px;
   padding: 2rem 2.5rem;
   max-width: 420px;
   width: 100%;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
-
-/* Close modal button */
 .close-modal-btn {
   position: absolute;
   top: 12px;
@@ -135,13 +159,12 @@
   border: none;
   cursor: pointer;
   color: #666;
-  transition: color 0.2s ease;
 }
 .close-modal-btn:hover {
   color: #111;
 }
 
-/* Responsive styles */
+/* ===== Responsive ===== */
 @media (max-width: 900px) {
   .main-title {
     font-size: 2rem;
@@ -160,10 +183,8 @@
   }
   .map-container {
     height: 300px;
-    max-width: 100%;
   }
 }
-
 @media (max-width: 480px) {
   .main-title {
     font-size: 1.6rem;

@@ -11,6 +11,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     { path: "/admin", label: "Dashboard", icon: "📊" },
     { path: "/admin/heritage", label: "Heritage Sites", icon: "🏛️" },
     { path: "/admin/festivals", label: "Festivals", icon: "🎉" },
+    { path: "/admin/places", label: "Places", icon: "📍" },  
     { path: "/admin/quiz/list", label: "Quiz", icon: "❓" } // Changed here
   ];
 
