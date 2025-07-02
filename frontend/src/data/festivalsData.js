@@ -13,7 +13,7 @@ const festivalsData = {
     description_en: `
 # Festival of Colors
 
-Holi is one of the most vibrant festivals celebrated with joy, color, and enthusiasm.
+Holi is one of the most ***vibrant*** **festivals** celebrated with joy, color, and enthusiasm.
 
 [image:holi.jpg]
 

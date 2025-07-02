@@ -14,7 +14,7 @@ export const places = [
       {
         type: "paragraph",
         content:
-          "Lumbini is the birthplace of Lord Buddha and one of the most significant spiritual sites in the world. Siddhartha Gautama, the Lord Buddha, was born in 623 B.C. in the famous gardens of Lumbini, which soon became a place of pilgrimage. The site is located in the Rupandehi District of Nepal, near the Indian border. Lumbini is a UNESCO World Heritage Site and attracts thousands of pilgrims and tourists every year. It is a place of peace, meditation, and reflection, where visitors can explore the rich history and culture associated with Buddhism."
+          "Lumbini is the birthplace of Lord Buddha and one of the most significant spiritual sites in the world. Siddhartha Gautama, the Lord Buddha, was born in 623 B.C. in the famous gardens of Lumbini, which soon became a place of pilgrimage. The site is located in the Rupandehi District of Nepal, near the Indian border. Lumbini is a UNESCO World Heritage Site and attracts thousands of pilgrims and tourists every year. It is a place of peace, meditation, and reflection, where *visitors* can explore the rich history and culture associated with Buddhism."
       },
 
       { type: "image", src: "/images/dashain.jpg", alt: "Lumbini sacred garden" },
@@ -22,7 +22,7 @@ export const places = [
       {
         type: "paragraph",
         content:
-          "Among the pilgrims was the Indian emperor Ashoka, who erected one of his commemorative pillars there. The site is now being developed as a Buddhist pilgrimage centre. The Lumbini Development Trust is responsible for the preservation and development of the site, which includes the Maya Devi Temple, the Ashoka Pillar, and various monasteries built by different Buddhist countries."
+          "Among the **pilgrims** was the Indian emperor Ashoka, who erected one of his commemorative pillars there. The site is now being developed as a Buddhist pilgrimage centre. The Lumbini Development Trust is responsible for the preservation and development of the site, which includes the Maya Devi Temple, the Ashoka Pillar, and various ***monasteries*** built by different Buddhist countries."
       },
 
       { type: "image", src: "/images/holi.jpg", alt: "Ashoka Pillar at Lumbini" },

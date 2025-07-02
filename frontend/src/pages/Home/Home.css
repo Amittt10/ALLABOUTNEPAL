@@ -58,7 +58,7 @@
 .explore-hero-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(255, 255, 255, 0.6); /* light overlay */
+  background: rgba(97, 96, 96, 0.6); /* light overlay */
   z-index: 0;
 }
 

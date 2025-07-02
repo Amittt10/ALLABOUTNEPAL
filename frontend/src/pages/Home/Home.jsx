@@ -38,7 +38,7 @@ export default function Home() {
 
       <section
         className="explore-hero-section"
-        style={{ backgroundImage: "url('/images/holi.jpg')" }}
+        style={{ backgroundImage: "url('/images/mainhero.jpg')" }}
       >
         <div className="explore-hero-overlay"></div>
         <div className="explore-left">

@@ -15,11 +15,11 @@ export default function PlaceDetail() {
   const place = places.find((p) => p.id === placeId);
   if (!place) return <div>Place not found.</div>;
 
-  const desc = i18n.language === "np" ? place.description_np : place.description_en;
-
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_KEY,
   });
+
+  const desc = i18n.language === "np" ? place.description_np : place.description_en;
 
   const [showLogin, setShowLogin] = useState(false);
 
@@ -41,6 +41,33 @@ export default function PlaceDetail() {
   const visibleBlocks = desc.slice(0, visibleCount);
   const hiddenBlocks = desc.slice(visibleCount);
 
+  // ✅ Markdown-style inline formatter
+  const renderFormattedText = (text) => {
+    const elements = [];
+    const regex = /(\*\*\*[^*]+\*\*\*|\*\*[^*]+\*\*|\*[^*]+\*|[^*]+)/g;
+    let match;
+
+    while ((match = regex.exec(text)) !== null) {
+      const part = match[0];
+
+      if (part.startsWith("***") && part.endsWith("***")) {
+        elements.push(
+          <strong key={elements.length}>
+            <em>{part.slice(3, -3)}</em>
+          </strong>
+        );
+      } else if (part.startsWith("**") && part.endsWith("**")) {
+        elements.push(<strong key={elements.length}>{part.slice(2, -2)}</strong>);
+      } else if (part.startsWith("*") && part.endsWith("*")) {
+        elements.push(<em key={elements.length}>{part.slice(1, -1)}</em>);
+      } else {
+        elements.push(<span key={elements.length}>{part}</span>);
+      }
+    }
+
+    return elements;
+  };
+
   const renderBlock = (block, key) => {
     switch (block.type) {
       case "title":
@@ -50,7 +77,11 @@ export default function PlaceDetail() {
       case "heading":
         return <h3 key={key} className="desc-heading bold">{block.content}</h3>;
       case "paragraph":
-        return <p key={key} className="desc-paragraph justify-text">{block.content}</p>;
+        return (
+          <p key={key} className="desc-paragraph justify-text">
+            {renderFormattedText(block.content)}
+          </p>
+        );
       case "image":
         return (
           <img
@@ -88,20 +119,12 @@ export default function PlaceDetail() {
         {!user && (
           <div className="blurred-section">
             {hiddenBlocks.map((block, idx) => renderBlock(block, idx + visibleCount))}
-            {/* You can remove this if images are already inline in description */}
-            {/* {place.images.map((imgSrc, idx) => (
-              <img key={`img-${idx}`} src={imgSrc} alt={`Extra ${idx + 1}`} className="inline-image" />
-            ))} */}
           </div>
         )}
 
         {user && (
           <>
             {hiddenBlocks.map((block, idx) => renderBlock(block, idx + visibleCount))}
-            {/* You can remove this if images are inline */}
-            {/* {place.images.map((imgSrc, idx) => (
-              <img key={`img-${idx}`} src={imgSrc} alt={`Extra ${idx + 1}`} className="inline-image" />
-            ))} */}
           </>
         )}
       </div>

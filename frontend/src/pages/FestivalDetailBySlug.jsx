@@ -49,7 +49,7 @@ export default function FestivalDetailBySlug() {
       const filename = line.slice(7, -1).trim();
       return {
         type: "image",
-        src: `/images/${filename}`, // Loaded from public/images/
+        src: `/images/${filename}`,
         alt: filename
       };
     }
@@ -60,10 +60,40 @@ export default function FestivalDetailBySlug() {
     return { type: "paragraph", content: line };
   });
 
+  const renderFormattedText = (text) => {
+    const elements = [];
+    const regex = /(\*\*\*[^*]+\*\*\*|\*\*[^*]+\*\*|\*[^*]+\*|[^*]+)/g;
+
+    let match;
+    while ((match = regex.exec(text)) !== null) {
+      const part = match[0];
+
+      if (part.startsWith("***") && part.endsWith("***")) {
+        elements.push(
+          <strong key={elements.length}>
+            <em>{part.slice(3, -3)}</em>
+          </strong>
+        );
+      } else if (part.startsWith("**") && part.endsWith("**")) {
+        elements.push(<strong key={elements.length}>{part.slice(2, -2)}</strong>);
+      } else if (part.startsWith("*") && part.endsWith("*")) {
+        elements.push(<em key={elements.length}>{part.slice(1, -1)}</em>);
+      } else {
+        elements.push(<span key={elements.length}>{part}</span>);
+      }
+    }
+
+    return elements;
+  };
+
   const renderBlock = (block, key) => {
     switch (block.type) {
       case "paragraph":
-        return <p key={key} className="desc-paragraph justify-text">{block.content}</p>;
+        return (
+          <p key={key} className="desc-paragraph justify-text">
+            {renderFormattedText(block.content)}
+          </p>
+        );
       case "image":
         return (
           <img

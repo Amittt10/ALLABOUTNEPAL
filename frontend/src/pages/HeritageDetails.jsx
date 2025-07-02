@@ -49,7 +49,6 @@ const HeritageDetails = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  // 👇 Scroll triggers login modal for non-authenticated users
   useEffect(() => {
     if (user) return;
 
@@ -101,10 +100,40 @@ const HeritageDetails = () => {
     }
   });
 
+  const renderFormattedText = (text) => {
+    const elements = [];
+    const regex = /(\*\*\*[^*]+\*\*\*|\*\*[^*]+\*\*|\*[^*]+\*|[^*]+)/g;
+
+    let match;
+    while ((match = regex.exec(text)) !== null) {
+      const part = match[0];
+
+      if (part.startsWith("***") && part.endsWith("***")) {
+        elements.push(
+          <strong key={elements.length}>
+            <em>{part.slice(3, -3)}</em>
+          </strong>
+        );
+      } else if (part.startsWith("**") && part.endsWith("**")) {
+        elements.push(<strong key={elements.length}>{part.slice(2, -2)}</strong>);
+      } else if (part.startsWith("*") && part.endsWith("*")) {
+        elements.push(<em key={elements.length}>{part.slice(1, -1)}</em>);
+      } else {
+        elements.push(<span key={elements.length}>{part}</span>);
+      }
+    }
+
+    return elements;
+  };
+
   const renderBlock = (block, key) => {
     switch (block.type) {
       case "paragraph":
-        return <p key={key} className="desc-paragraph justify-text">{block.content}</p>;
+        return (
+          <p key={key} className="desc-paragraph justify-text">
+            {renderFormattedText(block.content)}
+          </p>
+        );
       case "image":
         return (
           <img
@@ -151,7 +180,7 @@ const HeritageDetails = () => {
 
       <p className="location-entryfee">
         <span className="location-text italics small-font">{location}</span><br />
-        <span className="entryfee-heading bold">{lang === 'np' ? 'प्रवेश शुल्क:' : 'Entry Fee:'}</span> {' '}
+        <span className="entryfee-heading bold">{lang === 'np' ? 'प्रवेश शुल्क:' : 'Entry Fee:'}</span>{' '}
         <span className="entryfee-text small-font">
           {entryFee ? `₹${entryFee}` : lang === 'np' ? 'नि:शुल्क' : 'Free'}
         </span>

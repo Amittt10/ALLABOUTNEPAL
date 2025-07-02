@@ -23,17 +23,18 @@
     "description": "Welcome to Cultural Heritage Guide — a platform dedicated to exploring and preserving Nepal's rich cultural history. Our mission is to document, promote, and educate people about the various historical landmarks, traditions, and festivals that define Nepal’s heritage."
   },
 "festival": {
-  "back": "Back",
-  "notFound": "Festival not found.",
-  "description": "Description",
-  "significance": "Significance",
-  "location": "Location",
-  "category": "Category",
   "upcoming": "Upcoming Festivals",
   "noUpcoming": "No upcoming festivals",
-  "loadingFestivals": "Loading festivals...",
-  "failedLoadFestivals": "Failed to load festivals",
   "showAll": "Show All Festivals",
-  "eventsOnDate": "Festivals on Selected Date"
+  "eventsOnDate": "Festivals on Selected Date",
+  "searchPlaceholder": "Search by name or location...",
+  "allCategories": "All Categories",
+  "religious": "Religious",
+  "national": "National",
+  "regional": "Regional",
+  "nextFestival": "Next Festival",
+  "daysLeft": "days left",
+  "addToCalendar": "Add to Calendar"
 }
+
 }

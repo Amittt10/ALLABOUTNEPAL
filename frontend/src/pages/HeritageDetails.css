@@ -47,6 +47,7 @@
   font-weight: 600;
   margin: 1.5rem 0 0.6rem;
   color: #111;
+  
 }
 
 /* Subtitle (h4) */
@@ -56,6 +57,7 @@
   font-weight: 500;
   margin: 1rem 0 0.5rem;
   color: #555;
+  
 }
 
 /* Paragraph */
@@ -95,6 +97,8 @@
   font-size: 0.9rem;
   display: block;
   margin-bottom: 0.3rem;
+  /* text-align: center; */
+  
 }
 
 .entryfee-heading {

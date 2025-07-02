@@ -13,6 +13,7 @@ import adminRoutes from './routes/adminRoutes.js';        // admin routes
 import passwordRoutes from './routes/passwordRoutes.js';
 import searchRoutes from './routes/searchRoutes.js';
 import subscriberRoutes from './routes/subscriberRoutes.js';
+// import quizRoutes from './routes/quizRoutes.js'; // Import quiz routes
 
 dotenv.config();
 
@@ -57,6 +58,7 @@ connectDB()
     app.use('/api', passwordRoutes);
     app.use('/api', searchRoutes);
     app.use('/api/subscribers', subscriberRoutes);
+    // app.use("/api/admin/quiz", quizRoutes);
 
     app.listen(PORT, () => {
       console.log(`🚀 Server running at http://localhost:${PORT}`);

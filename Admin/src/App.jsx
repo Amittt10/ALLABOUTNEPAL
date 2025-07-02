@@ -11,6 +11,9 @@ import FestivalList from "./pages/FestivalList";
 import FestivalAdd from "./pages/FestivalAdd";
 import FestivalEdit from "./pages/FestivalEdit";
 import FestivalCalendarView from "./pages/FestivalCalendarView";
+// import QuizList from "./components/quiz/QuizList";
+// import QuizAdd from "./components/quiz/QuizAdd";
+// import QuizEdit from "./components/quiz/QuizEdit";
 
 function App() {
   return (
@@ -42,6 +45,13 @@ function App() {
             <Route path="festivals/add" element={<FestivalAdd />} />
             <Route path="festivals/edit/:id" element={<FestivalEdit />} />
             <Route path="festivals/calendar" element={<FestivalCalendarView />} />
+
+            {/* Quiz routes
+            <Route path="quiz" element={<Navigate to="quiz/list" replace />} />
+            <Route path="quiz/list" element={<QuizList />} />
+            <Route path="quiz/add" element={<QuizAdd />} />
+            <Route path="quiz/edit/:id" element={<QuizEdit />} /> */}
+
           </Route>
 
           {/* Redirects */}

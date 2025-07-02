@@ -5,7 +5,6 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000/api"
 export const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000,
-  // No global Content-Type header here, axios sets it automatically
 });
 
 // Manage token in headers and localStorage
@@ -49,13 +48,13 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-// Exported api object with all your API methods
+// Exported API calls
 export const api = {
   // Auth
   login: (credentials) => axiosInstance.post("/login", credentials),
   verifyToken: () => axiosInstance.get("/verify"),
 
-  // Stats (needed by DashboardHome.jsx)
+  // Stats
   getStats: () => axiosInstance.get("/admin/stats"),
 
   // Heritage
@@ -84,4 +83,11 @@ export const api = {
       headers: data instanceof FormData ? { "Content-Type": "multipart/form-data" } : {},
     }),
   deleteFestival: (id) => axiosInstance.delete(`/admin/festivals/${id}`),
+
+  // Quiz
+  fetchQuizQuestions: () => axiosInstance.get("/admin/quiz"),
+  getQuizQuestionById: (id) => axiosInstance.get(`/admin/quiz/${id}`),
+  createQuizQuestion: (data) => axiosInstance.post("/admin/quiz", data),
+  updateQuizQuestion: (id, data) => axiosInstance.put(`/admin/quiz/${id}`, data),
+  deleteQuizQuestion: (id) => axiosInstance.delete(`/admin/quiz/${id}`),
 };

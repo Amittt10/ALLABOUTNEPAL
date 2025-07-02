@@ -111,6 +111,14 @@
   color: #f87171;
 }
 
+.sidebar-link:focus,
+.sidebar-close:focus,
+.sidebar-logout:focus {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+}
+
+/* Responsive behavior */
 @media (min-width: 769px) {
   .sidebar {
     position: static;
@@ -129,11 +137,4 @@
   .sidebar-close {
     display: block;
   }
-}
-
-.sidebar-link:focus,
-.sidebar-close:focus,
-.sidebar-logout:focus {
-  outline: 2px solid #60a5fa;
-  outline-offset: 2px;
 }
