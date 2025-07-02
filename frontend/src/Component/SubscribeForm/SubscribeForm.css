@@ -1,56 +1,52 @@
 .subscribe-form-container {
   width: 100%;
-  padding: 1.5rem 1rem;
-  background: linear-gradient(90deg, #46e583, #17d406); /* Gradient background */
+  padding: 3rem 1rem;
+  padding-top: 1rem;
+  background: linear-gradient(90deg, #4f46e5, #06b6d4); /* Blue-purple to cyan gradient */
   color: #fff;
   text-align: center;
-  margin-top: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  max-width: 480px;
-  margin-left: auto;
-  margin-right: auto;
+  margin-top: 3rem;
 }
 
 .subscribe-form-container h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  letter-spacing: 0.3px;
-  line-height: 1.3;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.5px;
 }
 
 .subscribe-form {
+  max-width: 800px;
+  margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 1rem;
   justify-content: center;
-  align-items: center;
 }
 
 .subscribe-form input {
-  flex: 1 1 180px;
-  padding: 0.6rem 0.75rem;
-  font-size: 0.9rem;
+  flex: 1 1 250px;
+  padding: 0.9rem 1rem;
   border: none;
   border-radius: 6px;
+  font-size: 1rem;
   background: #fff;
   color: #333;
+  transition: box-shadow 0.3s ease;
 }
 
 .subscribe-form input::placeholder {
-  color: #666;
-  font-size: 0.85rem;
+  color: #777;
 }
 
 .subscribe-form input:focus {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4);
 }
 
 .subscribe-form button {
-  padding: 0.6rem 1.25rem;
-  font-size: 0.9rem;
+  padding: 0.9rem 2rem;
+  font-size: 1rem;
   font-weight: 600;
   color: #4f46e5;
   background: #fff;
@@ -58,6 +54,7 @@
   border-radius: 6px;
   cursor: pointer;
   transition: background 0.3s ease, color 0.3s ease;
+  flex-shrink: 0;
 }
 
 .subscribe-form button:hover {
@@ -66,22 +63,10 @@
 }
 
 .subscribe-message {
-  margin-top: 0.75rem;
-  font-size: 0.85rem;
+  width: 100%;
+  margin-top: 1rem;
+  font-size: 1rem;
   font-weight: 500;
-  color: #ffe4e6;
+  color: #ffdde0;
   text-align: center;
-}
-
-/* Responsive: Mobile */
-@media (max-width: 480px) {
-  .subscribe-form {
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .subscribe-form input,
-  .subscribe-form button {
-    width: 100%;
-  }
-}
+} 
