@@ -1,6 +1,6 @@
 /* Base header styles */
 .header {
-  background: rgb(249, 249, 5);
+  background: linear-gradient(90deg, #22b13a 0%, #186155 100%);
   position: sticky;
   top: 0;
   width: 100%;
@@ -44,16 +44,18 @@
   transition: color 0.3s ease;
   user-select: none;
 }
-.nav_item a:hover {
-  color: #007bff;
-  text-decoration: underline;
-  text-underline-offset: 4px;
+.nav_item a:hover,
+.dropdown-toggle:hover {
+  color: #51ff00;
 }
-.active_link {
-  color: #007bff;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  text-decoration-thickness: 2px;
+/* Dropdown toggle */
+.dropdown-toggle {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  user-select: none;
 }
 /* Dropdown base */
 .dropdown {

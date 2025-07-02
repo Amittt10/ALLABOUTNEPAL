@@ -1,48 +1,168 @@
-/* ==================== Main video hero section ==================== */
+/* ==================== CSS Reset & Variables ==================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* Colors */
+  --primary-color: #ff7e42;
+  --primary-hover: #e66a35;
+  --text-primary: #333;
+  --text-secondary: #6c757d;
+  --text-white: #ffffff;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #e9ecef;
+  --shadow-light: rgba(0, 0, 0, 0.08);
+  --shadow-medium: rgba(0, 0, 0, 0.12);
+  --shadow-heavy: rgba(0, 0, 0, 0.2);
+  
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 20px;
+  --space-2xl: 24px;
+  --space-3xl: 32px;
+  
+  /* Typography */
+  --font-xs: 10px;
+  --font-sm: 12px;
+  --font-base: 14px;
+  --font-lg: 16px;
+  --font-xl: 18px;
+  --font-2xl: 24px;
+  --font-3xl: 32px;
+  
+  /* Borders */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.25s ease;
+  --transition-slow: 0.35s ease;
+  --transition-bounce: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+
+
+body {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.5;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==================== Base Styles ==================== */
 .home-page {
   width: 100%;
   min-height: 100vh;
-  background: #ffffff;
-  color: #333;
+  background: var(--bg-primary);
+  color: var(--text-primary);
 }
 
+/* ==================== Enhanced Video Hero Section ==================== */
 .video-hero-section {
   position: relative;
-  width: 100vw; /* full viewport width */
-  left: 50%;
-  margin-left: -50vw; /* breakout */
-  height: 70vh;
+  width: 100%;
+  height: clamp(50vh, 70vh, 80vh);
   overflow: hidden;
-  border-radius: 0 0 12px 12px;
-  box-shadow: 0 2px 10px rgb(0 0 0 / 0.1);
-  z-index: 1;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  box-shadow: 0 8px 32px var(--shadow-medium);
+  margin-bottom: var(--space-3xl);
+  isolation: isolate;
 }
+
 .video-hero-section::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.35); /* dark overlay on top of the video */
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.4) 0%,
+    rgba(0, 0, 0, 0.2) 50%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
   z-index: 1;
 }
+
 .background-video {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
+  filter: brightness(0.85) contrast(1.1) saturate(1.1);
+  transform: scale(1.02);
 }
+
 .video-overlay {
   position: absolute;
   inset: 0;
   z-index: 2;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  place-items: center;
+  padding: var(--space-xl);
 }
+
 .video-overlay h1 {
-  color: #fff;
+  color: var(--text-white);
   text-align: center;
-  font-size: 2rem;
-  padding: 1rem;
-  max-width: 80%;
+  font-size: clamp(1.8rem, 5vw, 4rem);
+  font-weight: 800;
+  max-width: min(90%, 800px);
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  animation: heroFadeIn 1.2s var(--transition-bounce);
+}
+
+@keyframes heroFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(2rem) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.video-overlay p {
+  color: var(--text-white);
+  font-size: clamp(1rem, 3vw, 1.5rem);
+  margin-top: var(--space-md);
+  max-width: 600px;
+  text-align: center;
+  opacity: 0.9;
+  animation: fadeInUp 1.4s var(--transition-bounce);
+}
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(2rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* ==================== Header Section ==================== */
+.header {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  padding: var(--space-lg) var(--space-xl);
+  background: linear-gradient(90deg, #a5252c 0%, #d94f4f 100%);
+  box-shadow: 0 2px 8px var(--shadow-light);
+  z-index: 1000;
 }
 
 /* ==================== Explore hero section ==================== */
