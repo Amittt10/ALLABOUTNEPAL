@@ -32,6 +32,8 @@
   "upcoming": "Upcoming Festivals",
   "noUpcoming": "No upcoming festivals",
   "loadingFestivals": "Loading festivals...",
-  "failedLoadFestivals": "Failed to load festivals"
+  "failedLoadFestivals": "Failed to load festivals",
+  "showAll": "Show All Festivals",
+  "eventsOnDate": "Festivals on Selected Date"
 }
 }
