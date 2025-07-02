@@ -1,6 +1,6 @@
-/* Base header styles */
+/* ===== Base Header Styles ===== */
 .header {
-  background: linear-gradient(90deg, #22b13a 0%, #186155 100%);
+  background: rgb(251, 251, 5);
   position: sticky;
   top: 0;
   width: 100%;
@@ -8,32 +8,47 @@
   z-index: 1000;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   padding: 0.5rem 1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  user-select: none;
 }
+
 .nav_wrapper {
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 100%;
 }
+
 .logo img {
   height: 50px;
   cursor: pointer;
+  user-select: none;
 }
+
 .navigation {
   display: flex;
   align-items: center;
   gap: 1.5rem;
 }
+
 .navigation.active {
   flex-direction: column;
 }
+
 .menu {
   list-style: none;
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 0;
   margin: 0;
+  padding: 0;
+}
+
+.logo a:hover,
+.logo span:hover {
+  color: #007bff;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 .nav_item a,
 .dropdown-toggle {
@@ -44,24 +59,26 @@
   transition: color 0.3s ease;
   user-select: none;
 }
+
 .nav_item a:hover,
 .dropdown-toggle:hover {
-  color: #51ff00;
+  color: #007bff;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
-/* Dropdown toggle */
-.dropdown-toggle {
-  position: relative;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  user-select: none;
+
+.active_link {
+  color: #007bff;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 2px;
 }
-/* Dropdown base */
+
+/* ===== Dropdown Styling ===== */
 .dropdown {
   position: relative;
 }
-/* Center dropdown horizontally below toggle */
+
 .centered-dropdown {
   position: absolute !important;
   top: 100% !important;
@@ -74,47 +91,53 @@
   min-width: 160px;
   z-index: 9999;
   list-style: none;
-  max-height: none !important;
-  overflow-y: visible !important;
 }
-/* Dropdown menu items */
+
 .dropdown-menu li a {
   padding: 0.5rem 1rem;
   color: #333;
   text-decoration: none;
   display: block;
-  user-select: none;
 }
+
 .dropdown-menu li a:hover {
   background: #f0f0f0;
   border-radius: 4px;
 }
-/* Search bar */
+
+/* ===== Search Bar ===== */
 .search-bar {
-  position: relative;
   display: flex;
   align-items: center;
   background: #f7f7f7;
   padding: 0.25rem 0.5rem;
   border-radius: 999px;
+  margin-left: 1rem;
 }
+
 .search-bar input {
   border: none;
   background: none;
   padding: 0.25rem 0.5rem;
   width: 140px;
   outline: none;
+  font-size: 1rem;
 }
+
 .search-bar button {
   background: none;
   border: none;
   cursor: pointer;
+  color: #333;
+  font-size: 1.25rem;
 }
-/* Language switcher */
+
+/* ===== Language Switcher ===== */
 .language-switcher {
   position: relative;
   margin-left: 1rem;
 }
+
 .lang-btn {
   background: none;
   border: none;
@@ -122,6 +145,21 @@
   font-size: 1.5rem;
   user-select: none;
 }
+
+.lang-dropdown {
+  position: absolute;
+  top: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  padding: 0.5rem 0;
+  list-style: none;
+  min-width: 120px;
+  z-index: 9999;
+}
+
 .lang-dropdown li button {
   padding: 0.5rem 1rem;
   width: 100%;
@@ -130,23 +168,27 @@
   cursor: pointer;
   text-align: left;
   user-select: none;
+  font-size: 0.95rem;
+  color: #333;
 }
+
 .lang-dropdown li button:hover {
   background: #f0f0f0;
   border-radius: 4px;
 }
+
 .lang-dropdown .active {
-  font-weight: bold;
+  font-weight: 700;
+  color: #007bff;
 }
 
-
+/* ===== Profile Menu ===== */
 .profile-menu {
   display: flex;
   align-items: center;
-  justify-content: center;
-  height: 100%; /* ensures it matches nav height */
-  margin-left: 1rem;
   position: relative;
+  margin-left: 1rem;
+  cursor: pointer;
 }
 
 .avatar-wrapper {
@@ -155,7 +197,7 @@
   align-items: center;
   justify-content: center;
   line-height: 1;
-  margin-top: 9px;
+  margin-top: 8px;
 }
 
 .avatar {
@@ -163,21 +205,17 @@
   height: 36px;
   border-radius: 50%;
   object-fit: cover;
-  display: block;
   border: 1px solid #ccc;
+  display: block;
 }
 
 .header-greeting {
   font-size: 0.85rem;
   color: #333;
-  margin: 2px 0 0 0; /* slight space below avatar */
-  padding: 0;
+  margin: 2px 0 0 0;
   text-align: center;
   line-height: 1.1;
 }
-
-
-
 
 .profile-menu .dropdown {
   position: absolute !important;
@@ -190,13 +228,13 @@
   list-style: none;
   min-width: 160px;
   z-index: 9999;
-  max-height: none !important;
-  overflow-y: visible !important;
 }
+
 .profile-menu .dropdown ul {
-  padding: 0;
   margin: 0;
+  padding: 0;
 }
+
 .profile-menu .dropdown li a,
 .profile-menu .dropdown li button {
   width: 100%;
@@ -208,21 +246,15 @@
   color: #333;
   text-decoration: none;
   display: block;
-  user-select: none;
 }
+
 .profile-menu .dropdown li a:hover,
 .profile-menu .dropdown li button:hover {
   background: #f0f0f0;
   border-radius: 4px;
 }
-/* Mobile menu */
-.mobile_menu {
-  font-size: 1.5rem;
-  cursor: pointer;
-  display: none;
-  user-select: none;
-}
-/* Login/Signup btns */
+
+/* ===== Buttons ===== */
 .nav_btns .btn {
   padding: 6px 16px;
   font-size: 14px;
@@ -233,26 +265,38 @@
   margin-left: 10px;
   transition: background-color 0.3s ease, color 0.3s ease;
   display: inline-block;
-  user-select: none;
 }
+
 .primary_btn {
   background: #007bff;
   color: white;
   border: 1px solid #007bff;
 }
+
 .primary_btn:hover {
   background: #0056b3;
 }
+
 .secondary_btn {
   background: transparent;
   color: #007bff;
   border: 1px solid #007bff;
 }
+
 .secondary_btn:hover {
   background: #007bff;
   color: white;
 }
-/* Mega dropdown container */
+
+/* ===== Mobile Menu ===== */
+.mobile_menu {
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: none;
+  user-select: none;
+}
+
+/* ===== Mega Dropdown ===== */
 .mega-menu {
   position: absolute;
   top: 100%;
@@ -268,35 +312,29 @@
   z-index: 9999;
 }
 
-/* Left side grid for festivals */
 .mega-menu-left {
   flex: 0 0 65%;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-auto-rows: auto;
   gap: 1.5rem 2rem;
   padding-right: 1.5rem;
-  min-width: 0;
 }
 
-/* Festival items */
 .mega-menu-left ul {
   list-style: none;
   padding: 0;
   margin: 0;
-  display: contents; /* allow li to become grid items */
+  display: contents;
 }
 
-/* Festival link - vertical layout */
 .festival-dropdown-link {
   display: flex;
   flex-direction: column;
-  align-items: center;    /* center horizontally */
+  align-items: center;
   text-align: center;
   text-decoration: none;
   color: inherit;
   gap: 0.5rem;
-  user-select: none;
   width: 100%;
   padding: 0.5rem 0;
   transition: color 0.3s ease;
@@ -306,18 +344,16 @@
   color: #007bff;
 }
 
-/* Festival thumbnail */
 .festival-thumb {
   width: 200px;
   height: 130px;
   object-fit: cover;
-  border-radius: 7px;
-  user-select: none;
+  border-radius: 14px;
   pointer-events: none;
+  user-select: none;
   margin: 0;
 }
 
-/* Festival title */
 .festival-dropdown-link span {
   font-weight: 400;
   font-size: 1.1rem;
@@ -328,20 +364,15 @@
   user-select: none;
 }
 
-/* Right side: thumbnail + buttons */
 .mega-menu-right {
   flex: 0 0 35%;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  background: none;
   padding-right: 1.5rem;
-  border-radius: 0;
-  box-shadow: none;
 }
 
-/* Right side image */
 .mega-menu-right img {
   width: 100%;
   height: 140px;
@@ -352,7 +383,6 @@
   pointer-events: none;
 }
 
-/* Buttons container */
 .mega-menu-buttons {
   display: flex;
   gap: 1rem;
@@ -360,7 +390,6 @@
   justify-content: center;
 }
 
-/* Buttons style */
 .mega-menu-buttons button {
   flex: 1;
   padding: 0.6rem 0;
@@ -371,46 +400,42 @@
   font-size: 0.75rem;
   color: white;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  user-select: none;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: background-color 0.3s ease;
 }
 
 .mega-menu-buttons button:hover {
   background-color: #0056b3;
 }
 
-/* Responsive adjustments */
+/* ===== Responsive ===== */
 @media (max-width: 768px) {
-  /* Show hamburger menu on mobile */
   .mobile_menu {
     display: block;
   }
 
-  /* Hide desktop nav by default */
   .navigation {
     display: none;
     width: 100%;
     background: white;
     position: absolute;
-    top: 5rem; /* below header */
+    top: 6rem;
     left: 0;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     border-radius: 0 0 10px 10px;
-    max-height: calc(100vh - 5rem);
+    max-height: calc(100vh - 6rem);
     overflow-y: auto;
     z-index: 10000;
     flex-direction: column;
     padding: 1rem 0;
   }
-  /* Show nav when active */
+
   .navigation.active {
     display: flex;
   }
 
-  /* Vertical menu items */
   .menu {
     flex-direction: column;
     gap: 0;
@@ -429,7 +454,6 @@
     width: 100%;
   }
 
-  /* Dropdown menus become full width and relative */
   .dropdown-menu,
   .centered-dropdown {
     position: relative !important;
@@ -447,11 +471,11 @@
     padding-left: 3rem;
     color: #555;
   }
+
   .dropdown-menu li a:hover {
     background: #f9f9f9;
   }
 
-  /* Mega menu adjustments */
   .mega-menu {
     position: relative;
     top: 0;
@@ -469,6 +493,7 @@
     padding-right: 0;
     gap: 1rem;
   }
+
   .festival-thumb {
     width: 100% !important;
     height: auto !important;
@@ -499,32 +524,28 @@
     margin-bottom: 0.5rem;
   }
 
-  /* Language switcher */
   .language-switcher {
     margin-left: 0;
     padding: 1rem 1.5rem;
   }
 
-  
-
-  /* Profile menu */
   .profile-menu {
     margin-left: 0;
     padding: 1rem 1.5rem;
     border-top: 1px solid #eee;
   }
 
-  /* Search bar full width */
   .search-bar {
     margin: 1rem 1.5rem;
     width: calc(100% - 3rem);
   }
+
   .search-bar input {
     width: 100%;
   }
 }
 
-/* Optional smaller font size on very small mobile */
+/* Smaller font on very small screens */
 @media (max-width: 480px) {
   .nav_item a,
   .dropdown-toggle {

@@ -118,8 +118,8 @@ export default function FestivalDetailBySlug() {
 
   return (
     <div className="festival-detail-page">
-      <button className="back-button" onClick={() => navigate(-1)}>
-        &larr; {t("festival.back")}
+      <button className="back-btn" onClick={() => navigate(-1)}>
+        &larr; Back
       </button>
 
       <div className="festival-detail-card">
