@@ -1,35 +1,39 @@
 // src/data/festivalsData.js
 const festivalsData = {
-  holi: {
-    slug: "holi",
-    name_en: "Holi",
-    name_np: "होली",
-    dateBS: "2079-12-12",
-    dateAD: "2023-03-07",
+  dashain: {
+    slug: "dashain",
+    name_en: "Dashain",
+    name_np: "दशैं",
+    dateBS: "2082-06-06",
+    dateAD: "2025-09-22",
     category: "cultural",
-    image: "/images/holi.jpg",
+    image: "/images/dashain.jpg",
     location_en: "All over Nepal",
     location_np: "सारा नेपाल",
     description_en: `
-# Festival of Colors
 
-Holi is one of the most ***vibrant*** **festivals** celebrated with joy, color, and enthusiasm.
+Dashain is Nepal’s most important and widely celebrated festival, observed over 15 days during the lunar month of Ashwin (September–October). It brings families and communities together in joyous reunion and renewal. The festival symbolizes the victory of good over evil, embodied in Goddess Durga’s slaying of the demon Mahishasura. Throughout the country, homes are cleaned and decorated, markets bustle with activity, and traditional bamboo swings sway in open fields. Dashain is a time when people take breaks from daily work, wear new clothes, share festive meals, and seek blessings from elders. It is a unique blend of spirituality, culture, and social cohesion that transcends ethnic and geographic divisions in Nepal.
+
+## History
+Dashain’s origins are deeply rooted in Hindu mythology and Nepal’s agrarian traditions. The festival commemorates Goddess Durga’s triumph over the buffalo demon Mahishasura after nine days of fierce battle, reflecting the victory of virtue over vice. Additionally, the festival has ties to the Ramayana epic, celebrating Lord Rama’s victory over the demon king Ravana. Historically, monarchs performed grand rituals during Dashain to legitimize their rule and unify diverse groups under a shared cultural banner. Over centuries, Dashain evolved from a harvest festival into a national celebration, interweaving religious devotion with social practices such as gift exchanges and animal sacrifices. Despite modernization, these rituals remain central to Nepali identity.
 
 [image:holi.jpg]
 
-## Symbolism
+## Values
+Dashain instills vital cultural and spiritual values including family unity, respect for elders, and devotion to divine forces. It reinforces the principle that good eventually triumphs over evil, inspiring hope and resilience. The festival encourages forgiveness and renewal, as people reconcile and come together after months of separation. It fosters gratitude toward nature and ancestors, especially through rituals involving jamara and tika, symbolizing prosperity and protection. Dashain also nurtures generosity as people exchange gifts and support relatives in need. Importantly, it preserves continuity of tradition, allowing communities to pass down beliefs and customs to younger generations in an ever- changing world.
 
-It marks the arrival of spring and is associated with the victory of good over evil.
+## Cultural Significance
+Dashain transcends mere religious observance; it is a cultural cornerstone of Nepali life. The festival functions as an economic catalyst, with markets and businesses thriving on the demand for festive goods, new clothing, and food. It solidifies social ties, with people traveling across the country to reunite with family and participate in communal celebrations. Diverse ethnic groups participate, adapting Dashain’s core rituals to local customs, thereby enriching its cultural tapestry. It also showcases Nepal’s rich performing arts, with traditional music, folk dances, and kite flying forming
+integral parts of the festivities. Dashain affirms national identity, solidarity, and pride, reinforcing Nepal’s pluralistic fabric.
 
-### Celebration
+## Traditions and Rituals
+Dashain is marked by a series of sacred rituals that unfold over 15 days. It begins with Ghatasthapana, planting barley seeds (jamara) to invite Goddess Durga’s blessings. On Phulpati, flowers and sacred items are brought ceremoniously to the capital, echoing the royal era’s grandeur. Maha Ashtami and Navami involve worshipping fierce manifestations of Durga, often including animal sacrifices symbolizing devotion and appeasement. Ayudha Puja honors tools and weapons, acknowledging their role in daily life. The highlight, Vijaya Dashami, is when elders place tika and jamara on younger family members’ foreheads, blessing them with health and success. Throughout the festival, communities engage in kite flying, swing rides, feasting on traditional foods, and storytelling, weaving spirituality with joyous celebration.
 
-People throw colored powders, splash water, dance, and sing in the streets.
 
-Family and friends gather to share sweets and celebrate the festive spirit.
     `,
     description_np: `
-# रङहरूको चाड
 
+दशैं नेपालमा सबैभन्दा ठूलो हिन्दू पर्व हो जसले देवी दुर्गालाई समर्पित गर्दछ। यो पर्व आश्विन महिनाको 15 दिनसम्म सार्व जनिक हुन्छ। यो पर्व नेपाली समाजमा एकत  
 होली सबैभन्दा रङीला पर्वहरूमध्ये एक हो जुन खुसी र उत्साहका साथ मनाइन्छ।
 
 ## महत्व
@@ -44,7 +48,7 @@ Family and friends gather to share sweets and celebrate the festive spirit.
     `
   },
 
-  dashain: {
+  holi: {
     slug: "dashain",
     name_en: "Dashain",
     name_np: "दशैं",

@@ -1,6 +1,6 @@
 /* ===== Base Header Styles ===== */
 .header {
-  background: rgb(251, 251, 5);
+  background: rgb(249, 249, 5);
   position: sticky;
   top: 0;
   width: 100%;
@@ -44,12 +44,6 @@
   padding: 0;
 }
 
-.logo a:hover,
-.logo span:hover {
-  color: #007bff;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
 .nav_item a,
 .dropdown-toggle {
   color: #333;
