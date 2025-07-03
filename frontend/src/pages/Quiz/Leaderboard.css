@@ -1,49 +1,82 @@
 .leaderboard-container {
-  max-width: 700px;
-  margin: 3rem auto;
-  padding: 2rem;
-  background: #fefefe;
-  border-radius: 12px;
-  box-shadow: 0 3px 15px rgba(0,0,0,0.1);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+  font-family: Arial, sans-serif;
 }
 
-.leaderboard-container h2 {
-  text-align: center;
-  margin-bottom: 2rem;
-  color: #0077ff;
+.filters {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
 }
 
-.leaderboard-table {
+.filters label {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.filters select {
+  margin-left: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 1rem;
+}
+
+table {
   width: 100%;
   border-collapse: collapse;
+  text-align: left;
 }
 
-.leaderboard-table th,
-.leaderboard-table td {
+thead {
+  background-color: #f0f0f0;
+}
+
+thead th {
   padding: 0.75rem 1rem;
+  border-bottom: 2px solid #ccc;
+}
+
+tbody tr {
   border-bottom: 1px solid #ddd;
+  transition: background-color 0.3s ease;
+}
+
+tbody tr:hover {
+  background-color: #fafafa;
+}
+
+tbody td {
+  padding: 0.75rem 1rem;
+  vertical-align: middle;
+}
+
+/* Avatar + Username cell styling */
+tbody td:first-child + td {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+tbody img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+tbody span {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Loading and no data text */
+.leaderboard-container p {
   text-align: center;
-}
-
-.leaderboard-table thead {
-  background-color: #0077ff;
-  color: #fff;
-  font-weight: 700;
-}
-
-.leaderboard-table tbody tr:hover {
-  background-color: #f0f8ff;
-}
-
-@media (max-width: 480px) {
-  .leaderboard-container {
-    margin: 1.5rem 1rem;
-    padding: 1rem;
-  }
-
-  .leaderboard-table th,
-  .leaderboard-table td {
-    padding: 0.5rem 0.75rem;
-  }
+  font-size: 1.1rem;
+  color: #666;
+  margin-top: 2rem;
 }

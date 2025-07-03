@@ -102,17 +102,31 @@ export const submitQuizResult = async (req, res) => {
 };
 
 // Get leaderboard (top scores)
-export const getLeaderboard = async (req, res) => {
+ export const getLeaderboard = async (req, res) => {
   try {
-    const topResults = await QuizResult.find()
-      .sort({ score: -1 })
+    
+    const { category, difficulty } = req.query;
+    const filter = {};
+
+    if (category && category.trim() !== "") {
+      filter.category = new RegExp(`^${category}$`, 'i');
+    }
+    if (difficulty && difficulty.trim() !== "") {
+      filter.difficulty = new RegExp(`^${difficulty}$`, 'i');
+    }
+
+    const topResults = await QuizResult.find(filter)
+      .sort({ score: -1, createdAt: 1 })
       .limit(10)
-      .populate('userId', 'username');
+      .populate('userId', 'username photo');
+
     res.json(topResults);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
+
+
 
 // Get user progress
 export const getUserProgress = async (req, res) => {

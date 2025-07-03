@@ -8,6 +8,7 @@ const quizResultSchema = new mongoose.Schema({
   category: { type: String },
   difficulty: { type: String },
   timestamp: { type: Date, default: Date.now },
-});
+}, { timestamps: true }); // <-- add this
+
 
 export default mongoose.model('QuizResult', quizResultSchema);

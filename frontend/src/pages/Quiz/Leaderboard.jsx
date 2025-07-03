@@ -1,56 +1,107 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import './Leaderboard.css';
+import React, { useState, useEffect } from "react";
+import { api } from "../../api/api";
+import "./Leaderboard.css";
+
+const categories = ["All", "General", "Science", "Math", "History", "Sports"];
+const difficulties = ["All", "easy", "medium", "hard"];
 
 const Leaderboard = () => {
-  const [topResults, setTopResults] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [category, setCategory] = useState("All");
+  const [difficulty, setDifficulty] = useState("All");
+  const [leaderboard, setLeaderboard] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetchLeaderboard();
-  }, []);
+    setLoading(true);
+    const cat = category === "All" ? "" : category;
+    const diff = difficulty === "All" ? "" : difficulty;
 
-  const fetchLeaderboard = async () => {
-    try {
-      const res = await axios.get('/api/quiz/leaderboard');
-      setTopResults(res.data);
-    } catch (error) {
-      console.error('Error fetching leaderboard:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    api
+      .getLeaderboard({ category: cat, difficulty: diff })
+      .then((res) => {
+        const data = Array.isArray(res.data)
+          ? res.data
+          : Array.isArray(res.data.leaderboard)
+          ? res.data.leaderboard
+          : [];
+        setLeaderboard(data);
+      })
+      .catch(() => setLeaderboard([]))
+      .finally(() => setLoading(false));
+  }, [category, difficulty]);
 
   return (
     <div className="leaderboard-container">
-      <h2>Quiz Leaderboard</h2>
+      <h1>Leaderboard</h1>
+
+      <div className="filters">
+        <label>
+          Category:
+          <select value={category} onChange={(e) => setCategory(e.target.value)}>
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label>
+          Difficulty:
+          <select value={difficulty} onChange={(e) => setDifficulty(e.target.value)}>
+            {difficulties.map((diff) => (
+              <option key={diff} value={diff}>
+                {diff}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+
       {loading ? (
         <p>Loading leaderboard...</p>
-      ) : topResults.length === 0 ? (
-        <p>No leaderboard data available.</p>
-      ) : (
-        <table className="leaderboard-table">
+      ) : leaderboard.length > 0 ? (
+        <table>
           <thead>
             <tr>
               <th>Rank</th>
-              <th>Username</th>
+              <th>User</th>
               <th>Score</th>
-              <th>Category</th>
-              <th>Difficulty</th>
+              <th>Date</th>
             </tr>
           </thead>
           <tbody>
-            {topResults.map((result, idx) => (
-              <tr key={result._id}>
+            {leaderboard.map(({ userId, score, createdAt }, idx) => (
+              <tr key={idx}>
                 <td>{idx + 1}</td>
-                <td>{result.userId?.username || 'Unknown'}</td>
-                <td>{result.score}</td>
-                <td>{result.category || 'All'}</td>
-                <td>{result.difficulty || '-'}</td>
+                <td style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  {userId?.photo ? (
+                    <img
+                      src={`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/${userId.photo}`}
+                      alt={userId.username}
+                      style={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover" }}
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: "50%",
+                        backgroundColor: "#ccc",
+                        display: "inline-block",
+                      }}
+                    />
+                  )}
+                  <span>{userId?.username || "Unknown"}</span>
+                </td>
+                <td>{score}</td>
+                <td>{new Date(createdAt).toLocaleDateString()}</td>
               </tr>
             ))}
           </tbody>
         </table>
+      ) : (
+        <p>No leaderboard data available.</p>
       )}
     </div>
   );

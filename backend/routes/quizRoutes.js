@@ -12,14 +12,16 @@ import {
 
 const router = express.Router();
 
+router.get('/leaderboard', getLeaderboard);
+router.get('/progress/:userId', getUserProgress);
+
+router.get('/:id', getQuizQuestionById);
+
 router.get('/', getQuizQuestions);
-router.get('/:id', getQuizQuestionById); // ✅ ← this was missing
 router.post('/', createQuizQuestion);
 router.put('/:id', updateQuizQuestion);
 router.delete('/:id', deleteQuizQuestion);
 
 router.post('/submit', submitQuizResult);
-router.get('/leaderboard', getLeaderboard);
-router.get('/progress/:userId', getUserProgress);
 
 export default router;

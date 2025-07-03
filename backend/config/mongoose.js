@@ -1,17 +1,26 @@
 // config/mongoose.js
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-dotenv.config();
+
+dotenv.config(); // Load environment variables
 
 export const connectMongoose = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI, {
+    const dbURI = process.env.MONGO_URI;
+
+    if (!dbURI) {
+      throw new Error("MONGO_URI is not defined in .env");
+    }
+
+    await mongoose.connect(dbURI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    console.log("✅ Mongoose connected");
+
+    const dbName = mongoose.connection.name;
+    console.log(`✅ Mongoose connected to database: ${dbName}`);
   } catch (error) {
-    console.error("❌ Mongoose connection error:", error);
+    console.error("❌ Mongoose connection error:", error.message);
     process.exit(1);
   }
 };

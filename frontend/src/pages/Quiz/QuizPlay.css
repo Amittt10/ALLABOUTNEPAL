@@ -34,6 +34,24 @@
   user-select: none;
 }
 
+.quiz-option-btn.correct {
+  background-color: #28a745; /* green */
+  color: white;
+  border-color: #218838;
+}
+
+.quiz-option-btn.incorrect {
+  background-color: #dc3545; /* red */
+  color: white;
+  border-color: #c82333;
+}
+
+.quiz-option-btn.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
 .quiz-option-btn:hover {
   background-color: #e3f0ff;
 }
@@ -163,4 +181,133 @@
 .btn-finish:hover {
   background-color: #5a6268; /* slightly darker */
   transform: translateY(-2px);
+}
+.timer {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: #d9534f; /* red */
+}
+.quiz-option-btn.correct {
+  background-color: #28a745;
+  color: white;
+  border-color: #218838;
+}
+
+.quiz-option-btn.incorrect {
+  background-color: #dc3545;
+  color: white;
+  border-color: #c82333;
+}
+
+.quiz-option-btn.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-next {
+  background-color: #007bff;
+  color: white;
+  margin-right: 1rem;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-finish {
+  background-color: #6c757d;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-next:hover {
+  background-color: #0056b3;
+}
+
+.btn-finish:hover {
+  background-color: #5a6268;
+}
+
+/* Timer progress bar container */
+.timer {
+  position: relative;
+  height: 10px;
+  background-color: #ddd;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+/* Timer progress fill */
+.timer-progress {
+  height: 100%;
+  background-color: #0077ff;
+  width: 100%;
+  transition: width 1s linear;
+  border-radius: 5px 0 0 5px;
+}
+
+.timer-text {
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-box {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.modal-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-evenly;
+  gap: 1rem;
+}
+
+.btn-confirm {
+  background-color: #28a745;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-cancel {
+  background-color: #dc3545;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-confirm:hover {
+  background-color: #218838;
+}
+.btn-cancel:hover {
+  background-color: #c82333;
 }
