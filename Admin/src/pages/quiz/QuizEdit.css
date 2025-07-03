@@ -1,0 +1,194 @@
+/* Container styling for Add, Edit, and List */
+.quiz-add-container,
+.quiz-edit-container,
+.quiz-list-container {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 1.5rem 2rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Headings */
+.quiz-add-container h2,
+.quiz-edit-container h2,
+.quiz-list-container h2 {
+  margin-bottom: 1.5rem;
+  color: #333;
+  text-align: center;
+  font-weight: 700;
+}
+
+/* Form labels and inputs */
+.quiz-form label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: 600;
+  color: #555;
+}
+
+.quiz-form textarea,
+.quiz-form input[type="text"],
+.quiz-form input[type="number"],
+.quiz-form select {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  margin-top: 0.25rem;
+  border: 1.5px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.25s ease;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+.quiz-form textarea {
+  min-height: 80px;
+}
+
+.quiz-form textarea:focus,
+.quiz-form input[type="text"]:focus,
+.quiz-form input[type="number"]:focus,
+.quiz-form select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Submit and Add buttons */
+.submit-button,
+.add-button {
+  margin-top: 1.75rem;
+  background-color: #007bff;
+  color: white;
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.submit-button:hover,
+.add-button:hover {
+  background-color: #0056b3;
+}
+
+.submit-button:disabled {
+  background-color: #9bbcfb;
+  cursor: not-allowed;
+}
+
+/* Quiz List Table */
+.quiz-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background-color: white;
+}
+
+.quiz-table th,
+.quiz-table td {
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  text-align: left;
+  vertical-align: middle;
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.quiz-table th {
+  background-color: #007bff;
+  color: white;
+  font-weight: 700;
+}
+
+/* No row hover effect */
+.quiz-table tbody tr {
+  background-color: white;
+}
+
+/* Actions buttons in list */
+.quiz-table .edit,
+.quiz-table .delete {
+  margin-right: 0.5rem;
+  padding: 0.35rem 0.8rem;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.quiz-table .edit {
+  background-color: #28a745;
+}
+
+.quiz-table .edit:hover {
+  background-color: #1e7e34;
+}
+
+.quiz-table .delete {
+  background-color: #dc3545;
+}
+
+.quiz-table .delete:hover {
+  background-color: #b02a37;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .quiz-add-container,
+  .quiz-edit-container,
+  .quiz-list-container {
+    padding: 1rem 1.2rem;
+    margin: 1rem;
+  }
+
+  /* Make table horizontally scrollable on small screens */
+  .quiz-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .quiz-table th,
+  .quiz-table td {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  /* Buttons full width and stacked on small screens */
+  .quiz-table .edit,
+  .quiz-table .delete {
+    display: block;
+    margin: 0.3rem 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Inputs and textareas smaller font for small devices */
+  .quiz-form textarea,
+  .quiz-form input[type="text"],
+  .quiz-form input[type="number"],
+  .quiz-form select {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .submit-button,
+  .add-button {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .quiz-form label {
+    font-size: 0.9rem;
+  }
+}

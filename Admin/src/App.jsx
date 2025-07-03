@@ -16,9 +16,9 @@ import PlaceAdd from "./pages/PlaceAdmin/PlaceAdd";
 import PlaceEdit from "./pages/PlaceAdmin/PlaceEdit";
 import PlaceList from "./pages/PlaceAdmin/PlaceList";
 
-// import QuizList from "./components/quiz/QuizList";
-// import QuizAdd from "./components/quiz/QuizAdd";
-// import QuizEdit from "./components/quiz/QuizEdit";
+import QuizList from './pages/quiz/QuizList';
+import QuizAdd from './pages/quiz/QuizAdd';
+import QuizEdit from './pages/quiz/QuizEdit';
 
 function App() {
   return (
@@ -57,11 +57,9 @@ function App() {
             <Route path="places/edit/:id" element={<PlaceEdit />} />
           
 
-            {/* Quiz routes
-            <Route path="quiz" element={<Navigate to="quiz/list" replace />} />
-            <Route path="quiz/list" element={<QuizList />} />
-            <Route path="quiz/add" element={<QuizAdd />} />
-            <Route path="quiz/edit/:id" element={<QuizEdit />} /> */}
+            <Route path="/admin/quiz" element={<PrivateRoute><QuizList /></PrivateRoute>} />
+            <Route path="/admin/quiz/add" element={<PrivateRoute><QuizAdd /></PrivateRoute>} />
+            <Route path="/admin/quiz/edit/:id" element={<PrivateRoute><QuizEdit /></PrivateRoute>} />
 
           </Route>
 

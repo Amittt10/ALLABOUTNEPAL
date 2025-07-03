@@ -16,7 +16,7 @@ import UserSignup from './pages/UserSignup';
 import UserLogin from './pages/UserLogin';
 import Home from './pages/Home/Home';
 import CulturalHeritage from './pages/CulturalHeritage';
-import Quiz from './pages/Quiz';
+// import Quiz from './pages/Quiz';
 import Aboutus from './pages/Aboutus';
 import Festivals from './pages/Festivals';
 import Profile from './pages/Profile';
@@ -32,6 +32,14 @@ import FestivalDetailBySlug from "./pages/FestivalDetailBySlug"; // static
 import FestivalDetailById from './pages/FestivalDetailById'; // dynamic
 import FestivalsHighlight from './pages/FestivalsHighlight';
 import PlaceDetail from './pages/Places/PlaceDetail';
+import QuizHome from './pages/Quiz/QuizHome';
+import QuizPlay from './pages/Quiz/QuizPlay';
+import QuizResult from './pages/Quiz/QuizResult';
+import Leaderboard from './pages/Quiz/Leaderboard';
+import QuizHistory from "./pages/Quiz/QuizHistory.jsx";
+
+
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -50,7 +58,7 @@ const router = createBrowserRouter(
         <Route path="/festivals/:slug" element={<FestivalDetailBySlug />} /> {/* Static */}
         <Route path="/festival-detail/:id" element={<FestivalDetailById />} />       {/* Dynamic */}
 
-        <Route path="/quiz" element={<Quiz />} />
+        {/* <Route path="/quiz" element={<Quiz />} /> */}
         <Route path="/about" element={<Aboutus />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/verify" element={<Verify />} />
@@ -60,6 +68,17 @@ const router = createBrowserRouter(
         <Route path="/festivals-highlight" element={<FestivalsHighlight />} />
         <Route path="/search" element={<SearchResults />} />
         <Route path="/places/:placeId" element={<PlaceDetail />} />
+
+        
+        <Route path="/quiz" element={<QuizHome />} />
+        <Route path="/quiz/play" element={<QuizPlay />} />
+        <Route path="/quiz/result" element={<QuizResult />} />
+        <Route path="/quiz/leaderboard" element={<Leaderboard />} />
+        <Route path="/quiz/history" element={<QuizHistory />} />
+
+
+
+
       </Route>
     </>
   ),

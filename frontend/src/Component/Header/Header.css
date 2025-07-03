@@ -87,6 +87,37 @@
   list-style: none;
 }
 
+/* Quiz Dropdown */
+.quiz-dropdown .quiz-dropdown-content {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  min-width: 200px;
+  background: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 0.5rem 0;
+  z-index: 9999;
+}
+
+.quiz-dropdown .quiz-dropdown-content ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.quiz-dropdown .quiz-dropdown-content li a {
+  display: block;
+  padding: 0.5rem 1rem;
+  color: #333;
+  text-decoration: none;
+}
+
+.quiz-dropdown .quiz-dropdown-content li a:hover {
+  background: #f0f0f0;
+  border-radius: 4px;
+}
+
 .dropdown-menu li a {
   padding: 0.5rem 1rem;
   color: #333;
@@ -211,10 +242,11 @@
   line-height: 1.1;
 }
 
+
 .profile-menu .dropdown {
-  position: absolute !important;
-  top: 100% !important;
-  right: 0 !important;
+  position: absolute;
+  top: 100%;
+  right: 0;
   background: white;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   border-radius: 8px;
@@ -240,12 +272,19 @@
   color: #333;
   text-decoration: none;
   display: block;
+  font-size: 0.95rem;
+  font-family: inherit;
+  line-height: 1.4;
+  transition: all 0.2s ease;
 }
 
 .profile-menu .dropdown li a:hover,
 .profile-menu .dropdown li button:hover {
   background: #f0f0f0;
+  color: #007bff; /* Blue on hover */
   border-radius: 4px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 /* ===== Buttons ===== */

@@ -91,3 +91,5 @@ export const api = {
   updateQuizQuestion: (id, data) => axiosInstance.put(`/admin/quiz/${id}`, data),
   deleteQuizQuestion: (id) => axiosInstance.delete(`/admin/quiz/${id}`),
 };
+
+export default axiosInstance;

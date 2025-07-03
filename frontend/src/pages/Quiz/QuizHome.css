@@ -1,0 +1,148 @@
+/* QuizHome.css */
+
+.quiz-home-container {
+  max-width: 900px;
+  margin: 3rem auto;
+  padding: 0 1.5rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #222;
+}
+
+.page-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #111;
+  letter-spacing: 0.02em;
+}
+
+section {
+  margin-bottom: 3rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 0.25rem;
+  color: #004a99;
+}
+
+.quiz-filters {
+  background: #f7f9fc;
+  padding: 1.75rem 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.filters-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 180px;
+}
+
+.filter-group label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.filter-group select {
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1.5px solid #cbd5e1;
+  background-color: white;
+  transition: border-color 0.25s ease;
+  cursor: pointer;
+}
+
+.filter-group select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.4);
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.65rem 1.75rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+/* Table Styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  border-radius: 8px;
+  overflow: hidden;
+  background: white;
+}
+
+thead {
+  background-color: #007bff;
+  color: white;
+}
+
+thead th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+tbody tr {
+  border-bottom: 1px solid #e1e5eb;
+  transition: background-color 0.2s ease;
+  cursor: default;
+}
+
+tbody tr:hover {
+  background-color: #f1f5fb;
+}
+
+tbody td {
+  padding: 0.7rem 1rem;
+  font-size: 0.95rem;
+  color: #444;
+}
+
+p {
+  font-size: 1rem;
+  color: #666;
+  margin: 0.75rem 0 0;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+  .filters-row {
+    flex-direction: column;
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: 0.75rem 0;
+  }
+}

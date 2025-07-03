@@ -307,6 +307,17 @@ const Header = () => {
                             {t("profile.myProfile")}
                           </Link>
                         </li>
+                         <li>
+                          <Link
+                            to="/quiz/history"
+                            onClick={() => {
+                              setMenuOpen(false);
+                              setProfileMenuOpen(false);
+                            }}
+                          >
+                            Quiz History
+                          </Link>
+                        </li>
                         <li>
                           <button onClick={handleLogout}>{t("auth.logout")}</button>
                         </li>
