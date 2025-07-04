@@ -105,6 +105,10 @@ const UserSignup = () => {
             <button type="submit" className="signup-submit" disabled={loading}>
               {loading ? <Loader2 className="animate-spin" /> : "Sign Up"}
             </button>
+
+            <div className="signup-login-link">
+  Already have an account? <Link to="/login">Login</Link>
+</div>
           </form>
         </div>
       </div>

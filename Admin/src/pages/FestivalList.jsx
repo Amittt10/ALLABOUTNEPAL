@@ -62,7 +62,7 @@ const FestivalList = () => {
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody >
             {festivals.map((festival) => (
               <tr key={festival._id}>
                 <td>{festival.name_en}</td>

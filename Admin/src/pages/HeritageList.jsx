@@ -37,8 +37,8 @@ const HeritageList = () => {
   if (loading) return <p>Loading heritage sites...</p>
 
   return (
-    <div style={{ maxWidth: 700, margin: '2rem auto', color: 'black' }}>
-      <h2>Heritage Sites</h2>
+    <div style={{ maxWidth: 700, margin: '2rem auto', color: '#eee' }}>
+      <h2 style={{color:'black'}}>Heritage Sites</h2>
       <Link to="add" style={{ color: '#f0a500', fontWeight: '600' }}>+ Add New</Link>
       <table>
         <thead>
@@ -64,7 +64,7 @@ const HeritageList = () => {
                   <td>{location}</td>
                   <td>{site.entryFee ? `₹${site.entryFee}` : 'Free'}</td>
                   <td>
-                    <Link to={`edit/${site._id}`} style={{ marginRight: 10 }}>Edit</Link>
+                    <Link to={`edit/${site._id}`} style={{ marginRight: 10 , color:'orange'}}>Edit</Link>
                     <button onClick={() => handleDelete(site._id)}>Delete</button>
                   </td>
                 </tr>

@@ -1,92 +1,131 @@
-/* Container wrappers */
-.forgot-wrapper,
-.reset-wrapper {
-  max-width: 400px;
-  margin: 60px auto;
-  padding: 30px 25px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 6px 12px rgb(0 0 0 / 0.1);
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+body,
+html {
+  height: 100%;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.forgot-wrapper h2,
-.reset-wrapper h2 {
-  margin-bottom: 25px;
-  color: #222;
-  font-weight: 700;
-  text-align: center;
-}
-
-/* Forms */
-.forgot-wrapper form,
-.reset-wrapper form {
+.forgot-wrapper {
+  height: 100vh;
+  background: url('images/mainhero.jpg') no-repeat center center/cover;
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
 
-.forgot-wrapper input,
-.reset-wrapper input {
-  padding: 12px 14px;
-  font-size: 16px;
-  border: 1.8px solid #ddd;
-  border-radius: 6px;
-  outline-offset: 2px;
-  transition: border-color 0.3s ease;
-}
-
-.forgot-wrapper input:focus,
-.reset-wrapper input:focus {
-  border-color: #3b82f6;
-}
-
-/* Buttons */
-.forgot-wrapper button,
-.reset-wrapper button {
-  padding: 12px 0;
-  font-size: 18px;
-  font-weight: 600;
+.forgot-box {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 40px;
+  max-width: 400px;
+  width: 100%;
   color: #fff;
-  background-color: #3b82f6;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.forgot-wrapper button:disabled,
-.reset-wrapper button:disabled {
-  background-color: #a5b4fc;
-  cursor: not-allowed;
-}
-
-.forgot-wrapper button:hover:not(:disabled),
-.reset-wrapper button:hover:not(:disabled) {
-  background-color: #2563eb;
-}
-
-/* Messages */
-.success-message,
-.error-message {
-  margin-top: 15px;
-  font-weight: 600;
   text-align: center;
+}
+
+.forgot-box h2 {
+  font-size: 1.8rem;
+  margin-bottom: 25px;
+  font-weight: 600;
+}
+
+.forgot-box form {
+  text-align: left;
+}
+
+.forgot-box label {
+  display: block;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.required {
+  color: red;
+  margin-left: 4px;
+}
+
+.forgot-box input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 1rem;
+  margin-top: 6px;
+}
+
+.forgot-box input::placeholder {
+  color: #ddd;
+}
+
+.forgot-box button {
+  width: 100%;
+  padding: 12px;
+  background-color: #ffffff;
+  color: #000;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.3s ease background-color;
+}
+
+.forgot-box button:hover {
+  background-color: #ddd;
 }
 
 .success-message {
-  color: #16a34a;
+  color: #00ff99;
+  margin-top: 15px;
 }
 
 .error-message {
-  color: #dc2626;
+  color: #ff4d4d;
+  margin-top: 15px;
+}
+
+.back-to-login {
+  margin-top: 25px;
+  font-size: 0.95rem;
+  color: #fff;
+}
+
+.back-to-login a {
+  color: #fff;
+  font-weight: 500;
+  text-decoration: underline;
 }
 
 /* Responsive */
 @media (max-width: 480px) {
-  .forgot-wrapper,
-  .reset-wrapper {
-    margin: 40px 15px;
-    padding: 20px 15px;
+  .forgot-box {
+    padding: 25px 20px;
+    border-radius: 12px;
+  }
+
+  .forgot-box h2 {
+    font-size: 1.5rem;
+  }
+
+  .forgot-box input {
+    font-size: 0.95rem;
+    padding: 10px 12px;
+  }
+
+  .forgot-box button {
+    font-size: 0.95rem;
+    padding: 10px;
+  }
+
+  .back-to-login {
+    font-size: 0.85rem;
   }
 }

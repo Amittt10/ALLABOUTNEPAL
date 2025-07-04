@@ -30,69 +30,63 @@ const UserLogin = ({ onSuccess }) => {
   };
 
   return (
-    <div className="login-wrapper">
-      <div className="login-box">
-        <div className="login-left">
-          <h2>Welcome!</h2>
-          <p>Create your account.<br />For Free!</p>
-          <Link to="/register" className="signup-button">
-            Sign Up
-          </Link>
-        </div>
+  <div className="login-wrapper">
+    <div className="login-box">
+      <div className="login-right">
+        <h3>Login Form</h3>
 
-        <div className="login-right">
-          <h3>Login</h3>
+        <form onSubmit={handleLogin} className="login-form">
+          <label>
+            Username/Email address<span className="required">*</span>
+          </label>
+          <input
+            type="text"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
 
-          <form onSubmit={handleLogin} className="login-form">
-            <label>
-              Username/Email address<span className="required">*</span>
-            </label>
+          <label>
+            Password<span className="required">*</span>
+          </label>
+          <div className="password-wrapper">
             <input
-              type="text"
-              placeholder="Username or Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type={showPassword ? "text" : "password"}
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
+              className="password-input"
             />
-
-            <label>
-              Password<span className="required">*</span>
-            </label>
-            <div className="password-wrapper">
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="password-input"
-              />
-              <button
-                type="button"
-                className="password-toggle"
-                onClick={() => setShowPassword(!showPassword)}
-                disabled={loading}
-                aria-label={showPassword ? "Hide password" : "Show password"}
-
-              >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-              </button>
-            </div>
-
-            {error && <div className="error-message">{error}</div>}
-
-            <button type="submit" className="login-btn" disabled={loading}>
-              {loading ? "Signing in..." : "Sign In"}
+            <button
+              type="button"
+              className="password-toggle"
+              onClick={() => setShowPassword(!showPassword)}
+              disabled={loading}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
-          </form>
+          </div>
 
           <div className="forgot-link">
             <Link to="/forgot">Forgot password?</Link>
           </div>
+
+          {error && <div className="error-message">{error}</div>}
+
+          <button type="submit" className="login-btn" disabled={loading}>
+            {loading ? "Signing in..." : "Log In"}
+          </button>
+        </form>
+
+        <div className="signup-text">
+          Don't have an account? <Link to="/register">Register</Link>
         </div>
       </div>
     </div>
-  );
-};
-
+  </div>
+);
+}
 export default UserLogin;
