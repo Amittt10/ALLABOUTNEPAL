@@ -16,6 +16,7 @@ const QuizEdit = () => {
     explanation: '',
   });
 
+  const categories = ["General", "Location", "History"];
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [submitError, setSubmitError] = useState(null);
@@ -88,7 +89,20 @@ const QuizEdit = () => {
         />
 
         <label>Category</label>
-        <input type="text" name="category" value={form.category} onChange={handleChange} required />
+          <select
+            name="category"
+            value={form.category}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select Category</option>
+            {categories.map((cat) => (
+              <option key={cat} value={cat}>
+                {cat}
+              </option>
+            ))}
+          </select>
+
 
         <label>Difficulty</label>
         <select name="difficulty" value={form.difficulty} onChange={handleChange}>

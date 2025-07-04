@@ -15,6 +15,8 @@ import searchRoutes from "./routes/searchRoutes.js";
 import subscriberRoutes from "./routes/subscriberRoutes.js";
 import placeRoutes from "./routes/placeRoutes.js";
 import quizRoutes from './routes/quizRoutes.js';
+import { deleteOldQuizResults } from "./controllers/quizController.js";
+
 
 dotenv.config();
 
@@ -61,8 +63,16 @@ Promise.all([connectDB(), connectMongoose()])
 
     app.listen(PORT, () => {
       console.log(`🚀 Server running at http://localhost:${PORT}`);
+
+           // 🧹 Daily quiz result cleanup
+      setInterval(() => {
+        deleteOldQuizResults()
+          .then(() => console.log("✅ Old quiz results cleaned up"))
+          .catch((err) => console.error("❌ Cleanup error:", err));
+      }, 24 * 60 * 60 * 1000);
     });
   })
+
   .catch((err) => {
     console.error("❌ DB connection error:", err);
     process.exit(1);

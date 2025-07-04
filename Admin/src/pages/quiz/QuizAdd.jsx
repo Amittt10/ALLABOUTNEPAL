@@ -9,11 +9,12 @@ const QuizAdd = () => {
     question: '',
     options: ['', '', '', ''],
     correctAnswerIndex: 0,
-    category: '',
+    category: 'General',
     difficulty: 'easy',
     explanation: '',
   });
 
+  const categories = ["General", "Location", "History"]; // 🔸 Define locally
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -69,7 +70,7 @@ const QuizAdd = () => {
           </div>
         ))}
 
-        <label>Correct Answer Index (0-3)</label>
+        <label>Correct Answer Index (0–3)</label>
         <input
           type="number"
           name="correctAnswerIndex"
@@ -82,14 +83,20 @@ const QuizAdd = () => {
         />
 
         <label>Category</label>
-        <input
-          type="text"
+        <select
           name="category"
           value={form.category}
           onChange={handleChange}
           required
           disabled={loading}
-        />
+        >
+          <option value="">Select Category</option>
+          {categories.map((cat) => (
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
+          ))}
+        </select>
 
         <label>Difficulty</label>
         <select

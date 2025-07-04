@@ -37,7 +37,7 @@ const HeritageList = () => {
   if (loading) return <p>Loading heritage sites...</p>
 
   return (
-    <div style={{ maxWidth: 700, margin: '2rem auto', color: '#eee' }}>
+    <div style={{ maxWidth: 700, margin: '2rem auto', color: 'black' }}>
       <h2>Heritage Sites</h2>
       <Link to="add" style={{ color: '#f0a500', fontWeight: '600' }}>+ Add New</Link>
       <table>

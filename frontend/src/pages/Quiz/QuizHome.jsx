@@ -5,7 +5,7 @@ import { api } from "../../api/api";
 import LoginCard from "../../Component/LoginCard";
 import "./QuizHome.css";
 
-const categories = ["General", "Science", "Math", "History", "Sports"];
+const categories = ["General", "Location", "History"];
 const difficulties = ["easy", "medium", "hard"];
 
 const QuizHome = () => {

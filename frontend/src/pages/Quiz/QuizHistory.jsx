@@ -1,21 +1,26 @@
 import React, { useEffect, useState, useContext } from "react";
-import axios from "axios";
-import { AuthContext } from "../../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext"; // Fix: import AuthContext
+import { api } from "../../api/api"; // centralized API
 import "./QuizHistory.css";
 
 const QuizHistory = () => {
-  const { user } = useContext(AuthContext);
+  // Get both user and loading from AuthContext
+  const { user, loading: authLoading } = useContext(AuthContext);
+
   const [history, setHistory] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // loading for history fetch
   const [error, setError] = useState("");
   const [quizStats, setQuizStats] = useState({
     totalQuizzes: 0,
     highestScore: 0,
-    badges: [], // Assume badges are strings or objects with name and icon
+    badges: [],
   });
 
   useEffect(() => {
     const fetchHistoryAndStats = async () => {
+      // Wait until auth loading finishes
+      if (authLoading) return;
+
       if (!user?._id) {
         setError("User not logged in");
         setLoading(false);
@@ -24,19 +29,11 @@ const QuizHistory = () => {
 
       try {
         setLoading(true);
-        const token = localStorage.getItem("token");
+        setError("");
 
-        // Fetch quiz history
-        const resHistory = await axios.get(
-          `http://localhost:3000/api/quiz/user-progress/${user._id}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-        setHistory(resHistory.data);
+        const resHistory = await api.getUserProgress(user._id);
+        setHistory(resHistory.data || []);
 
-        // Fetch user quiz stats (you can create an API for this or get from user context)
-        // For demo, use user.quizStats from context if available:
         if (user.quizStats) {
           setQuizStats({
             totalQuizzes: user.quizStats.totalQuizzes || 0,
@@ -53,17 +50,16 @@ const QuizHistory = () => {
     };
 
     fetchHistoryAndStats();
-  }, [user]);
+  }, [user, authLoading]); // add authLoading here
 
   if (loading) return <div className="quiz-history-container">Loading...</div>;
-
   if (error) return <div className="quiz-history-container error">{error}</div>;
 
   return (
     <div className="quiz-history-container">
       <h2>Your Quiz History</h2>
 
-      {/* Summary */}
+      {/* Quiz Summary */}
       <div className="quiz-summary">
         <div><strong>Total Quizzes Played:</strong> {quizStats.totalQuizzes}</div>
         <div><strong>Highest Score:</strong> {quizStats.highestScore}</div>
@@ -75,7 +71,6 @@ const QuizHistory = () => {
             <div className="badges-list">
               {quizStats.badges.map((badge, idx) => (
                 <div className="badge" key={idx} title={badge.name || badge}>
-                  {/* You can customize badge icon if you have icons */}
                   <img
                     src={badge.icon || "/badge-default.svg"}
                     alt={badge.name || "Badge"}
@@ -89,7 +84,7 @@ const QuizHistory = () => {
         </div>
       </div>
 
-      {/* History Table */}
+      {/* Quiz History Table */}
       {history.length === 0 ? (
         <p>You haven't played any quizzes yet.</p>
       ) : (
@@ -100,14 +95,14 @@ const QuizHistory = () => {
               <th>Category</th>
               <th>Difficulty</th>
               <th>Score</th>
-              <th>Correct Answers</th>
-              <th>Total Questions</th>
+              <th>Correct</th>
+              <th>Total</th>
             </tr>
           </thead>
           <tbody>
             {history.map((quiz) => (
               <tr key={quiz._id}>
-                <td>{new Date(quiz.timestamp).toLocaleString()}</td>
+                <td>{new Date(quiz.timestamp || quiz.createdAt).toLocaleString()}</td>
                 <td>{quiz.category}</td>
                 <td>{quiz.difficulty}</td>
                 <td>{quiz.score}</td>

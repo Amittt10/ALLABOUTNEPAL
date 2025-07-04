@@ -8,11 +8,20 @@ const userSchema = new mongoose.Schema({
   verified: { type: Boolean, default: false },
   role: { type: String, default: "user" },
   photo: { type: String }, // Add this line
-  quizStats: {
-    totalQuizzes: { type: Number, default: 0 },
-    highestScore: { type: Number, default: 0 },
-    categoriesPlayed: { type: [String], default: [] }
-  }
+quizStats: {
+  totalQuizzes: { type: Number, default: 0 },
+  highestScore: { type: Number, default: 0 },
+  categoriesPlayed: { type: [String], default: [] },
+  badges: {
+    type: [
+      {
+        name: String,
+        icon: String,
+      }
+    ],
+    default: [],
+  },
+},
 }, {
   timestamps: true
 });
