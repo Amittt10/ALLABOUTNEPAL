@@ -1,6 +1,6 @@
 /* ===== Base Header Styles ===== */
 .header {
-  background: rgb(203, 190, 190);
+  background: rgb(177, 161, 161);
   position: sticky;
   top: 0;
   width: 100%;
@@ -134,7 +134,7 @@
 .search-bar {
   display: flex;
   align-items: center;
-  background: #f7f7f7;
+  background: #966868;
   padding: 0.25rem 0.5rem;
   border-radius: 999px;
   margin-left: 1rem;

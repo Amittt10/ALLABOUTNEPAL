@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import "./FestivalDetails.css";
 
+const API = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
 const FestivalDetailById = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -20,7 +22,7 @@ const FestivalDetailById = () => {
       try {
         setLoading(true);
         setError(null);
-        const res = await fetch(`http://localhost:3000/api/festivals/${id}`);
+        const res = await fetch(`${API}/api/festivals/${id}`);
         if (!res.ok) throw new Error("Error fetching festival");
         const data = await res.json();
         setFestival(data);
@@ -38,7 +40,6 @@ const FestivalDetailById = () => {
   const name = festival?.[`name_${lang}`] || festival?.name_en || "No Name";
   const dateAD = festival?.dateAD || "";
   const location = festival?.[`location_${lang}`] || festival?.location_en || "Unknown location";
-  const category = festival?.category || "N/A";
   const gallery = festival?.gallery || [];
 
   const formatDate = (dateStr) => {
@@ -58,30 +59,10 @@ const FestivalDetailById = () => {
     if (line.startsWith("### ")) return { type: "subtitle", content: line.slice(4).trim() };
     if (line.startsWith("## ")) return { type: "heading", content: line.slice(3).trim() };
     if (line.startsWith("# ")) return { type: "title", content: line.slice(2).trim() };
-    if (/^[A-Z\s\-:]+$/.test(line) && line.length < 30) {
+    if (/^[A-Z\s\-:]+$/.test(line) && line.length < 40) {
       return { type: "heading", content: line.trim() };
     }
     return { type: "paragraph", content: line };
-  });
-
-  const descriptionBlocks = [];
-  let paragraphCount = 0;
-  let imageIndex = 0;
-
-  parsedBlocks.forEach(block => {
-    descriptionBlocks.push(block);
-
-    if (block.type === "paragraph") {
-      paragraphCount++;
-      if (paragraphCount % 2 === 0 && imageIndex < gallery.length) {
-        descriptionBlocks.push({
-          type: "image",
-          src: `http://localhost:3000/uploads/${gallery[imageIndex]}`,
-          alt: `${name} image ${imageIndex + 1}`
-        });
-        imageIndex++;
-      }
-    }
   });
 
   const renderFormattedText = (text) => {
@@ -109,18 +90,33 @@ const FestivalDetailById = () => {
   const renderBlock = (block, key) => {
     switch (block.type) {
       case "paragraph":
-        return <p key={key} className="desc-paragraph justify-text">{renderFormattedText(block.content)}</p>;
-      case "image":
+        const parts = block.content.split(/(\[image\d+\])/i);
         return (
-          <img
-            key={key}
-            src={block.src}
-            alt={block.alt || "Image"}
-            className="inline-image"
-            onClick={() => setFullscreenImg(block.src)}
-            style={{ cursor: "pointer" }}
-          />
+          <p key={key} className="desc-paragraph justify-text">
+            {parts.map((part, i) => {
+              const match = part.match(/\[image(\d+)\]/i);
+              if (match) {
+                const index = parseInt(match[1], 10) - 1;
+                if (gallery[index]) {
+                  return (
+                    <img
+                      key={`img-${index}`}
+                      src={`${API}/uploads/${gallery[index]}`}
+                      alt={`${name} image ${index + 1}`}
+                      className="inline-image"
+                      onClick={() => setFullscreenImg(`${API}/uploads/${gallery[index]}`)}
+                      style={{ cursor: "pointer" }}
+                    />
+                  );
+                }
+                return null;
+              } else {
+                return <React.Fragment key={`text-${i}`}>{renderFormattedText(part)}</React.Fragment>;
+              }
+            })}
+          </p>
         );
+
       case "title":
         return <h2 key={key} className="desc-title semibold">{block.content}</h2>;
       case "heading":
@@ -133,16 +129,6 @@ const FestivalDetailById = () => {
   };
 
   if (loading) return <p className="loading">Loading festival details...</p>;
-  if (error) {
-    return (
-      <div className="festival-details-container">
-        <button className="back-btn" onClick={() => navigate(-1)}>
-          &larr; Back
-        </button>
-        <p className="error">{error}</p>
-      </div>
-    );
-  }
 
   return (
     <div className="festival-details-container">
@@ -150,23 +136,23 @@ const FestivalDetailById = () => {
         &larr; Back
       </button>
 
-      {festival.image && (
+      {festival?.image && (
         <img
-          src={`http://localhost:3000/uploads/${festival.image}`}
+          src={`${API}/uploads/${festival.image}`}
           alt={name}
           className="festival-main-image"
-          onClick={() => setFullscreenImg(`http://localhost:3000/uploads/${festival.image}`)}
+          onClick={() => setFullscreenImg(`${API}/uploads/${festival.image}`)}
         />
       )}
 
       <h2 className="desc-title semibold">{name}</h2>
       <p className="festival-date">{formatDate(dateAD)}</p>
       <p className="location-entryfee">
-        <span className="location-text italics small-font">{location}</span><br />
+        <span className="location-text italics small-font">{location}</span>
       </p>
 
       <div className="description-content">
-        {descriptionBlocks.map((block, idx) => renderBlock(block, idx))}
+        {parsedBlocks.map((block, idx) => renderBlock(block, idx))}
       </div>
 
       {fullscreenImg && (

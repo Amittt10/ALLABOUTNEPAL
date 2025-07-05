@@ -13,6 +13,16 @@ html {
   justify-content: center;
   align-items: center;
   padding: 20px;
+  position: relative;
+}
+
+/* Optional: dark overlay */
+.signup-page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 0;
 }
 
 /* Glassmorphism container */
@@ -28,6 +38,8 @@ html {
   width: 100%;
   color: #fff;
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 /* Remove left panel (if still used) */
@@ -40,6 +52,7 @@ html {
   font-size: 1.8rem;
   margin-bottom: 20px;
   font-weight: 600;
+  color: #ffffff;
 }
 
 /* Status message */
@@ -90,6 +103,39 @@ html {
   color: #ddd;
 }
 
+/* Password wrapper with Eye icon */
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input {
+  width: 100%;
+  padding-right: 40px; /* leave room for icon */
+}
+
+/* Eye Icon */
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #ffffffcc;
+  font-size: 1.2rem;
+  transition: color 0.3s ease;
+}
+
+.password-toggle:hover {
+  color: #ffd88d;
+}
+
+.password-toggle:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 /* Sign Up button */
 .signup-submit {
   width: 100%;
@@ -133,6 +179,7 @@ html {
   }
 }
 
+/* Responsive */
 @media (max-width: 480px) {
   .login-wrapper,
   .signup-page {

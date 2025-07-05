@@ -11,6 +11,8 @@ import {
 import './i18n';
 
 import { AuthProvider } from './context/AuthContext';
+import { ToastContainer } from 'react-toastify';     
+import 'react-toastify/dist/ReactToastify.css'; 
 
 import UserSignup from './pages/UserSignup';
 import UserLogin from './pages/UserLogin';
@@ -95,5 +97,6 @@ const root = createRoot(document.getElementById('root'));
 root.render(
   <AuthProvider>
     <RouterProvider router={router} />
+    <ToastContainer position="top-center" theme='dark' autoClose={4000} />
   </AuthProvider>
 );

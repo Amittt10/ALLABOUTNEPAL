@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 import './HeritageDetails.css';
 
+const API = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 const HeritageDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -25,7 +27,7 @@ const HeritageDetails = () => {
       try {
         setLoading(true);
         setError(null);
-        const res = await fetch(`http://localhost:3000/api/heritage/${id}`);
+        const res = await fetch(`${API}/api/heritage/${id}`);
         if (!res.ok) throw new Error('Error fetching heritage site');
         const data = await res.json();
         setSite(data);
@@ -52,36 +54,23 @@ const HeritageDetails = () => {
 
   const rawLines = historyRaw.split('\n').map(line => line.trim()).filter(Boolean);
 
-  const parsedBlocks = rawLines.map(line => {
-    if (line.startsWith('### ')) return { type: 'subtitle', content: line.slice(4).trim() };
-    if (line.startsWith('## ')) return { type: 'heading', content: line.slice(3).trim() };
-    if (line.startsWith('# ')) return { type: 'title', content: line.slice(2).trim() };
-    if (/^[A-Z\s\-:]+$/.test(line) && line.length < 30) {
-      return { type: 'heading', content: line.trim() };
-    }
-    return { type: 'paragraph', content: line };
-  });
-
+  // === Enhanced block parsing with [imageX] support ===
   const descriptionBlocks = [];
-  let paragraphCount = 0;
-  let imageIndex = 0;
-
-  parsedBlocks.forEach(block => {
-    descriptionBlocks.push(block);
-
-    if (block.type === 'paragraph') {
-      paragraphCount++;
-      if (paragraphCount % 2 === 0 && imageIndex < images.length) {
-        descriptionBlocks.push({
-          type: 'image',
-          src: `http://localhost:3000/${images[imageIndex]}`,
-          alt: `${name} image ${imageIndex + 1}`,
-        });
-        imageIndex++;
-      }
+  rawLines.forEach((line) => {
+    if (line.startsWith('### ')) {
+      descriptionBlocks.push({ type: 'subtitle', content: line.slice(4).trim() });
+    } else if (line.startsWith('## ')) {
+      descriptionBlocks.push({ type: 'heading', content: line.slice(3).trim() });
+    } else if (line.startsWith('# ')) {
+      descriptionBlocks.push({ type: 'title', content: line.slice(2).trim() });
+    } else if (/^[A-Z\s\-:]+$/.test(line) && line.length < 40) {
+      descriptionBlocks.push({ type: 'heading', content: line });
+    } else {
+      descriptionBlocks.push({ type: 'paragraph', content: line });
     }
   });
 
+  // === Markdown-style text formatting ===
   const renderFormattedText = (text) => {
     const elements = [];
     const regex = /(\*\*\*[^*]+\*\*\*|\*\*[^*]+\*\*|\*[^*]+\*|[^*]+)/g;
@@ -104,27 +93,47 @@ const HeritageDetails = () => {
     return elements;
   };
 
+  // === Rendering blocks ===
   const renderBlock = (block, key) => {
     switch (block.type) {
       case "paragraph":
-        return <p key={key} className="desc-paragraph justify-text">{renderFormattedText(block.content)}</p>;
-      case "image":
+        // Check and render images inline like [image1], [image2]
+        const parts = block.content.split(/(\[image\d+\])/i);
         return (
-          <img
-            key={key}
-            src={block.src}
-            alt={block.alt || "Image"}
-            className="inline-image"
-            onClick={() => setFullscreenImg(block.src)}
-            style={{ cursor: "pointer" }}
-          />
+          <p key={key} className="desc-paragraph justify-text">
+            {parts.map((part, i) => {
+              const match = part.match(/\[image(\d+)\]/i);
+              if (match) {
+                const index = parseInt(match[1], 10) - 1;
+                if (images[index]) {
+                  return (
+                    <img
+                      key={`img-${index}`}
+                      src={`${API}/${images[index]}`}
+                      alt={`${name} image ${index + 1}`}
+                      className="inline-image"
+                      onClick={() => setFullscreenImg(`${API}/${images[index]}`)}
+                      style={{ cursor: "pointer" }}
+                    />
+                  );
+                }
+                return null;
+              } else {
+                return <React.Fragment key={`text-${i}`}>{renderFormattedText(part)}</React.Fragment>;
+              }
+            })}
+          </p>
         );
+
       case "title":
         return <h2 key={key} className="desc-title semibold">{block.content}</h2>;
+
       case "heading":
         return <h3 key={key} className="desc-heading bold">{block.content}</h3>;
+
       case "subtitle":
         return <h4 key={key} className="desc-subtitle italics">{block.content}</h4>;
+
       default:
         return null;
     }
@@ -141,9 +150,9 @@ const HeritageDetails = () => {
       {site.image && (
         <img
           className="heritage-main-image"
-          src={`http://localhost:3000/${site.image}`}
+          src={`${API}/${site.image}`}
           alt={name}
-          onClick={() => setFullscreenImg(`http://localhost:3000/${site.image}`)}
+          onClick={() => setFullscreenImg(`${API}/${site.image}`)}
           style={{ cursor: 'pointer' }}
         />
       )}

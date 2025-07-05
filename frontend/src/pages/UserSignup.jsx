@@ -1,6 +1,8 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./Signup.css";
 
 const UserSignup = () => {
@@ -11,12 +13,11 @@ const UserSignup = () => {
     password: "",
     confirmPassword: "",
   });
-  const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    setStatus("");
   };
 
   const handleSignup = async (e) => {
@@ -24,12 +25,12 @@ const UserSignup = () => {
 
     const { fullname, username, email, password, confirmPassword } = form;
     if (!fullname || !username || !email || !password || !confirmPassword) {
-      setStatus("❌ Please fill in all fields.");
+      toast.error("❌ Please fill in all fields.", { theme: "dark", autoClose: 4000 });
       return;
     }
 
     if (password !== confirmPassword) {
-      setStatus("❌ Passwords do not match.");
+      toast.error("❌ Passwords do not match.", { theme: "dark", autoClose: 4000 });
       return;
     }
 
@@ -44,7 +45,11 @@ const UserSignup = () => {
       const data = await response.json();
 
       if (response.ok) {
-        setStatus("✅ Signup successful. Please check your email to verify your account.");
+        toast.success("✅ Signup successful. Please check your email to verify your account.", {
+          theme: "dark",
+          autoClose: 4000,
+        });
+
         setForm({
           fullname: "",
           username: "",
@@ -52,11 +57,19 @@ const UserSignup = () => {
           password: "",
           confirmPassword: "",
         });
+
+        // ⏳ Wait and redirect to login page
+        setTimeout(() => {
+          navigate("/login");
+        }, 4000);
       } else {
-        setStatus(`❌ Signup failed: ${data.message || data.error}`);
+        toast.error(`❌ Signup failed: ${data.message || data.error}`, {
+          theme: "dark",
+          autoClose: 4000,
+        });
       }
     } catch (error) {
-      setStatus("❌ Network error during signup.");
+      toast.error("❌ Network error during signup.", { theme: "dark", autoClose: 4000 });
     } finally {
       setLoading(false);
     }
@@ -75,11 +88,6 @@ const UserSignup = () => {
 
         <div className="signup-right-panel">
           <h2>Sign Up</h2>
-          {status && (
-            <p className={`signup-status ${status.startsWith("✅") ? "status-success" : "status-error"}`}>
-              {status}
-            </p>
-          )}
 
           <form onSubmit={handleSignup} className="signup-form">
             <label>Full Name<span className="required">*</span>
@@ -107,8 +115,8 @@ const UserSignup = () => {
             </button>
 
             <div className="signup-login-link">
-  Already have an account? <Link to="/login">Login</Link>
-</div>
+              Already have an account? <Link to="/login">Login</Link>
+            </div>
           </form>
         </div>
       </div>

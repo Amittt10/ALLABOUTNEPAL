@@ -196,11 +196,18 @@ export default function FestivalCalendar() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            {isDateFiltered && (
-              <button onClick={() => setSelectedDate(today)} className="show-all-button">
-                {t("festival.showAll")}
-              </button>
-            )}
+            {(isDateFiltered || searchQuery.trim() !== "") && (
+                <button
+                  onClick={() => {
+                    setSelectedDate(today);
+                    setSearchQuery("");
+                  }}
+                  className="show-all-button"
+                >
+                  {t("festival.showAll")}
+                </button>
+              )}
+              
           </div>
 
           {filteredFestivals.length === 0 ? (

@@ -217,19 +217,33 @@
   list-style-type: circle;
   padding-left: 1.8rem;
 }
+
+.description-content p,
+.description-content ul,
+.description-content li {
+  text-align: justify;
+}
+
+
 /* ===== Injected Image Between Text ===== */
+/* Injected Image Between Text - full width of content with fixed max height */
 .injected-img-wrapper {
   margin: 2rem 0;
   text-align: center;
   cursor: pointer;
 }
+
 .injected-img {
-  max-width: 90%;
-  max-height: 400px;
+  width: 100%;           /* full width of the container (text content width) */
+  max-height: 400px;     /* max height so images don’t get too tall */
+  height: auto;          /* keep aspect ratio */
+  object-fit: cover;     /* cover so image fills width, cropping if needed */
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
+  display: inline-block;
 }
+
 .injected-img:hover {
   transform: scale(1.03);
 }

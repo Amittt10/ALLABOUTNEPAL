@@ -101,7 +101,8 @@ export default function PlaceDetail() {
         blocks.push({ type: "heading", content: line.slice(3).trim() });
       } else if (line.startsWith("# ")) {
         blocks.push({ type: "title", content: line.slice(2).trim() });
-      } else if (/^[A-Z\s\-:]+$/.test(line) && line.length < 30) {
+      } else if (/^[A-Z\s\-:]+$/.test(line)) {
+        // You can add length condition if you want here
         blocks.push({ type: "heading", content: line.trim() });
       } else {
         blocks.push({ type: "paragraph", content: line });
@@ -190,34 +191,41 @@ export default function PlaceDetail() {
       {/* Title */}
       <h1 className="main-title">{title}</h1>
 
-      {/* Description with images injected like HeritageDetails */}
+      {/* Description with injected images via placeholders */}
       <div className="description-content">
         {(() => {
-          let paragraphCount = 0;
-          let imageIndex = 0;
           const blocks = [];
 
           descriptionBlocks.forEach((block, idx) => {
-            blocks.push(renderBlock(block, idx));
+            // Detect [image1], [image2], etc. placeholders inside paragraph blocks
+            if (block.type === "paragraph" && /\[image(\d+)\]/i.test(block.content)) {
+              const parts = block.content.split(/(\[image\d+\])/i);
 
-            if (block.type === "paragraph") {
-              paragraphCount++;
-              if (paragraphCount % 4 === 0 && imageIndex < gallery.length) {
-                blocks.push(
-                  <div
-                    key={`img-${imageIndex}`}
-                    className="injected-img-wrapper"
-                    onClick={() => setFullscreenImg(gallery[imageIndex])}
-                  >
-                    <img
-                      src={gallery[imageIndex]}
-                      alt={`Gallery ${imageIndex + 1}`}
-                      className="injected-img"
-                    />
-                  </div>
-                );
-                imageIndex++;
-              }
+              parts.forEach((part, i) => {
+                if (/\[image(\d+)\]/i.test(part)) {
+                  const match = part.match(/\[image(\d+)\]/i);
+                  const num = parseInt(match[1], 10) - 1; // zero-based index
+                  if (gallery[num]) {
+                    blocks.push(
+                      <div
+                        key={`img-${num}`}
+                        className="injected-img-wrapper"
+                        onClick={() => setFullscreenImg(gallery[num])}
+                      >
+                        <img
+                          src={gallery[num]}
+                          alt={`${title} - छवि ${num + 1}`}
+                          className="injected-img"
+                        />
+                      </div>
+                    );
+                  }
+                } else if (part.trim() !== "") {
+                  blocks.push(renderBlock({ ...block, content: part }, `${idx}-${i}`));
+                }
+              });
+            } else {
+              blocks.push(renderBlock(block, idx));
             }
           });
 
@@ -225,7 +233,7 @@ export default function PlaceDetail() {
         })()}
       </div>
 
-      {/* Map */}
+      {/* Google Map */}
       {isLoaded && place.location?.lat && place.location?.lng && (
         <div className="map-container">
           <GoogleMap
@@ -241,7 +249,7 @@ export default function PlaceDetail() {
       {/* Fullscreen Image Modal */}
       {fullscreenImg && (
         <div className="fullscreen-modal" onClick={() => setFullscreenImg(null)}>
-          <img src={fullscreenImg} alt="Fullscreen" />
+          <img src={fullscreenImg} alt={`${title} - Fullscreen`} />
         </div>
       )}
     </div>
