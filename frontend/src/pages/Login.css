@@ -73,9 +73,10 @@ html {
   position: relative;
 }
 
+
 .password-input {
-  width: 100%;
-  padding-right: 40px; /* Make space for icon */
+  flex-grow: 1;
+  padding-right: 40px; /* space for eye icon */
   padding-left: 12px;
   padding-top: 12px;
   padding-bottom: 12px;
@@ -85,30 +86,32 @@ html {
   color: #fff;
   font-size: 1rem;
   outline: none;
+  height: 40px; /* fixed height to align with toggle button */
+  box-sizing: border-box;
 }
 
 .password-toggle {
   position: absolute;
-  top: 50%;
   right: 12px;
-  /* Remove transform for now */
-  transform: none;
+  height: 24px; /* height of the icon */
+  width: 24px; /* width of the icon */
   background: none;
   border: none;
   cursor: pointer;
-  color: #eee;
-  padding: 0;
-  height: 24px;
-  width: 24px;
-
+  color: #9a6262;
+  
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
+  
+  /* Center vertically by top 50% + transform */
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0;
   line-height: 1;
-
-  /* Use translateY with padding to center manually */
-  margin-top: -9px; /* half height to center vertically */
+  margin-top: -10px;
 }
+
 
 
 .password-toggle svg {
@@ -118,6 +121,7 @@ html {
   margin: 0;
   vertical-align: middle;
 }
+
 
 
 /* Forgot link */

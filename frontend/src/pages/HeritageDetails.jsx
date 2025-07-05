@@ -1,23 +1,18 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
-
-import { AuthContext } from '../context/AuthContext';
-import LoginCard from '../Component/LoginCard';
 import './HeritageDetails.css';
 
 const HeritageDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { i18n } = useTranslation();
-  const { user } = useContext(AuthContext);
 
   const [site, setSite] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [fullscreenImg, setFullscreenImg] = useState(null);
-  const [showLogin, setShowLogin] = useState(false);
 
   const lang = i18n.language || 'en';
 
@@ -48,19 +43,6 @@ const HeritageDetails = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  useEffect(() => {
-    if (user) return;
-
-    const handleScroll = () => {
-      if (!showLogin && window.scrollY > 600) {
-        setShowLogin(true);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [user, showLogin]);
 
   const name = site?.[`name_${lang}`] || site?.name_en || site?.name || 'No Name';
   const historyRaw = site?.[`history_${lang}`] || site?.history_en || site?.history || 'No history available.';
@@ -109,11 +91,7 @@ const HeritageDetails = () => {
       const part = match[0];
 
       if (part.startsWith("***") && part.endsWith("***")) {
-        elements.push(
-          <strong key={elements.length}>
-            <em>{part.slice(3, -3)}</em>
-          </strong>
-        );
+        elements.push(<strong key={elements.length}><em>{part.slice(3, -3)}</em></strong>);
       } else if (part.startsWith("**") && part.endsWith("**")) {
         elements.push(<strong key={elements.length}>{part.slice(2, -2)}</strong>);
       } else if (part.startsWith("*") && part.endsWith("*")) {
@@ -129,11 +107,7 @@ const HeritageDetails = () => {
   const renderBlock = (block, key) => {
     switch (block.type) {
       case "paragraph":
-        return (
-          <p key={key} className="desc-paragraph justify-text">
-            {renderFormattedText(block.content)}
-          </p>
-        );
+        return <p key={key} className="desc-paragraph justify-text">{renderFormattedText(block.content)}</p>;
       case "image":
         return (
           <img
@@ -162,9 +136,7 @@ const HeritageDetails = () => {
 
   return (
     <div className="heritage-details-container">
-      <button className="back-btn" onClick={() => navigate(-1)}>
-        &larr; Back
-      </button>
+      <button className="back-btn" onClick={() => navigate(-1)}>&larr; Back</button>
 
       {site.image && (
         <img
@@ -186,23 +158,12 @@ const HeritageDetails = () => {
         </span>
       </p>
 
-      {/* Description */}
       <div className="description-content">
-        {!user ? (
-          <>
-            {descriptionBlocks.slice(0, 4).map((block, idx) => renderBlock(block, idx))}
-            <div className="blurred-section">
-              {descriptionBlocks.slice(4).map((block, idx) => renderBlock(block, idx + 4))}
-            </div>
-          </>
-        ) : (
-          descriptionBlocks.map((block, idx) => renderBlock(block, idx))
-        )}
+        {descriptionBlocks.map((block, idx) => renderBlock(block, idx))}
       </div>
 
-      {/* Map */}
       {isLoaded && site.lat && site.lng && (
-        <div className={`map-container ${!user ? "blurred-section" : ""}`}>
+        <div className="map-container">
           <GoogleMap
             center={{ lat: site.lat, lng: site.lng }}
             zoom={13}
@@ -213,22 +174,9 @@ const HeritageDetails = () => {
         </div>
       )}
 
-      {/* Fullscreen Image */}
       {fullscreenImg && (
         <div className="fullscreen-modal" onClick={() => setFullscreenImg(null)}>
           <img src={fullscreenImg} alt="Fullscreen" />
-        </div>
-      )}
-
-      {/* Login Modal */}
-      {!user && showLogin && (
-        <div className="auth-modal-overlay">
-          <div className="auth-modal">
-            <button className="close-modal-btn" onClick={() => setShowLogin(false)}>
-              ×
-            </button>
-            <LoginCard onSuccess={() => setShowLogin(false)} />
-          </div>
         </div>
       )}
     </div>

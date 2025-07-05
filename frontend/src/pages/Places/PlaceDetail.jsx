@@ -1,10 +1,8 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
-import { AuthContext } from "../../context/AuthContext";
-import LoginCard from "../../Component/LoginCard";
 import "./PlaceDetail.css";
 
 const API = import.meta.env.VITE_API_URL || "http://localhost:3000";
@@ -13,13 +11,11 @@ export default function PlaceDetail() {
   const { placeId } = useParams();
   const navigate = useNavigate();
   const { i18n } = useTranslation();
-  const { user } = useContext(AuthContext);
 
   const [place, setPlace] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [fullscreenImg, setFullscreenImg] = useState(null);
-  const [showLogin, setShowLogin] = useState(false);
 
   const lang = i18n.language || "en";
 
@@ -44,15 +40,6 @@ export default function PlaceDetail() {
   }, [placeId]);
 
   useEffect(() => {
-    if (user) return;
-    const handleScroll = () => {
-      if (!showLogin && window.scrollY > 600) setShowLogin(true);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [user, showLogin]);
-
-  useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
@@ -63,39 +50,70 @@ export default function PlaceDetail() {
   const title = place?.[`title_${lang}`] || place?.title_en || place?.title || "No Title";
   const descriptionRaw = place?.[`description_${lang}`] || place?.description_en || "No description.";
   const videoUrl = place?.video_url || "";
-  const thumbnail = place?.thumbnail ? `${API}${place.thumbnail}` : null;
   const gallery = place?.images || [];
 
-  const rawLines = descriptionRaw.split("\n").map(line => line.trim()).filter(Boolean);
+  const rawLines = descriptionRaw.split("\n").map(line => line.replace(/\t/g, "  ").trimEnd());
 
-  const parsedBlocks = rawLines.map(line => {
-    if (line.startsWith("### ")) return { type: "subtitle", content: line.slice(4).trim() };
-    if (line.startsWith("## ")) return { type: "heading", content: line.slice(3).trim() };
-    if (line.startsWith("# ")) return { type: "title", content: line.slice(2).trim() };
-    if (/^[A-Z\s\-:]+$/.test(line) && line.length < 30) return { type: "heading", content: line.trim() };
-    return { type: "paragraph", content: line };
-  });
+  function parseNestedList(lines, startIndex = 0, baseIndent = 0) {
+    const items = [];
+    let i = startIndex;
 
-  const descriptionBlocks = [];
-  let paragraphCount = 0;
-  let imageIndex = 0;
+    while (i < lines.length) {
+      const line = lines[i];
+      const leadingSpaces = line.match(/^ */)[0].length;
+      if (line.trim().startsWith("- ")) {
+        if (leadingSpaces < baseIndent) break;
+        if (leadingSpaces > baseIndent) {
+          if (items.length === 0) break;
+          const [nestedList, nextIndex] = parseNestedList(lines, i, leadingSpaces);
+          items[items.length - 1].children = nestedList;
+          i = nextIndex;
+          continue;
+        }
 
-  parsedBlocks.forEach(block => {
-    descriptionBlocks.push(block);
-    if (block.type === "paragraph") {
-      paragraphCount++;
-      if (paragraphCount % 2 === 0 && imageIndex < gallery.length) {
-        descriptionBlocks.push({
-          type: "image",
-          src: `${API}${gallery[imageIndex]}`,
-          alt: `${title} image ${imageIndex + 1}`,
-        });
-        imageIndex++;
+        const content = line.trim().slice(2).trim();
+        items.push({ content, children: [] });
+        i++;
+      } else {
+        break;
       }
     }
-  });
+    return [items, i];
+  }
 
-   const renderFormattedText = (text) => {
+  const parseBlocks = (lines) => {
+    const blocks = [];
+    let i = 0;
+
+    while (i < lines.length) {
+      const line = lines[i];
+
+      if (line.trim().startsWith("- ")) {
+        const [listItems, nextIndex] = parseNestedList(lines, i);
+        blocks.push({ type: "list", items: listItems });
+        i = nextIndex;
+        continue;
+      }
+
+      if (line.startsWith("### ")) {
+        blocks.push({ type: "subtitle", content: line.slice(4).trim() });
+      } else if (line.startsWith("## ")) {
+        blocks.push({ type: "heading", content: line.slice(3).trim() });
+      } else if (line.startsWith("# ")) {
+        blocks.push({ type: "title", content: line.slice(2).trim() });
+      } else if (/^[A-Z\s\-:]+$/.test(line) && line.length < 30) {
+        blocks.push({ type: "heading", content: line.trim() });
+      } else {
+        blocks.push({ type: "paragraph", content: line });
+      }
+      i++;
+    }
+    return blocks;
+  };
+
+  const descriptionBlocks = parseBlocks(rawLines);
+
+  const renderFormattedText = (text) => {
     const elements = [];
     const regex = /(\*\*\*[^*]+\*\*\*|\*\*[^*]+\*\*|\*[^*]+\*|[^*]+)/g;
 
@@ -120,21 +138,24 @@ export default function PlaceDetail() {
     return elements;
   };
 
+  const renderList = (items, keyPrefix = "", level = 1) => (
+    <ul className={`nested-list level-${level}`} key={keyPrefix}>
+      {items.map((item, idx) => (
+        <li key={`${keyPrefix}-${idx}`}>
+          {renderFormattedText(item.content)}
+          {item.children && item.children.length > 0 &&
+            renderList(item.children, `${keyPrefix}-${idx}`, level + 1)}
+        </li>
+      ))}
+    </ul>
+  );
+
   const renderBlock = (block, key) => {
     switch (block.type) {
       case "paragraph":
         return <p key={key} className="desc-paragraph justify-text">{renderFormattedText(block.content)}</p>;
-      case "image":
-        return (
-          <img
-            key={key}
-            src={block.src}
-            alt={block.alt || "Image"}
-            className="inline-image"
-            onClick={() => setFullscreenImg(block.src)}
-            style={{ cursor: "pointer" }}
-          />
-        );
+      case "list":
+        return renderList(block.items, `list-${key}`);
       case "title":
         return <h2 key={key} className="desc-title semibold">{block.content}</h2>;
       case "heading":
@@ -169,23 +190,44 @@ export default function PlaceDetail() {
       {/* Title */}
       <h1 className="main-title">{title}</h1>
 
-      {/* Description */}
+      {/* Description with images injected like HeritageDetails */}
       <div className="description-content">
-        {!user ? (
-          <>
-            {descriptionBlocks.slice(0, 4).map((block, idx) => renderBlock(block, idx))}
-            <div className="blurred-section">
-              {descriptionBlocks.slice(4).map((block, idx) => renderBlock(block, idx + 4))}
-            </div>
-          </>
-        ) : (
-          descriptionBlocks.map((block, idx) => renderBlock(block, idx))
-        )}
+        {(() => {
+          let paragraphCount = 0;
+          let imageIndex = 0;
+          const blocks = [];
+
+          descriptionBlocks.forEach((block, idx) => {
+            blocks.push(renderBlock(block, idx));
+
+            if (block.type === "paragraph") {
+              paragraphCount++;
+              if (paragraphCount % 4 === 0 && imageIndex < gallery.length) {
+                blocks.push(
+                  <div
+                    key={`img-${imageIndex}`}
+                    className="injected-img-wrapper"
+                    onClick={() => setFullscreenImg(gallery[imageIndex])}
+                  >
+                    <img
+                      src={gallery[imageIndex]}
+                      alt={`Gallery ${imageIndex + 1}`}
+                      className="injected-img"
+                    />
+                  </div>
+                );
+                imageIndex++;
+              }
+            }
+          });
+
+          return blocks;
+        })()}
       </div>
 
       {/* Map */}
       {isLoaded && place.location?.lat && place.location?.lng && (
-        <div className={`map-container ${!user ? "blurred-section" : ""}`}>
+        <div className="map-container">
           <GoogleMap
             center={{ lat: place.location.lat, lng: place.location.lng }}
             zoom={13}
@@ -200,16 +242,6 @@ export default function PlaceDetail() {
       {fullscreenImg && (
         <div className="fullscreen-modal" onClick={() => setFullscreenImg(null)}>
           <img src={fullscreenImg} alt="Fullscreen" />
-        </div>
-      )}
-
-      {/* Login Modal */}
-      {!user && showLogin && (
-        <div className="auth-modal-overlay">
-          <div className="auth-modal">
-            <button className="close-modal-btn" onClick={() => setShowLogin(false)}>×</button>
-            <LoginCard onSuccess={() => setShowLogin(false)} />
-          </div>
         </div>
       )}
     </div>

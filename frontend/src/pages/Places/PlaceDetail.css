@@ -197,3 +197,39 @@
     max-width: 95%;
   }
 }
+
+.nested-list {
+  padding-left: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+/* Main level: solid circle */
+.nested-list.level-1 {
+  list-style-type: disc;
+  padding-left: 1.2rem;
+}
+
+/* Nested levels: hollow/light circle */
+.nested-list.level-2,
+.nested-list.level-3,
+.nested-list.level-4 {
+  
+  list-style-type: circle;
+  padding-left: 1.8rem;
+}
+/* ===== Injected Image Between Text ===== */
+.injected-img-wrapper {
+  margin: 2rem 0;
+  text-align: center;
+  cursor: pointer;
+}
+.injected-img {
+  max-width: 90%;
+  max-height: 400px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+.injected-img:hover {
+  transform: scale(1.03);
+}

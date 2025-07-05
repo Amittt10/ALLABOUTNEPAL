@@ -1,21 +1,17 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { AuthContext } from "../context/AuthContext";
-import LoginCard from "../Component/LoginCard";
 import "./FestivalDetails.css";
 
 const FestivalDetailById = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { i18n } = useTranslation();
-  const { user } = useContext(AuthContext);
 
   const [festival, setFestival] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [fullscreenImg, setFullscreenImg] = useState(null);
-  const [showLogin, setShowLogin] = useState(false);
 
   const lang = i18n.language || "en";
 
@@ -38,15 +34,6 @@ const FestivalDetailById = () => {
 
     fetchFestival();
   }, [id]);
-
-  useEffect(() => {
-    if (user) return;
-    const handleScroll = () => {
-      if (!showLogin && window.scrollY > 600) setShowLogin(true);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [user, showLogin]);
 
   const name = festival?.[`name_${lang}`] || festival?.name_en || "No Name";
   const dateAD = festival?.dateAD || "";
@@ -84,7 +71,7 @@ const FestivalDetailById = () => {
   parsedBlocks.forEach(block => {
     descriptionBlocks.push(block);
 
-    if (block.type === 'paragraph') {
+    if (block.type === "paragraph") {
       paragraphCount++;
       if (paragraphCount % 2 === 0 && imageIndex < gallery.length) {
         descriptionBlocks.push({
@@ -97,7 +84,6 @@ const FestivalDetailById = () => {
     }
   });
 
-  // ✅ Markdown-style inline formatter
   const renderFormattedText = (text) => {
     const elements = [];
     const regex = /(\*\*\*[^*]+\*\*\*|\*\*[^*]+\*\*|\*[^*]+\*|[^*]+)/g;
@@ -107,11 +93,7 @@ const FestivalDetailById = () => {
       const part = match[0];
 
       if (part.startsWith("***") && part.endsWith("***")) {
-        elements.push(
-          <strong key={elements.length}>
-            <em>{part.slice(3, -3)}</em>
-          </strong>
-        );
+        elements.push(<strong key={elements.length}><em>{part.slice(3, -3)}</em></strong>);
       } else if (part.startsWith("**") && part.endsWith("**")) {
         elements.push(<strong key={elements.length}>{part.slice(2, -2)}</strong>);
       } else if (part.startsWith("*") && part.endsWith("*")) {
@@ -127,11 +109,7 @@ const FestivalDetailById = () => {
   const renderBlock = (block, key) => {
     switch (block.type) {
       case "paragraph":
-        return (
-          <p key={key} className="desc-paragraph justify-text">
-            {renderFormattedText(block.content)}
-          </p>
-        );
+        return <p key={key} className="desc-paragraph justify-text">{renderFormattedText(block.content)}</p>;
       case "image":
         return (
           <img
@@ -155,7 +133,7 @@ const FestivalDetailById = () => {
   };
 
   if (loading) return <p className="loading">Loading festival details...</p>;
-  if (error)
+  if (error) {
     return (
       <div className="festival-details-container">
         <button className="back-btn" onClick={() => navigate(-1)}>
@@ -164,6 +142,7 @@ const FestivalDetailById = () => {
         <p className="error">{error}</p>
       </div>
     );
+  }
 
   return (
     <div className="festival-details-container">
@@ -182,40 +161,17 @@ const FestivalDetailById = () => {
 
       <h2 className="desc-title semibold">{name}</h2>
       <p className="festival-date">{formatDate(dateAD)}</p>
-
       <p className="location-entryfee">
         <span className="location-text italics small-font">{location}</span><br />
       </p>
 
       <div className="description-content">
-        {!user ? (
-          <>
-            {descriptionBlocks.slice(0, 4).map((block, idx) => renderBlock(block, idx))}
-            <div className="blurred-section">
-              {descriptionBlocks.slice(4).map((block, idx) => renderBlock(block, idx + 4))}
-            </div>
-          </>
-        ) : (
-          descriptionBlocks.map((block, idx) => renderBlock(block, idx))
-        )}
+        {descriptionBlocks.map((block, idx) => renderBlock(block, idx))}
       </div>
 
-      {/* Fullscreen Image Modal */}
       {fullscreenImg && (
         <div className="fullscreen-modal" onClick={() => setFullscreenImg(null)}>
           <img src={fullscreenImg} alt="Fullscreen" />
-        </div>
-      )}
-
-      {/* Login Modal */}
-      {!user && showLogin && (
-        <div className="auth-modal-overlay">
-          <div className="auth-modal">
-            <button className="close-modal-btn" onClick={() => setShowLogin(false)}>
-              ×
-            </button>
-            <LoginCard onSuccess={() => setShowLogin(false)} />
-          </div>
         </div>
       )}
     </div>
