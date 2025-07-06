@@ -20,6 +20,9 @@ import QuizList from './pages/quiz/QuizList';
 import QuizAdd from './pages/quiz/QuizAdd';
 import QuizEdit from './pages/quiz/QuizEdit';
 
+import AdminUsers from './pages/AdminUsers';
+import AdminQuizStats from "./pages/AdminQuizStats";
+
 function App() {
   return (
     <AuthProvider>
@@ -61,6 +64,9 @@ function App() {
             <Route path="/admin/quiz/add" element={<PrivateRoute><QuizAdd /></PrivateRoute>} />
             <Route path="/admin/quiz/edit/:id" element={<PrivateRoute><QuizEdit /></PrivateRoute>} />
 
+            {/* Pagination Routes */}
+             <Route path="/admin/users" element={<AdminUsers />} />
+             <Route path="/admin/quiz-attempts" element={<AdminQuizStats />} />
           </Route>
 
           {/* Redirects */}

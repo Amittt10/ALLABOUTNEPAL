@@ -1,0 +1,121 @@
+/* AdminUsers.css */
+
+.admin-users-page {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1rem 2rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgb(0 0 0 / 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+.admin-users-page h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2c3e50;
+  text-align: center;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+.users-table th,
+.users-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+/* Table header with black background and white text */
+.users-table thead {
+  background-color: #000; /* black */
+  color: #fff; /* white */
+}
+
+.users-table thead th {
+  font-weight: 700;
+}
+
+/* Table body with white background and black text */
+.users-table tbody td {
+  background-color: #fff; /* white */
+  color: #000; /* black */
+  vertical-align: middle;
+}
+
+/* Even rows background */
+.users-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* No row hover effect */
+/* .users-table tbody tr:hover {
+  background-color: #f5f8fa;
+} */
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.pagination-controls button {
+  background-color: #2980b9;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.25rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+}
+
+.pagination-controls button:disabled {
+  background-color: #b0c4de;
+  cursor: not-allowed;
+}
+
+.pagination-controls button:not(:disabled):hover {
+  background-color: #1c5980;
+}
+
+.pagination-controls span {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #444;
+}
+
+/* Loading and error messages */
+.admin-users-page p {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #555;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .admin-users-page {
+    padding: 1rem;
+  }
+  .users-table th,
+  .users-table td {
+    padding: 8px 10px;
+    font-size: 0.9rem;
+  }
+  .pagination-controls {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .pagination-controls button {
+    width: 100%;
+  }
+}

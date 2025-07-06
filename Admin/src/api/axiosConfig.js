@@ -57,6 +57,9 @@ export const api = {
   // Stats
   getStats: () => axiosInstance.get("/admin/stats"),
 
+   // Users
+  getUsers: (page = 1) => axiosInstance.get(`/admin/users?page=${page}`),
+
   // Heritage
   getHeritage: (params = {}) => axiosInstance.get("/heritage", { params }),
   getAdminHeritage: (params = {}) => axiosInstance.get("/admin/heritage", { params }),
@@ -90,6 +93,11 @@ export const api = {
   createQuizQuestion: (data) => axiosInstance.post("/admin/quiz", data),
   updateQuizQuestion: (id, data) => axiosInstance.put(`/admin/quiz/${id}`, data),
   deleteQuizQuestion: (id) => axiosInstance.delete(`/admin/quiz/${id}`),
+
+    //quiz stats
+  getQuizStatistics: () => axiosInstance.get("/admin/quiz/statistics"),
+
+
 };
 
 export default axiosInstance;

@@ -1,0 +1,72 @@
+/* AdminQuizStats.css */
+
+.admin-quiz-stats {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.admin-quiz-stats h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.quiz-section {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.quiz-section h3 {
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+.quiz-section ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.quiz-section li {
+  padding: 8px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.quiz-section li:last-child {
+  border-bottom: none;
+}
+
+.admin-loading {
+  text-align: center;
+  font-size: 18px;
+  color: #007bff;
+}
+
+.admin-error {
+  text-align: center;
+  font-size: 18px;
+  color: #d9534f; /* Bootstrap danger color */
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .admin-quiz-stats {
+    padding: 15px;
+  }
+
+  .quiz-section {
+    padding: 10px;
+  }
+
+  .admin-loading,
+  .admin-error {
+    font-size: 16px;
+  }
+}

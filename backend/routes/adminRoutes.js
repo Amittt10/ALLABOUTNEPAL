@@ -17,9 +17,13 @@ import {
   adminDeleteFestival,
 } from '../controllers/festivalController.js';
 
-import { getStats, verifyUser } from '../controllers/statsController.js';
-
+import { getStats } from '../controllers/statsController.js';
+import { getUsersPaginated } from '../controllers/adminUserController.js';
 import { authenticateJWT, authorizeAdmin } from '../middleware/authMiddleware.js';
+import { getQuizStatistics } from '../controllers/quizStatsController.js';
+
+
+
 
 const router = express.Router();
 
@@ -93,6 +97,12 @@ router.delete('/festivals/:id', adminDeleteFestival);
 
 // Stats & verify
 router.get('/stats', getStats);
-router.get('/verify', verifyUser);
+// router.get('/verify', verifyUser);
+
+//For User Pagination
+router.get('/users', getUsersPaginated);
+
+// For Quiz Pagination
+router.get('/quiz/statistics', getQuizStatistics);
 
 export default router;
