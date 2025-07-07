@@ -1,17 +1,22 @@
 import { axiosInstance } from "./axiosConfig";
 
 export const api = {
-  // Heritage APIs
+  get: (url, config = {}) => axiosInstance.get(url, config),
+  post: (url, data, config = {}) => axiosInstance.post(url, data, config),
+  put: (url, data, config = {}) => axiosInstance.put(url, data, config),
+  delete: (url, config = {}) => axiosInstance.delete(url, config),
+
+  // Heritage
   getHeritageSiteById: (id) => axiosInstance.get(`/heritage/${id}`),
 
-  // Festival APIs
+  // Festival
   getFestivals: () => axiosInstance.get("/festivals"),
   getFestivalById: (id) => axiosInstance.get(`/festivals/${id}`),
   addFestival: (data) => axiosInstance.post("/festivals", data),
   updateFestival: (id, data) => axiosInstance.put(`/festivals/${id}`, data),
   deleteFestival: (id) => axiosInstance.delete(`/festivals/${id}`),
 
-  // Quiz APIs
+  // Quiz
   getQuizQuestions: (category = "", difficulty = "") => {
     const query = [];
     if (category) query.push(`category=${encodeURIComponent(category)}`);
@@ -19,22 +24,23 @@ export const api = {
     const queryString = query.length ? `?${query.join("&")}` : "";
     return axiosInstance.get(`/quiz${queryString}`);
   },
-
   getQuizQuestionById: (id) => axiosInstance.get(`/quiz/${id}`),
   submitQuizResult: (data) => axiosInstance.post("/quiz/submit", data),
-  submitQuizFeedback: (data) => axiosInstance.post("/quiz/feedback", data), 
+  submitQuizFeedback: (data) => axiosInstance.post("/quiz/feedback", data),
   getUserProgress: (userId) => axiosInstance.get(`/quiz/progress/${userId}`),
-
   getLeaderboard: (params = {}) => {
     const query = Object.entries(params)
       .filter(([_, v]) => v && v.trim() !== "")
       .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
       .join("&");
-
-    const queryString = query ? `?${query}` : "";
-    return axiosInstance.get(`/quiz/leaderboard${queryString}`);
+    return axiosInstance.get(`/quiz/leaderboard${query ? `?${query}` : ""}`);
   },
-
-    getQuizFeedbackByCategory: (category) =>
+  getQuizFeedbackByCategory: (category) =>
     axiosInstance.get(`/quiz/feedback/category/${encodeURIComponent(category)}`),
+
+  // Review
+  submitReview: (data) => axiosInstance.post("/reviews", data),
+  getReviewsByTarget: (targetType, targetId, page = 1, limit = 5) =>
+  axiosInstance.get(`/reviews/${targetType}/${targetId}?page=${page}&limit=${limit}`),
+
 };

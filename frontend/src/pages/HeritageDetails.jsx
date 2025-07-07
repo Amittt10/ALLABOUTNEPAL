@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 import './HeritageDetails.css';
+import ReviewSection from "../Component/ReviewSection/ReviewSection";
+
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
@@ -182,6 +184,8 @@ const HeritageDetails = () => {
           </GoogleMap>
         </div>
       )}
+
+      <ReviewSection targetType="heritage" targetId={id} />
 
       {fullscreenImg && (
         <div className="fullscreen-modal" onClick={() => setFullscreenImg(null)}>

@@ -1,0 +1,214 @@
+.review-section {
+  max-width: 900px;
+  margin: 1.5rem auto;
+  font-family: Arial, sans-serif;
+  color: #222;
+  background: #fff;
+  padding: 1.8rem 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.1);
+}
+
+.review-section h3 {
+  margin-bottom: 1rem;
+  font-weight: 700;
+  font-size: 1.6rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.4rem;
+}
+
+.review-section form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.stars {
+  display: inline-flex;
+  cursor: pointer;
+  user-select: none;
+}
+
+.star {
+  font-size: 1.8rem;
+  color: #ddd;
+  margin-right: 0.2rem;
+  transition: color 0.3s ease;
+}
+
+.star.filled {
+  color: #ffc107;
+}
+
+.star:hover,
+.star:focus {
+  color: #ffca28;
+  outline: none;
+}
+
+.review-section textarea {
+  width: 100%;
+  min-height: 80px;
+  margin: 0.8rem 0 1.2rem;
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  border: 1.5px solid #ccc;
+  resize: vertical;
+  transition: border-color 0.2s ease;
+}
+
+.review-section textarea:focus {
+  border-color: #0077cc;
+  outline: none;
+}
+
+.review-section button[type="submit"] {
+  background-color: #0077cc;
+  color: white;
+  border: none;
+  padding: 0.55rem 1.5rem;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.review-section button[type="submit"]:hover {
+  background-color: #005fa3;
+}
+
+.review-list {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 1.6rem;
+}
+
+.review-item {
+  border-bottom: 1px solid #eee;
+  padding: 0.8rem 0;
+}
+
+.review-item strong {
+  color: #0077cc;
+  font-weight: 600;
+}
+
+.review-item p {
+  margin: 0.3rem 0 0 0;
+  font-size: 1rem;
+  line-height: 1.3;
+}
+
+.reply-list {
+  list-style: none;
+  margin: 0.5rem 0 0 1.4rem;
+  padding-left: 0;
+  border-left: 2px solid #ddd;
+}
+
+.reply-item {
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.reply-btn {
+  background: none;
+  border: none;
+  color: #0077cc;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0;
+  margin-top: 0.4rem;
+  transition: color 0.3s ease;
+}
+
+.reply-btn:hover {
+  text-decoration: underline;
+}
+
+.reply-form {
+  margin-top: 0.5rem;
+}
+
+.reply-form textarea {
+  width: 100%;
+  border-radius: 8px;
+  border: 1.2px solid #ccc;
+  padding: 0.5rem;
+  font-family: inherit;
+  font-size: 0.9rem;
+  resize: vertical;
+}
+
+.reply-form button {
+  margin-top: 0.3rem;
+  background-color: #0077cc;
+  border: none;
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.reply-form button:hover {
+  background-color: #005fa3;
+}
+
+/* Pagination styles */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1.8rem;
+  gap: 1rem;
+  font-family: Arial, sans-serif;
+}
+
+.pagination button {
+  background-color: #0077cc;
+  color: white;
+  border: none;
+  padding: 0.4rem 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  color: #666;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #005fa3;
+}
+
+.pagination span {
+  font-weight: 600;
+  color: #555;
+}
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  .review-section {
+    padding: 1.2rem 1rem;
+  }
+
+  .star {
+    font-size: 1.4rem;
+  }
+
+  .review-section button[type="submit"],
+  .reply-form button,
+  .pagination button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+}

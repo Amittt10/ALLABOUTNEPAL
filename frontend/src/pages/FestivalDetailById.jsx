@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import "./FestivalDetails.css";
+import ReviewSection from '../Component/ReviewSection/ReviewSection';
+
 
 const API = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -132,6 +134,7 @@ const FestivalDetailById = () => {
 
   return (
     <div className="festival-details-container">
+      
       <button className="back-btn" onClick={() => navigate(-1)}>
         &larr; Back
       </button>
@@ -154,6 +157,9 @@ const FestivalDetailById = () => {
       <div className="description-content">
         {parsedBlocks.map((block, idx) => renderBlock(block, idx))}
       </div>
+
+
+      <ReviewSection targetType="festival" targetId={id} />
 
       {fullscreenImg && (
         <div className="fullscreen-modal" onClick={() => setFullscreenImg(null)}>

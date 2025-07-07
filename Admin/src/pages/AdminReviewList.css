@@ -1,0 +1,50 @@
+.admin-review-page {
+  background-color: #121212;
+  color: #ffffff;
+  padding: 2rem;
+  min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.admin-review-page h2 {
+  color: #ffffff;
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.admin-review-page table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.admin-review-page th,
+.admin-review-page td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #333;
+}
+
+.admin-review-page th {
+  background-color: #222;
+  color: #f0f0f0;
+  font-weight: 600;
+}
+
+.admin-review-page td {
+  color: #dddddd;
+}
+
+.admin-review-page tr:hover {
+  background-color: #2a2a2a;
+}
+
+.admin-review-page p {
+  text-align: center;
+  color: #ccc;
+  font-size: 1rem;
+}

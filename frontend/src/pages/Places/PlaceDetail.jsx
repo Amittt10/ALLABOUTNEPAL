@@ -4,6 +4,7 @@ import axios from "axios";
 import { useTranslation } from "react-i18next";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import "./PlaceDetail.css";
+import ReviewSection from "../../Component/ReviewSection/ReviewSection";
 
 const API = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -245,6 +246,8 @@ export default function PlaceDetail() {
           </GoogleMap>
         </div>
       )}
+
+      <ReviewSection targetType="place" targetId={placeId} />
 
       {/* Fullscreen Image Modal */}
       {fullscreenImg && (

@@ -110,4 +110,5 @@ router.get('/quiz/statistics', getQuizStatistics);
 
 
 router.get('/quiz-feedback', getAllQuizFeedback);
+
 export default router;

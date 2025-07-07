@@ -16,6 +16,8 @@ import subscriberRoutes from "./routes/subscriberRoutes.js";
 import placeRoutes from "./routes/placeRoutes.js";
 import quizRoutes from './routes/quizRoutes.js';
 import { deleteOldQuizResults } from "./controllers/quizController.js";
+import reviewRoutes from './routes/reviewRoutes.js';
+
 
 
 dotenv.config();
@@ -60,7 +62,7 @@ Promise.all([connectDB(), connectMongoose()])
     app.use("/api/places", placeRoutes);
     app.use("/api/quiz", quizRoutes);
     app.use('/api/admin/quiz', quizRoutes);
-    // app.use('/api/admin/quiz-feedback', quizRoutes);
+    app.use('/api/reviews', reviewRoutes);
 
     app.listen(PORT, () => {
       console.log(`🚀 Server running at http://localhost:${PORT}`);
