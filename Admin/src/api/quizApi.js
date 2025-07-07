@@ -1,4 +1,5 @@
-import { axiosInstance } from "./axiosConfig";
+// quizApi.js
+import axiosInstance from "./axiosConfig";
 
 const BASE_URL = "/admin/quiz";
 
@@ -48,6 +49,19 @@ export const deleteQuizQuestion = async (id) => {
     return res.data;
   } catch (error) {
     console.error(`Failed to delete quiz question with id ${id}:`, error);
+    throw error;
+  }
+};
+
+// ✅ Get Quiz Feedback (pass quizId only if needed)
+export const getQuizFeedback = async (quizId) => {
+  try {
+    const params = {};
+    if (quizId) params.quizId = quizId;
+    const res = await axiosInstance.get("/admin/quiz-feedback", { params });
+    return res.data;
+  } catch (error) {
+    console.error("Failed to fetch quiz feedback:", error);
     throw error;
   }
 };

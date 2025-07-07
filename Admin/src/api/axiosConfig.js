@@ -97,6 +97,8 @@ export const api = {
     //quiz stats
   getQuizStatistics: () => axiosInstance.get("/admin/quiz/statistics"),
 
+  getQuizFeedback: () => axiosInstance.get("/admin/quiz-feedback"),
+
 
 };
 

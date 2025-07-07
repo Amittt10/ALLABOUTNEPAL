@@ -9,6 +9,10 @@ const QuizPlay = () => {
   const navigate = useNavigate();
   const { category, difficulty } = location.state || {};
 
+  useEffect(() => {
+    console.log("📍 QuizPlay location.state:", location.state); // Debug
+  }, [location.state]);
+
   const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -112,7 +116,7 @@ const QuizPlay = () => {
     setShowFinishConfirm(true);
   };
 
-  // New function: submit quiz result to backend and navigate to results page
+  // Submit quiz results and navigate to results page
   const submitResultAndNavigate = async (finalAnswers) => {
     if (!user) {
       alert("Please login to save your quiz results.");
@@ -127,7 +131,7 @@ const QuizPlay = () => {
     }, 0);
 
     try {
-      await api.submitQuizResult({
+      const res = await api.submitQuizResult({
         userId: user._id,
         score: correctAnswersCount,
         correctAnswers: correctAnswersCount,
@@ -136,8 +140,17 @@ const QuizPlay = () => {
         difficulty,
       });
 
-      // Navigate after successful submission
-      navigate("/quiz/result", { state: { questions, userAnswers: finalAnswers } });
+      // Get quizId from response to pass to results page
+      const quizId = res.data.quizId;
+
+      navigate("/quiz/result", {
+        state: {
+          questions,
+          userAnswers: finalAnswers,
+          quizId, // Pass quizId for feedback association
+          userId: user._id, // Pass userId for feedback
+        },
+      });
     } catch (error) {
       console.error("Failed to submit quiz result:", error);
       alert("Failed to save your quiz result. Please try again.");
@@ -213,8 +226,15 @@ const QuizPlay = () => {
             <h3>Are you sure you want to finish the quiz?</h3>
             <p>Your progress will be submitted and you'll see your results.</p>
             <div className="modal-actions">
-              <button onClick={confirmFinishNow} className="btn-confirm">Yes, Finish</button>
-              <button onClick={() => setShowFinishConfirm(false)} className="btn-cancel">Cancel</button>
+              <button onClick={confirmFinishNow} className="btn-confirm">
+                Yes, Finish
+              </button>
+              <button
+                onClick={() => setShowFinishConfirm(false)}
+                className="btn-cancel"
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>
@@ -231,7 +251,9 @@ const QuizPlay = () => {
           </button>
         ) : (
           <button className="btn-next" onClick={handleNext}>
-            {currentIndex + 1 === questions.length ? "See Results" : "Next Question"}
+            {currentIndex + 1 === questions.length
+              ? "See Results"
+              : "Next Question"}
           </button>
         )}
 

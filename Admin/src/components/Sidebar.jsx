@@ -12,7 +12,9 @@ const Sidebar = ({ isOpen, onClose }) => {
     { path: "/admin/heritage", label: "Heritage Sites", icon: "🏛️" },
     { path: "/admin/festivals", label: "Festivals", icon: "🎉" },
     { path: "/admin/places", label: "Places", icon: "📍" },  
-    { path: "/admin/quiz", label: "Quiz", icon: "❓" } // Changed here
+    { path: "/admin/quiz", label: "Quiz", icon: "❓" },
+    { path: "/admin/quiz-feedback", label: "Quiz Feedback", icon: "💬" }, 
+
   ];
 
   const handleLogout = () => {

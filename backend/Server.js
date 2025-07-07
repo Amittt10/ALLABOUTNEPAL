@@ -60,6 +60,7 @@ Promise.all([connectDB(), connectMongoose()])
     app.use("/api/places", placeRoutes);
     app.use("/api/quiz", quizRoutes);
     app.use('/api/admin/quiz', quizRoutes);
+    // app.use('/api/admin/quiz-feedback', quizRoutes);
 
     app.listen(PORT, () => {
       console.log(`🚀 Server running at http://localhost:${PORT}`);

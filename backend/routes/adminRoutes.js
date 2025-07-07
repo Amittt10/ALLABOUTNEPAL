@@ -22,6 +22,9 @@ import { getUsersPaginated } from '../controllers/adminUserController.js';
 import { authenticateJWT, authorizeAdmin } from '../middleware/authMiddleware.js';
 import { getQuizStatistics } from '../controllers/quizStatsController.js';
 
+import { getAllQuizFeedback} from '../controllers/quizController.js';
+
+
 
 
 
@@ -105,4 +108,6 @@ router.get('/users', getUsersPaginated);
 // For Quiz Pagination
 router.get('/quiz/statistics', getQuizStatistics);
 
+
+router.get('/quiz-feedback', getAllQuizFeedback);
 export default router;

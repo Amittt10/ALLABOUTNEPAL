@@ -1,6 +1,9 @@
 import QuizQuestion from "../models/QuizQuestion.js";
 import QuizResult from "../models/QuizResult.js";
 import User from "../models/User.js";
+import QuizFeedback from '../models/QuizFeedback.js';
+
+
 
 // =============================
 // GET Quiz Questions (with filters)
@@ -92,8 +95,16 @@ export const submitQuizResult = async (req, res) => {
   try {
     const { userId, score, correctAnswers, totalQuestions, category, difficulty } = req.body;
 
-    const result = new QuizResult({ userId, score, correctAnswers, totalQuestions, category, difficulty });
-    await result.save();
+    const result = new QuizResult({
+      userId,
+      score,
+      correctAnswers,
+      totalQuestions,
+      category,
+      difficulty,
+    });
+
+    const savedResult = await result.save(); // ✅ save and capture the saved result
 
     const user = await User.findById(userId);
     if (user) {
@@ -118,7 +129,12 @@ export const submitQuizResult = async (req, res) => {
       await user.save();
     }
 
-    res.status(201).json({ result, updatedStats: user.quizStats });
+    // ✅ Return the new quiz result ID (quizId)
+    res.status(201).json({
+      message: "Quiz result saved",
+      quizId: savedResult._id,
+      updatedStats: user.quizStats,
+    });
   } catch (err) {
     console.error("❌ Error in submitQuizResult:", err);
     res.status(500).json({ message: err.message });
@@ -176,5 +192,69 @@ export const deleteOldQuizResults = async () => {
     console.log(`🧹 Deleted ${result.deletedCount} old quiz results`);
   } catch (err) {
     console.error("❌ Failed to delete old quiz results:", err);
+  }
+};
+
+
+
+// =============================
+// FEEDBACK FOR QUIZ
+// =============================
+export const submitFeedback = async (req, res) => {
+  try {
+    const { quizId, userId, rating, comment } = req.body;
+
+    if (!quizId || !userId || !rating) {
+      return res.status(400).json({ message: 'Required fields missing' });
+    }
+
+    const feedback = new QuizFeedback({ quizId, userId, rating, comment });
+    await feedback.save();
+
+    res.status(201).json({ message: 'Feedback submitted successfully' });
+  } catch (err) {
+    console.error('Feedback submission error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+export const getAllQuizFeedback = async (req, res) => {
+  try {
+    const feedbacks = await QuizFeedback.find()
+      .populate('userId', 'fullname username ')  // select fields from User
+      .populate('quizId', 'category difficulty score')           // select fields from Quiz
+      .sort({ createdAt: -1 });                        // latest first
+
+    res.json(feedbacks);
+  } catch (err) {
+    console.error('Error fetching quiz feedback:', err);
+    res.status(500).json({ message: 'Server error fetching quiz feedback' });
+  }
+};
+
+// =============================
+// GET Feedback By Quiz Category
+// =============================
+export const getQuizFeedbackByCategory = async (req, res) => {
+  try {
+    const { category } = req.params;
+
+    // Find feedback where populated quizId's category matches requested category
+    const feedbacks = await QuizFeedback.find()
+      .populate('userId', 'fullname username')
+      .populate({
+        path: 'quizId',
+        select: 'category',
+        match: { category: new RegExp(`^${category}$`, 'i') },
+      })
+      .sort({ createdAt: -1 });
+
+    // Filter out feedbacks whose quizId didn't match category (null)
+    const filtered = feedbacks.filter(fb => fb.quizId !== null);
+
+    res.json(filtered);
+  } catch (err) {
+    console.error('Error fetching feedback by category:', err);
+    res.status(500).json({ message: 'Server error fetching feedback by category' });
   }
 };

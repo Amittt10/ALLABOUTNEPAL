@@ -22,6 +22,7 @@ import QuizEdit from './pages/quiz/QuizEdit';
 
 import AdminUsers from './pages/AdminUsers';
 import AdminQuizStats from "./pages/AdminQuizStats";
+import AdminQuizFeedback from "./pages/quiz/AdminQuizFeedback";
 
 function App() {
   return (
@@ -67,6 +68,9 @@ function App() {
             {/* Pagination Routes */}
              <Route path="/admin/users" element={<AdminUsers />} />
              <Route path="/admin/quiz-attempts" element={<AdminQuizStats />} />
+
+             <Route path="/admin/quiz-feedback" element={<AdminQuizFeedback />} />
+
           </Route>
 
           {/* Redirects */}
