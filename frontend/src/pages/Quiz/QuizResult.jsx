@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { api } from "../../api/api";
 import "./QuizResult.css";
+import { showCustomToast } from "../utils/showCustomToast";
+
 
 const QuizResult = () => {
   const location = useLocation();
@@ -90,13 +92,14 @@ const QuizResult = () => {
 
   const handleSubmitFeedback = async () => {
     if (!rating) {
-      setFeedbackStatus("Please select a rating.");
-      return;
-    }
-    if (!quizId || !userId) {
-      setFeedbackStatus("Missing quiz or user info. Please retry.");
-      return;
-    }
+  showCustomToast("⚠️ RATING_REQUIRED", "Please select a rating.");
+  return;
+}
+if (!quizId || !userId) {
+  showCustomToast("❌ MISSING_DATA", "Quiz or user information is missing.");
+  return;
+}
+
 
     try {
       await api.submitQuizFeedback({
@@ -106,7 +109,7 @@ const QuizResult = () => {
         comment,
       });
 
-      setFeedbackStatus("✅ Thank you for your feedback!");
+      showCustomToast("Thank you for your feedback!");
       setRating(0);
       setComment("");
       // Refresh feedback list after submit
@@ -119,7 +122,8 @@ const QuizResult = () => {
       }, 2000);
     } catch (error) {
       console.error("Feedback error:", error);
-      setFeedbackStatus("❌ Failed to submit feedback. Please try again later.");
+      showCustomToast("SUBMIT_FAILED", "Failed to submit feedback. Please try again later.");
+
     }
   };
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { api } from "../../api/api";
+import { showCustomToast } from "../../pages/utils/showCustomToast";
 import "./ReviewSection.css";
 
 const ReviewItem = ({ review, onReplySubmit }) => {
@@ -9,7 +10,10 @@ const ReviewItem = ({ review, onReplySubmit }) => {
   const toggleReplyBox = () => setShowReplyBox((prev) => !prev);
 
   const handleSubmitReply = async () => {
-    if (!replyText.trim()) return alert("Please enter a reply.");
+    if (!replyText.trim()) {
+      showCustomToast("⚠️ REPLY_REQUIRED", "Please enter a reply.");
+      return;
+    }
     await onReplySubmit(review._id, replyText);
     setReplyText("");
     setShowReplyBox(false);
@@ -56,34 +60,25 @@ const ReviewSection = ({ targetType, targetId }) => {
   const [comment, setComment] = useState("");
   const [average, setAverage] = useState(0);
   const [total, setTotal] = useState(0);
-
-  // Pagination state
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const limit = 5; // reviews per page
+  const limit = 5;
 
- const fetchReviews = async (pageNumber = 1) => {
-  console.log(`Fetching reviews for page ${pageNumber}...`);
-  try {
-    const res = await api.get(
-      `/reviews/${targetType}/${targetId}?page=${pageNumber}&limit=${limit}`
-    );
+  const fetchReviews = async (pageNumber = 1) => {
+    try {
+      const res = await api.get(
+        `/reviews/${targetType}/${targetId}?page=${pageNumber}&limit=${limit}`
+      );
 
-    setReviews(res.data.reviews || res.data);
-    setAverage(res.data.averageRating || 0);
-    setTotal(res.data.totalReviews || (res.data.reviews ? res.data.reviews.length : 0));
-    setPage(res.data.page || pageNumber);
-    setTotalPages(res.data.totalPages || 1);
-  } catch (err) {
-    console.error("Error loading reviews", err);
-    setReviews([]);
-    setAverage(0);
-    setTotal(0);
-    setPage(1);
-    setTotalPages(1);
-  }
-};
-
+      setReviews(res.data.reviews || res.data);
+      setAverage(res.data.averageRating || 0);
+      setTotal(res.data.totalReviews || (res.data.reviews ? res.data.reviews.length : 0));
+      setPage(res.data.page || pageNumber);
+      setTotalPages(res.data.totalPages || 1);
+    } catch (err) {
+      showCustomToast("❌ FETCH_FAILED", "Could not load reviews.");
+    }
+  };
 
   useEffect(() => {
     if (targetType && targetId) {
@@ -93,15 +88,20 @@ const ReviewSection = ({ targetType, targetId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!comment.trim()) return alert("Please write a comment before submitting.");
+    if (!comment.trim()) {
+      showCustomToast("⚠️ COMMENT_REQUIRED", "Please write a comment before submitting.");
+      return;
+    }
+
     try {
       await api.post("/reviews", { targetType, targetId, rating, comment });
       setRating(5);
       setComment("");
       fetchReviews(1);
       setPage(1);
+      showCustomToast("Thank you for your review!");
     } catch (err) {
-      alert("Please login to submit a review.");
+      showCustomToast("⚠️ UNAUTHORIZED", "Please login to submit a review.");
     }
   };
 
@@ -109,8 +109,9 @@ const ReviewSection = ({ targetType, targetId }) => {
     try {
       await api.post(`/reviews/${reviewId}/replies`, { comment: replyComment });
       fetchReviews(page);
+      showCustomToast("✅ REPLY_ADDED", "Reply submitted successfully.");
     } catch (err) {
-      alert("Please login to reply.");
+      showCustomToast("⚠️ UNAUTHORIZED", "Please login to reply.");
     }
   };
 
@@ -120,7 +121,6 @@ const ReviewSection = ({ targetType, targetId }) => {
     }
   };
 
-  // For pagination buttons, display max 5 pages around current
   const getPaginationButtons = () => {
     const buttons = [];
     const maxButtons = 5;
@@ -145,7 +145,7 @@ const ReviewSection = ({ targetType, targetId }) => {
         <label>
           Rating:
           <div className="stars" aria-label="Rating selector">
-            {[1, 2, 3, 4 , 5].map((star) => (
+            {[1, 2, 3, 4, 5].map((star) => (
               <span
                 key={star}
                 className={`star ${rating >= star ? "filled" : ""}`}

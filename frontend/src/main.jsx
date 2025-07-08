@@ -92,11 +92,23 @@ const router = createBrowserRouter(
   }
 );
 
+
+
 const root = createRoot(document.getElementById('root'));
 
 root.render(
   <AuthProvider>
     <RouterProvider router={router} />
-    <ToastContainer position="top-center" theme='dark' autoClose={4000} />
+    <ToastContainer
+      position="top-right"
+      theme="dark"
+      autoClose={5000}
+      hideProgressBar
+      newestOnTop
+      closeOnClick
+      pauseOnHover
+      draggable
+      style={{ marginRight: '24px', marginTop: '20px' }} 
+    />
   </AuthProvider>
 );

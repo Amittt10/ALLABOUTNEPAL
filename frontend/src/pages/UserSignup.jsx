@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { showCustomToast } from "./utils/showCustomToast"; // <-- import your custom toast helper
 import "./Signup.css";
 
 const UserSignup = () => {
@@ -25,12 +24,12 @@ const UserSignup = () => {
 
     const { fullname, username, email, password, confirmPassword } = form;
     if (!fullname || !username || !email || !password || !confirmPassword) {
-      toast.error("❌ Please fill in all fields.", { theme: "dark", autoClose: 4000 });
+      showCustomToast("ERROR", "Please fill in all fields.");
       return;
     }
 
     if (password !== confirmPassword) {
-      toast.error("❌ Passwords do not match.", { theme: "dark", autoClose: 4000 });
+      showCustomToast("ERROR", "Passwords do not match.");
       return;
     }
 
@@ -45,10 +44,12 @@ const UserSignup = () => {
       const data = await response.json();
 
       if (response.ok) {
-        toast.success("✅ Signup successful. Please check your email to verify your account.", {
-          theme: "dark",
-          autoClose: 4000,
-        });
+        showCustomToast(
+          "SIGNUP_SUCCESS",
+          "Signup successful. Please check your email to verify your account.",
+          "Go to login",
+          "/login"
+        );
 
         setForm({
           fullname: "",
@@ -58,18 +59,14 @@ const UserSignup = () => {
           confirmPassword: "",
         });
 
-        // ⏳ Wait and redirect to login page
         setTimeout(() => {
           navigate("/login");
         }, 4000);
       } else {
-        toast.error(`❌ Signup failed: ${data.message || data.error}`, {
-          theme: "dark",
-          autoClose: 4000,
-        });
+        showCustomToast("SIGNUP_FAILED", data.message || data.error);
       }
     } catch (error) {
-      toast.error("❌ Network error during signup.", { theme: "dark", autoClose: 4000 });
+      showCustomToast("NETWORK_ERROR", "Network error during signup.");
     } finally {
       setLoading(false);
     }
@@ -80,7 +77,11 @@ const UserSignup = () => {
       <div className="signup-wrapper">
         <div className="signup-left-panel">
           <h1>Welcome!</h1>
-          <p>Create your account.<br />For Free!</p>
+          <p>
+            Create your account.
+            <br />
+            For Free!
+          </p>
           <Link to="/login">
             <button className="signup-left-button">Login</button>
           </Link>
@@ -90,24 +91,60 @@ const UserSignup = () => {
           <h2>Sign Up</h2>
 
           <form onSubmit={handleSignup} className="signup-form">
-            <label>Full Name<span className="required">*</span>
-              <input className="signup-input" name="fullname" type="text" value={form.fullname} onChange={handleChange} required />
+            <label>
+              Full Name<span className="required">*</span>
+              <input
+                className="signup-input"
+                name="fullname"
+                type="text"
+                value={form.fullname}
+                onChange={handleChange}
+                required
+              />
             </label>
 
-            <label>Username<span className="required">*</span>
-              <input name="username" type="text" value={form.username} onChange={handleChange} required />
+            <label>
+              Username<span className="required">*</span>
+              <input
+                name="username"
+                type="text"
+                value={form.username}
+                onChange={handleChange}
+                required
+              />
             </label>
 
-            <label>Email<span className="required">*</span>
-              <input name="email" type="email" value={form.email} onChange={handleChange} required />
+            <label>
+              Email<span className="required">*</span>
+              <input
+                name="email"
+                type="email"
+                value={form.email}
+                onChange={handleChange}
+                required
+              />
             </label>
 
-            <label>Password<span className="required">*</span>
-              <input name="password" type="password" value={form.password} onChange={handleChange} required />
+            <label>
+              Password<span className="required">*</span>
+              <input
+                name="password"
+                type="password"
+                value={form.password}
+                onChange={handleChange}
+                required
+              />
             </label>
 
-            <label>Confirm Password<span className="required">*</span>
-              <input name="confirmPassword" type="password" value={form.confirmPassword} onChange={handleChange} required />
+            <label>
+              Confirm Password<span className="required">*</span>
+              <input
+                name="confirmPassword"
+                type="password"
+                value={form.confirmPassword}
+                onChange={handleChange}
+                required
+              />
             </label>
 
             <button type="submit" className="signup-submit" disabled={loading}>

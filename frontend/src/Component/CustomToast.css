@@ -1,0 +1,63 @@
+.custom-toast {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 40px 16px 20px;
+  border-radius: 10px;
+  background-color: #0f0f0f; /* closer to dark theme from screenshot */
+  border: 1px solid #2f2f2f;
+  color: #fff;
+  max-width: 400px;
+  min-width: 340px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+}
+
+.toast-icon {
+  font-size: 1.4rem;
+  margin-top: 2px;
+  color: #ef4444;
+}
+
+.toast-code {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 2px;
+}
+
+.toast-message {
+  font-size: 0.95rem;
+  color: #d1d5db; /* lighter gray */
+  line-height: 1.4;
+}
+
+.toast-link {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 0.9rem;
+  color: #3b82f6;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Close button (top-right corner) */
+.custom-toast .toast-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: #6b7280;
+  font-size: 1.2rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  transition: color 0.2s ease;
+}
+
+.custom-toast .toast-close:hover {
+  color: #ffffff;
+}

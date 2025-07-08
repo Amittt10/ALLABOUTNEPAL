@@ -2,8 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { Eye, EyeOff } from "lucide-react";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; // ensure it's imported
+import { showCustomToast } from "./utils/showCustomToast"; // ⬅️ Custom toast utility
 import "./Login.css";
 
 const UserLogin = ({ onSuccess }) => {
@@ -19,19 +18,36 @@ const UserLogin = ({ onSuccess }) => {
   useEffect(() => {
     const query = new URLSearchParams(location.search);
     if (query.get("verified") === "success") {
-      toast.success("Email verified successfully!");
+      showCustomToast(
+        "✅ VERIFIED_SUCCESS",
+        "Your email has been successfully verified!",
+        "Go to your profile",
+        "/profile"
+      );
     }
   }, [location]);
 
   const handleLogin = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    const success = await login(email, password);
-    setLoading(false);
-    if (success) {
-      onSuccess ? onSuccess() : navigate(from, { replace: true });
-    }
-  };
+  e.preventDefault();
+  setLoading(true);
+  const success = await login(email, password);
+  setLoading(false);
+  if (success) {
+    showCustomToast(
+      "✅ LOGIN_SUCCESS",
+      "You have logged in successfully!",
+    );
+    onSuccess ? onSuccess() : navigate(from, { replace: true });
+  } else {
+    showCustomToast(
+      "LOGIN_FAILED",
+      "Invalid email or password. Please try again.",
+      "Forgot password?",
+      "/forgot"
+    );
+  }
+};
+
 
   return (
     <div className="login-wrapper">
