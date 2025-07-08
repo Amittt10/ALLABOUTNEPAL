@@ -145,7 +145,7 @@ const ReviewSection = ({ targetType, targetId }) => {
         <label>
           Rating:
           <div className="stars" aria-label="Rating selector">
-            {[5, 4, 3, 2, 1].map((star) => (
+            {[1, 2, 3, 4 , 5].map((star) => (
               <span
                 key={star}
                 className={`star ${rating >= star ? "filled" : ""}`}
