@@ -2,11 +2,6 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-
-import path from "path";
-import { fileURLToPath } from "url";
-
-
 import { connectDB } from "./config/db.js";
 import { connectMongoose } from "./config/mongoose.js";
 
@@ -46,14 +41,7 @@ app.use(
 );
 
 app.use(express.json());
-
-// ES module fix for __dirname
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// ✅ Serve static uploads folder
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
+app.use("/uploads", express.static("uploads"));
 
 Promise.all([connectDB(), connectMongoose()])
   .then(([nativeDb]) => {
