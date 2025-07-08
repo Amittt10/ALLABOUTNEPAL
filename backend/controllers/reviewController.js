@@ -1,6 +1,8 @@
 import Review from "../models/Review.js";
 import { ObjectId } from "mongodb";
 import { connectDB } from "../config/db.js";  
+import mongoose from "mongoose";
+
 
 
 export const addReview = async (req, res) => {
@@ -36,8 +38,7 @@ export const addReview = async (req, res) => {
 export const getReviewsByTarget = async (req, res) => {
   try {
     const { targetType, targetId } = req.params;
-    let { page = 1, limit = 5 } = req.query; // defaults: page 1, 5 reviews per page
-
+    let { page = 1, limit = 5 } = req.query;
     page = parseInt(page);
     limit = parseInt(limit);
 
@@ -45,22 +46,24 @@ export const getReviewsByTarget = async (req, res) => {
       return res.status(400).json({ message: "Missing targetType or targetId" });
     }
 
+    // Validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(targetId)) {
+      return res.status(400).json({ message: "Invalid targetId format" });
+    }
+
     const id = new mongoose.Types.ObjectId(targetId);
 
-    // Count total reviews for pagination metadata
+    // Continue with your query...
     const totalReviews = await Review.countDocuments({ targetType, targetId: id });
-
-    // Calculate total pages
     const totalPages = Math.ceil(totalReviews / limit);
 
-    // Fetch paginated reviews
     const reviews = await Review.find({ targetType, targetId: id })
       .populate("userId", "username")
       .skip((page - 1) * limit)
       .limit(limit)
-      .sort({ createdAt: -1 }); // newest first
+      .sort({ createdAt: -1 });
 
-    // Calculate average rating over all reviews (not just current page)
+    // Calculate average rating
     const allReviews = await Review.find({ targetType, targetId: id });
     const averageRating = allReviews.length > 0
       ? allReviews.reduce((sum, r) => sum + r.rating, 0) / allReviews.length
@@ -79,6 +82,7 @@ export const getReviewsByTarget = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
 
 
 // New controller to add reply to review

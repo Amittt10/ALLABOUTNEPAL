@@ -65,22 +65,28 @@ const QuizResult = () => {
       : 0;
 
   // Render stars for average rating and individual feedbacks
-  const renderStars = (ratingValue) => {
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      stars.push(
-        <span
-          key={i}
-          className={`star ${i <= ratingValue ? "filled" : ""}`}
-          aria-hidden="true"
-          style={{ color: i <= ratingValue ? "#FFD700" : "#ccc" }}
-        >
-          ★
-        </span>
-      );
-    }
-    return <span className="star-rating" aria-label={`${ratingValue} out of 5 stars`}>{stars}</span>;
-  };
+  const renderStars = (ratingValue, onClick = null) => {
+  const stars = [];
+  for (let i = 1; i <= 5; i++) {
+    stars.push(
+      <span
+        key={i}
+        className={`star ${i <= ratingValue ? "filled" : ""}`}
+        aria-hidden="true"
+        style={{ color: i <= ratingValue ? "#FFD700" : "#ccc", cursor: onClick ? "pointer" : "default" }}
+        onClick={() => onClick && onClick(i)}
+      >
+        ★
+      </span>
+    );
+  }
+  return (
+    <span className="star-rating" aria-label={`${ratingValue} out of 5 stars`}>
+      {stars}
+    </span>
+  );
+};
+
 
   const handleSubmitFeedback = async () => {
     if (!rating) {
@@ -220,7 +226,7 @@ const QuizResult = () => {
             <h3>We'd love your feedback!</h3>
 
             <label>Rating:</label>
-            <div>{renderStars(rating)}</div>
+            <div>{renderStars(rating, setRating)}</div>
 
             <label htmlFor="feedback-comment">Comments (optional):</label>
             <textarea
