@@ -70,35 +70,36 @@ const Leaderboard = () => {
               <th>Date</th>
             </tr>
           </thead>
-          <tbody>
-            {leaderboard.map(({ userId, score, createdAt }, idx) => (
-              <tr key={idx}>
-                <td>{idx + 1}</td>
-                <td style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                  {userId?.photo ? (
-                    <img
-                      src={`${import.meta.env.VITE_API_URL || "http://localhost:3000"}/${userId.photo}`}
-                      alt={userId.username}
-                      style={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover" }}
-                    />
-                  ) : (
-                    <div
-                      style={{
-                        width: 40,
-                        height: 40,
-                        borderRadius: "50%",
-                        backgroundColor: "#ccc",
-                        display: "inline-block",
-                      }}
-                    />
-                  )}
-                  <span>{userId?.username || "Unknown"}</span>
-                </td>
-                <td>{score}</td>
-                <td>{new Date(createdAt).toLocaleDateString()}</td>
-              </tr>
-            ))}
-          </tbody>
+        <tbody>
+  {leaderboard.map(({ userId, score, createdAt }, idx) => (
+    <tr key={idx}>
+      <td>{idx + 1}</td>
+      <td style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        {userId?.photo ? (
+          <img
+            src={`http://localhost:3000/${userId.photo}`}
+            alt={userId.username}
+            className="leaderboard-avatar"
+          />
+        ) : (
+          <div
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: "50%",
+              backgroundColor: "#ccc",
+              display: "inline-block",
+            }}
+          />
+        )}
+        <span>{userId?.username || "Unknown"}</span>
+      </td>
+      <td>{score}</td>
+      <td>{new Date(createdAt).toLocaleDateString()}</td>
+    </tr>
+  ))}
+</tbody>
+
         </table>
       ) : (
         <p>No leaderboard data available.</p>
