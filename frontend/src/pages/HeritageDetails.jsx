@@ -4,6 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
 import './HeritageDetails.css';
 import ReviewSection from "../Component/ReviewSection/ReviewSection";
+import TTSControl from "../Component/TTSControl/TTSControl";
+import RecommendedList from "../Component/RecommendedList/RecommendedList";
+
 
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:3000';
@@ -17,8 +20,11 @@ const HeritageDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [fullscreenImg, setFullscreenImg] = useState(null);
-
+   // ✅ First define lang
   const lang = i18n.language || 'en';
+
+  // ✅ Then use lang to define langCode
+  const langCode = lang === "np" ? "ne-NP" : "en-US";
 
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_KEY,
@@ -160,6 +166,7 @@ const HeritageDetails = () => {
       )}
 
       <h2 className="desc-title semibold">{name}</h2>
+      
 
       <p className="location-entryfee">
         <span className="location-text italics small-font">{location}</span><br />
@@ -185,7 +192,14 @@ const HeritageDetails = () => {
         </div>
       )}
 
+       {site && historyRaw && (
+        <TTSControl text={historyRaw} lang={langCode} />
+      )}
+
       <ReviewSection targetType="heritage" targetId={id} />
+
+      <RecommendedList targetType="heritage" excludeId={id} lang={lang} />
+
 
       {fullscreenImg && (
         <div className="fullscreen-modal" onClick={() => setFullscreenImg(null)}>

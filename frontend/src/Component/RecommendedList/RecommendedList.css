@@ -1,0 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+:root {
+  --primary: #007bff;
+  --accent: #ff4081;
+  --text-dark: #222;
+  --text-muted: #555;
+  --background: #fafafa;
+  --white: #fff;
+}
+
+/* Make background full width with centered content */
+.recommended-section {
+  width: 100vw; /* full viewport width */
+  padding: 2.5rem 1rem 3rem;
+  background: var(--background);
+  margin-left: calc(50% - 50vw); /* shift left to full viewport */
+  margin-right: calc(50% - 50vw); /* shift right to full viewport */
+}
+
+/* Wrapper to center and limit max width */
+.recommended-grid-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  width: 100%;
+}
+
+.recommended-title {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--text-dark);
+  text-align: center;
+  margin-bottom: 2rem;
+  text-transform: none;
+  letter-spacing: normal;
+  user-select: none;
+  width: 100%;
+}
+
+/* Grid for recommended items */
+.recommended-grid {
+  display: grid;
+  gap: 1.8rem;
+  justify-items: center;
+
+  /* Show about 3-4 items per row depending on width */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+
+  /* Limit height to about 2 rows */
+  max-height: calc(2 * 230px + 1.8rem); /* each card ~230px tall plus gap */
+  overflow-y: hidden;
+}
+
+/* Cards styling */
+.recommended-card {
+  background-color: var(--white);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  max-width: 280px; /* constrain max width for consistent size */
+  height: 230px; /* fix height for uniform rows */
+}
+
+.recommended-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.18);
+}
+
+.recommended-image {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  user-select: none;
+  transition: transform 0.3s ease;
+}
+
+.recommended-card:hover .recommended-image {
+  transform: scale(1.08);
+}
+
+.recommended-content {
+  padding: 1.2rem 1rem;
+  text-align: center;
+  flex-grow: 1; /* fill remaining space */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.recommended-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+}
+
+.recommended-extra {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .recommended-grid {
+    grid-template-columns: repeat(3, 1fr);
+    max-height: none; /* remove height limit on smaller screens */
+  }
+}
+
+@media (max-width: 768px) {
+  .recommended-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .recommended-card {
+    max-width: 100%;
+  }
+
+  .recommended-image {
+    height: 130px;
+  }
+}
+
+@media (max-width: 480px) {
+  .recommended-title {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .recommended-name {
+    font-size: 1rem;
+  }
+  .recommended-extra {
+    font-size: 0.85rem;
+  }
+  .recommended-image {
+    height: 120px;
+  }
+}

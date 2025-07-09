@@ -188,3 +188,16 @@
 .close-modal-btn:hover {
   color: #000;
 }
+
+.tts-btn {
+  background-color: #333;
+  color: white;
+  padding: 6px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.tts-btn:hover {
+  background-color: #444;
+}

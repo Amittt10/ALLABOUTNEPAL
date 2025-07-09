@@ -17,6 +17,8 @@ import placeRoutes from "./routes/placeRoutes.js";
 import quizRoutes from './routes/quizRoutes.js';
 import { deleteOldQuizResults } from "./controllers/quizController.js";
 import reviewRoutes from './routes/reviewRoutes.js';
+import ttsRoutes from './routes/ttsRoutes.js';
+import recommendedRoutes from './routes/recommendedRoutes.js';
 
 
 
@@ -63,6 +65,8 @@ Promise.all([connectDB(), connectMongoose()])
     app.use("/api/quiz", quizRoutes);
     app.use('/api/admin/quiz', quizRoutes);
     app.use('/api/reviews', reviewRoutes);
+    app.use('/api/tts', ttsRoutes);
+    app.use('/api/recommended', recommendedRoutes);
 
     app.listen(PORT, () => {
       console.log(`🚀 Server running at http://localhost:${PORT}`);

@@ -5,6 +5,8 @@ import { useTranslation } from "react-i18next";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import "./PlaceDetail.css";
 import ReviewSection from "../../Component/ReviewSection/ReviewSection";
+import TTSControl from "../../Component/TTSControl/TTSControl";
+import RecommendedList from '../../Component/RecommendedList/RecommendedList';
 
 const API = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -19,6 +21,7 @@ export default function PlaceDetail() {
   const [fullscreenImg, setFullscreenImg] = useState(null);
 
   const lang = i18n.language || "en";
+  const langCode = lang === "np" ? "ne-NP" : "en-US";
 
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_KEY,
@@ -246,8 +249,15 @@ export default function PlaceDetail() {
           </GoogleMap>
         </div>
       )}
+      
+       {descriptionRaw && (
+       <TTSControl text={descriptionRaw} lang={langCode} />
+      )}
 
       <ReviewSection targetType="place" targetId={placeId} />
+
+      <RecommendedList targetType="place" excludeId={placeId} lang={lang} />
+
 
       {/* Fullscreen Image Modal */}
       {fullscreenImg && (

@@ -1,0 +1,29 @@
+/* Floating TTS button */
+.tts-floating-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.tts-floating-btn:hover {
+  background-color: #555;
+}
+
+.tts-floating-btn:focus {
+  outline: 2px solid #66aaff;
+  outline-offset: 2px;
+}

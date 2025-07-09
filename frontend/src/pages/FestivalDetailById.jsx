@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import "./FestivalDetails.css";
 import ReviewSection from '../Component/ReviewSection/ReviewSection';
+import TTSControl from "../Component/TTSControl/TTSControl";
+import RecommendedList from '../Component/RecommendedList/RecommendedList';
 
 
 const API = import.meta.env.VITE_API_URL || "http://localhost:3000";
@@ -17,7 +19,11 @@ const FestivalDetailById = () => {
   const [error, setError] = useState(null);
   const [fullscreenImg, setFullscreenImg] = useState(null);
 
-  const lang = i18n.language || "en";
+     // ✅ First define lang
+  const lang = i18n.language || 'en';
+
+  // ✅ Then use lang to define langCode
+  const langCode = lang === "np" ? "ne-NP" : "en-US";
 
   useEffect(() => {
     const fetchFestival = async () => {
@@ -158,8 +164,15 @@ const FestivalDetailById = () => {
         {parsedBlocks.map((block, idx) => renderBlock(block, idx))}
       </div>
 
+      {descriptionRaw && (
+       <TTSControl text={descriptionRaw} lang={langCode} />
+      )}
+
 
       <ReviewSection targetType="festival" targetId={id} />
+
+      {/* Recommended Festivals Section */}
+      <RecommendedList targetType="festival" excludeId={id} lang={lang} />
 
       {fullscreenImg && (
         <div className="fullscreen-modal" onClick={() => setFullscreenImg(null)}>
