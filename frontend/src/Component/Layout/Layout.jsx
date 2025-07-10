@@ -10,7 +10,7 @@ const Layout = () => {
     <>
       <ScrollToTop />    {/* Add it here */}
       <Header />
-      <main style={{ minHeight: "80vh", padding: "1rem" }}>
+      <main style={{ minHeight: "80vh" }}>
         <Outlet />
       </main>
       <Footer />

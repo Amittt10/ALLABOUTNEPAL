@@ -56,7 +56,12 @@ export default function PlaceDetail() {
   const videoUrl = place?.video_url || "";
   const gallery = place?.images || [];
 
-  const rawLines = descriptionRaw.split("\n").map(line => line.replace(/\t/g, "  ").trimEnd());
+  const rawLines = descriptionRaw
+  .replace(/^[\u2022\u2013\u2014•]/gm, "-")  // Replace common bullets/dashes
+  .replace(/\t/g, "  ")
+  .split("\n")
+  .map(line => line.trimEnd());
+
 
   function parseNestedList(lines, startIndex = 0, baseIndent = 0) {
     const items = [];
@@ -174,9 +179,9 @@ export default function PlaceDetail() {
 
   return (
     <div className="place-detail-page">
-      <button className="back-btn" onClick={() => navigate(-1)}>
+      {/* <button className="back-btn" onClick={() => navigate(-1)}>
         &larr; Back
-      </button>
+      </button> */}
 
       {/* Video at the top */}
       {videoUrl && (

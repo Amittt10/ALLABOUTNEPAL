@@ -1,7 +1,7 @@
 /* ===== Base Layout ===== */
 .place-detail-page {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  padding: 1rem;
+  padding: 0;
   background-color: #fff;
   color: #333;
   position: relative;

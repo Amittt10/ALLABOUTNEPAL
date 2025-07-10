@@ -60,7 +60,12 @@ const HeritageDetails = () => {
   const entryFee = site?.entryFee;
   const images = site?.gallery || [];
 
-  const rawLines = historyRaw.split('\n').map(line => line.trim()).filter(Boolean);
+  const rawLines = historyRaw
+  .replace(/^[\u2022\u2013\u2014•]/gm, "-")  // Replace common bullets/dashes
+  .replace(/\t/g, "  ")
+  .split("\n")
+  .map(line => line.trimEnd());
+
 
   // === Enhanced block parsing with [imageX] support ===
   const descriptionBlocks = [];
@@ -153,7 +158,7 @@ const HeritageDetails = () => {
 
   return (
     <div className="heritage-details-container">
-      <button className="back-btn" onClick={() => navigate(-1)}>&larr; Back</button>
+      {/* <button className="back-btn" onClick={() => navigate(-1)}>&larr; Back</button> */}
 
       {site.image && (
         <img

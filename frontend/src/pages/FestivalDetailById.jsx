@@ -61,7 +61,12 @@ const FestivalDetailById = () => {
   };
 
   const descriptionRaw = festival?.[`description_${lang}`] || festival?.description_en || "No content available.";
-  const rawLines = descriptionRaw.split("\n").map(line => line.trim()).filter(Boolean);
+  const rawLines = descriptionRaw
+  .replace(/^[\u2022\u2013\u2014•]/gm, "-")  // Replace common bullets/dashes
+  .replace(/\t/g, "  ")
+  .split("\n")
+  .map(line => line.trimEnd());
+
 
   const parsedBlocks = rawLines.map(line => {
     if (line.startsWith("### ")) return { type: "subtitle", content: line.slice(4).trim() };
@@ -141,9 +146,9 @@ const FestivalDetailById = () => {
   return (
     <div className="festival-details-container">
       
-      <button className="back-btn" onClick={() => navigate(-1)}>
+      {/* <button className="back-btn" onClick={() => navigate(-1)}>
         &larr; Back
-      </button>
+      </button> */}
 
       {festival?.image && (
         <img
