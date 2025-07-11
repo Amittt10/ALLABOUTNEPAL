@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { MapContainer, TileLayer, Marker, Popup, Tooltip } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import "./NepalMap.css";
 
-// Fix default marker icon URLs for leaflet
+// Fix default marker icon URLs for Leaflet
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
@@ -11,56 +12,58 @@ L.Icon.Default.mergeOptions({
 });
 
 export default function NepalMap({ places }) {
-  // Helper function to create a custom icon with thumbnail
-  const createCustomIcon = (thumbnailUrl) => {
-    return new L.Icon({
-      iconUrl: thumbnailUrl,
-      iconSize: [40, 40], // size of the thumbnail icon
-      iconAnchor: [20, 40], // point of the icon which will correspond to marker's location
-      popupAnchor: [0, -40], // point from which the popup should open relative to the iconAnchor
-      className: "custom-marker-icon",
-    });
-  };
+  // Memoize icons for performance and safety
+  const getIcon = useMemo(() => {
+    const cache = new Map();
+    return (thumbnailUrl) => {
+      if (!thumbnailUrl || typeof thumbnailUrl !== "string") {
+        return new L.Icon.Default(); // fallback to default if no image
+      }
+
+      if (cache.has(thumbnailUrl)) return cache.get(thumbnailUrl);
+
+      const icon = new L.Icon({
+        iconUrl: thumbnailUrl,
+        iconSize: [40, 40],
+        iconAnchor: [20, 40],
+        popupAnchor: [0, -40],
+        className: "custom-marker-icon",
+      });
+
+      cache.set(thumbnailUrl, icon);
+      return icon;
+    };
+  }, []);
 
   return (
     <MapContainer
       center={[28.3949, 84.124]}
       zoom={7}
       scrollWheelZoom={false}
-      style={{ height: "500px", width: "100%" }}
       className="nepal-map-container"
     >
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+
       {places.map((place) => {
+        const { location, _id, title_en, thumbnail } = place;
+
         if (
-          place.location &&
-          typeof place.location.lat === "number" &&
-          typeof place.location.lng === "number"
+          location &&
+          typeof location.lat === "number" &&
+          typeof location.lng === "number"
         ) {
-          // Use place.thumbnail as icon if available, else default icon
-          const icon = place.thumbnail
-            ? createCustomIcon(place.thumbnail)
-            : undefined;
+          const icon = getIcon(thumbnail);
 
           return (
-            <Marker
-              key={place._id}
-              position={[place.location.lat, place.location.lng]}
-              icon={icon}
-            >
+            <Marker key={_id} position={[location.lat, location.lng]} icon={icon}>
               <Popup>
-                <div style={{ textAlign: "center" }}>
-                  <h3>{place.title_en}</h3>
-                  {place.thumbnail ? (
+                <div className="popup-content">
+                  <h3>{title_en}</h3>
+                  {thumbnail ? (
                     <img
-                      src={place.thumbnail}
-                      alt={place.title_en}
-                      style={{
-                        width: "200px",
-                        height: "auto",
-                        borderRadius: "8px",
-                        marginTop: "5px",
-                      }}
+                      src={thumbnail}
+                      alt={title_en}
+                      className="popup-image"
                     />
                   ) : (
                     <p>No image available</p>
@@ -68,11 +71,12 @@ export default function NepalMap({ places }) {
                 </div>
               </Popup>
               <Tooltip direction="top" offset={[0, -10]} permanent>
-                {place.title_en}
+                {title_en}
               </Tooltip>
             </Marker>
           );
         }
+
         return null;
       })}
     </MapContainer>
