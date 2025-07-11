@@ -4,6 +4,9 @@ import { useTranslation } from "react-i18next";
 import SubscribeForm from "../../Component/SubscribeForm/SubscribeForm";
 import axios from "axios";
 import "./Home.css";
+import FeaturedCarousel from "../../Component/FeaturedCarousel/FeaturedCarousel";
+import NepalMap from "../../Component/NepalMap/NepalMap";
+
 
 const API = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -12,6 +15,7 @@ export default function Home() {
   const { i18n } = useTranslation();
   const [category, setCategory] = useState("unesco");
   const [places, setPlaces] = useState([]);
+  const [festivals, setFestivals] = useState([]);
   const [message, setMessage] = useState("");
 
   useEffect(() => {
@@ -23,13 +27,41 @@ export default function Home() {
         setMessage("Failed to load places.");
       }
     };
+    const fetchFestivals = async () => {
+      try {
+        const res = await axios.get(`${API}/api/festivals`);
+        setFestivals(res.data);
+      } catch (err) {
+        console.error("Failed to load festivals.");
+      }
+    };
     fetchPlaces();
+    fetchFestivals();
   }, []);
 
-  // Filter places by selected category & limit to 9
-  const filteredPlaces = places
-    .filter((p) => p.category === category)
-    .slice(0, 9);
+  const filteredPlaces = places.filter((p) => p.category === category).slice(0, 9);
+
+  const featuredHeritage = places
+  .filter(p => p.category === "unesco")
+  .slice(0, 5)
+  .map(place => ({
+    ...place,
+    shortDescription: place.description_en?.slice(0, 100) + "..."
+  }));
+
+  const today = new Date();
+  const futureFestivals = festivals
+    .filter((f) => f.dateAD && new Date(f.dateAD) >= today)
+    .sort((a, b) => new Date(a.dateAD) - new Date(b.dateAD));
+
+  const formatDate = (dateStr) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString(i18n.language === "np" ? "ne-NP" : "en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
 
   return (
     <div className="home-page">
@@ -46,6 +78,51 @@ export default function Home() {
           </h1>
         </div>
       </section>
+
+{/* Upcoming Festivals Section */}
+<div className="fullwidth-bg-wrapper">
+  <section className="upcoming-festivals-section">
+    <h2>
+      {i18n.language === "np" ? "आगामी चाडपर्वहरू" : "Upcoming Festivals"}
+    </h2>
+
+    <div className="festival-card-list">
+      {futureFestivals.slice(0, 3).map((festival) => (
+        <div
+          key={festival._id}
+          className="festival-card"
+          onClick={() => navigate(`/festival-detail/${festival._id}`)}
+        >
+          <div className="festival-image-wrapper">
+            <img
+              src={`${API}/uploads/${festival.image}`}
+              alt={i18n.language === "np" ? festival.name_np : festival.name_en}
+            />
+          </div>
+          <div className="festival-info">
+            <p className="festival-date">{formatDate(festival.dateAD)}</p>
+            <h3>
+              {i18n.language === "np"
+                ? festival.name_np
+                : festival.name_en}
+            </h3>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div style={{ textAlign: "center", marginTop: "1.5rem" }}>
+      <button
+        className="view-all-btn"
+        onClick={() => navigate("/festivals-highlight")}
+      >
+        {i18n.language === "np" ? "सबै हेर्नुहोस्" : "View All Festivals"}
+      </button>
+    </div>
+  </section>
+</div>
+
+
 
       <section
         className="explore-hero-section"
@@ -98,10 +175,13 @@ export default function Home() {
             ))}
           </div>
         </div>
-        <div className="explore-right"></div>
+        <div className="explore-right">
+           <NepalMap places={filteredPlaces} />
+        </div>
       </section>
 
-      {/* Subscribe form component */}
+       {/* <FeaturedCarousel items={featuredHeritage} /> */}
+
       <SubscribeForm />
     </div>
   );
