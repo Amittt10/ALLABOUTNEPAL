@@ -44,7 +44,6 @@ body {
 .festival-date {
   font-style: italic;
   color: #555;
-  margin-bottom: 1rem;
   padding-top: 2.5rem;
 }
 
@@ -56,6 +55,7 @@ body {
 
 .location-text {
   font-style: italic;
+  padding-top: 1rem;
 }
 
 .entryfee-heading {

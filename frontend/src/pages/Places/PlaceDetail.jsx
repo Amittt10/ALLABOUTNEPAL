@@ -183,19 +183,28 @@ export default function PlaceDetail() {
         &larr; Back
       </button> */}
 
-      {/* Video at the top */}
-      {videoUrl && (
-        <div className="video-wrapper">
-          <video
-            src={videoUrl}
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="place-video-top"
-          />
-        </div>
-      )}
+      {/* Media at the top (video or fallback thumbnail) */}
+{videoUrl ? (
+  <div className="video-wrapper">
+    <video
+      src={videoUrl}
+      autoPlay
+      loop
+      muted
+      playsInline
+      className="place-video-top"
+    />
+  </div>
+) : place.thumbnail ? (
+  <div className="thumbnail-wrapper">
+    <img
+      src={place.thumbnail}
+      alt={`${title} thumbnail`}
+      className="place-thumbnail-top"
+    />
+  </div>
+) : null}
+
 
       {/* Title */}
       <h1 className="main-title">{title}</h1>
