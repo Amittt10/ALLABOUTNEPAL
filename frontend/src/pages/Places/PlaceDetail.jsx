@@ -167,11 +167,11 @@ export default function PlaceDetail() {
       case "list":
         return renderList(block.items, `list-${key}`);
       case "title":
-        return <h2 key={key} className="desc-title semibold">{block.content}</h2>;
+        return <h2 key={key} className="place-desc-title semibold">{block.content}</h2>;
       case "heading":
-        return <h3 key={key} className="desc-heading bold">{block.content}</h3>;
+        return <h3 key={key} className="place-desc-heading bold">{block.content}</h3>;
       case "subtitle":
-        return <h4 key={key} className="desc-subtitle italics">{block.content}</h4>;
+        return <h4 key={key} className="place-desc-subtitle italics">{block.content}</h4>;
       default:
         return null;
     }
@@ -207,7 +207,7 @@ export default function PlaceDetail() {
 
 
       {/* Title */}
-      <h1 className="main-title">{title}</h1>
+      <h1 className="place-main-title">{title}</h1>
 
       {/* Description with injected images via placeholders */}
       <div className="description-content">

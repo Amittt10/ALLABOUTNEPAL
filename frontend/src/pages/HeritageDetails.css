@@ -1,14 +1,12 @@
-
 body {
-  /* remove any flex or centering */
   display: block;
 }
 
 /* Container */
 .heritage-details-container {
   max-width: 900px;
-  margin: 0 auto; /* center horizontally */
-  padding: 0 1rem; /* horizontal padding only, no top padding */
+  margin: 0 auto;
+  padding: 0 1rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
 }
@@ -23,7 +21,6 @@ body {
   margin-bottom: 1rem;
   transition: color 0.3s ease;
 }
-
 .back-btn:hover {
   color: #005fa3;
 }
@@ -39,42 +36,40 @@ body {
   box-shadow: none;
   cursor: pointer;
 }
+.heritage-main-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin: 2rem auto 1.5rem;
+  max-width: 900px;
+}
 
-
-
-/* Title (h2) */
+/* Title (centered) */
 .desc-title {
   font-size: 2.4rem;
   font-weight: 700;
   margin-bottom: 1rem;
   color: #222;
-  text-align: left; /* add this */
+  text-align: left; /* Main Title centered */
 }
 
-
-/* Heading (h3) */
+/* Headings (left aligned) */
 .desc-heading {
   font-size: 1.8rem;
   font-weight: 600;
   margin: 1.5rem 0 0.6rem;
   color: #111;
   text-align: left;
-  
 }
 
-/* Subtitle (h4) */
+/* Subtitle (left aligned) */
 .desc-subtitle {
   font-size: 1.3rem;
   font-style: italic;
   font-weight: 500;
   margin: 1rem 0 0.5rem;
   color: #555;
-  
-}
-
-.desc-heading,
-.desc-subtitle {
-  text-align: left; /* keep other headings left-aligned */
+  text-align: left;
 }
 
 /* Paragraph */
@@ -86,7 +81,7 @@ body {
   color: #444;
 }
 
-/* Inline images */
+/* Inline images inside paragraphs */
 .inline-image {
   display: block;
   max-width: 100%;
@@ -97,33 +92,28 @@ body {
   cursor: pointer;
   transition: transform 0.3s ease;
 }
-
 .inline-image:hover {
   transform: scale(1.03);
 }
 
-/* Location and Entry Fee section */
+/* Location and Entry Fee */
 .location-entryfee {
   font-size: 0.9rem;
   margin-bottom: 1rem;
   color: #666;
+  text-align: left;
 }
-
 .location-text {
   font-style: italic;
   font-size: 0.9rem;
   display: block;
   margin-bottom: 0.3rem;
   padding-top: 2.5rem;
-  /* text-align: center; */
-  
 }
-
 .entryfee-heading {
   font-weight: 700;
   color: #333;
 }
-
 .entryfee-text {
   font-size: 0.9rem;
 }
@@ -136,7 +126,7 @@ body {
   box-shadow: 0 6px 12px rgba(0,0,0,0.1);
 }
 
-/* Blurred section (for non-logged in users) */
+/* Blurred section */
 .blurred-section {
   filter: blur(4px);
   pointer-events: none;
@@ -144,7 +134,7 @@ body {
   position: relative;
 }
 
-/* Fullscreen modal for images */
+/* Fullscreen modal */
 .fullscreen-modal {
   position: fixed;
   top: 0;
@@ -158,7 +148,6 @@ body {
   z-index: 9999;
   cursor: zoom-out;
 }
-
 .fullscreen-modal img {
   max-width: 90%;
   max-height: 90%;
@@ -202,11 +191,11 @@ body {
   color: #666;
   transition: color 0.3s ease;
 }
-
 .close-modal-btn:hover {
   color: #000;
 }
 
+/* TTS Button */
 .tts-btn {
   background-color: #333;
   color: white;

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
-import './HeritageDetails.css';
+import "./HeritageDetails.css";
 import ReviewSection from "../Component/ReviewSection/ReviewSection";
 import TTSControl from "../Component/TTSControl/TTSControl";
 import RecommendedList from "../Component/RecommendedList/RecommendedList";
@@ -139,13 +139,13 @@ const HeritageDetails = () => {
         );
 
       case "title":
-        return <h2 key={key} className="desc-title semibold">{block.content}</h2>;
+        return <h2 key={key} className="heritage-desc-title semibold">{block.content}</h2>;
 
       case "heading":
-        return <h3 key={key} className="desc-heading bold">{block.content}</h3>;
+        return <h3 key={key} className="heritage-desc-heading bold">{block.content}</h3>;
 
       case "subtitle":
-        return <h4 key={key} className="desc-subtitle italics">{block.content}</h4>;
+        return <h4 key={key} className="heritage-desc-subtitle italics">{block.content}</h4>;
 
       default:
         return null;
@@ -170,7 +170,10 @@ const HeritageDetails = () => {
         />
       )}
 
-      <h2 className="desc-title semibold">{name}</h2>
+       {/* Title */}
+      <h1 className="heritage-main-title">{name}</h1>
+
+      {/* <h2 className="desc-title semibold">{name}</h2> */}
       
 
       <p className="location-entryfee">

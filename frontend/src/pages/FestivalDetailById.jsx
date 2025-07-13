@@ -131,11 +131,11 @@ const FestivalDetailById = () => {
         );
 
       case "title":
-        return <h2 key={key} className="desc-title semibold">{block.content}</h2>;
+        return <h2 key={key} className="festival-desc-title semibold">{block.content}</h2>;
       case "heading":
-        return <h3 key={key} className="desc-heading bold">{block.content}</h3>;
+        return <h3 key={key} className="festival-desc-heading bold">{block.content}</h3>;
       case "subtitle":
-        return <h4 key={key} className="desc-subtitle italics">{block.content}</h4>;
+        return <h4 key={key} className="festival-desc-subtitle italics">{block.content}</h4>;
       default:
         return null;
     }
