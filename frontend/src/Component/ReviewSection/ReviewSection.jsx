@@ -56,7 +56,8 @@ const ReviewItem = ({ review, onReplySubmit }) => {
 
 const ReviewSection = ({ targetType, targetId }) => {
   const [reviews, setReviews] = useState([]);
-  const [rating, setRating] = useState(5);
+  const [rating, setRating] = useState(0); // Set to 0 initially
+  const [hoveredStar, setHoveredStar] = useState(0);
   const [comment, setComment] = useState("");
   const [average, setAverage] = useState(0);
   const [total, setTotal] = useState(0);
@@ -95,7 +96,7 @@ const ReviewSection = ({ targetType, targetId }) => {
 
     try {
       await api.post("/reviews", { targetType, targetId, rating, comment });
-      setRating(5);
+      setRating(0);
       setComment("");
       fetchReviews(1);
       setPage(1);
@@ -139,17 +140,20 @@ const ReviewSection = ({ targetType, targetId }) => {
   };
 
   return (
-    <div className="review-section">
+    <div className="review-container">
+      <div className="review-section">
       <h3>Leave a Review</h3>
       <form onSubmit={handleSubmit}>
         <label>
           Rating:
-          <div className="stars" aria-label="Rating selector">
+          <div className="review-stars" aria-label="Rating selector">
             {[1, 2, 3, 4, 5].map((star) => (
               <span
                 key={star}
-                className={`star ${rating >= star ? "filled" : ""}`}
+                className={`star ${hoveredStar >= star || rating >= star ? "filled" : ""}`}
                 onClick={() => setRating(star)}
+                onMouseEnter={() => setHoveredStar(star)}
+                onMouseLeave={() => setHoveredStar(0)}
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => e.key === "Enter" && setRating(star)}
@@ -214,6 +218,7 @@ const ReviewSection = ({ targetType, targetId }) => {
           </button>
         </nav>
       )}
+    </div>
     </div>
   );
 };

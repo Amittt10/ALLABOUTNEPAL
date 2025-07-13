@@ -237,7 +237,7 @@
 }
 
 /* Star rating */
-.star {
+.quiz-star {
   user-select: none;
   font-size: 24px;
   margin-right: 5px;
@@ -246,11 +246,11 @@
   transition: color 0.2s ease;
 }
 
-.star.filled {
+.quiz-star.filled {
   color: #FFD700; /* gold */
 }
 
-.star:hover,
+.quiz-star:hover,
 .star:focus {
   color: #ffbf00;
   outline: none;
