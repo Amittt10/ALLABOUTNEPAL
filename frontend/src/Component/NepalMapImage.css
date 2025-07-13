@@ -1,0 +1,119 @@
+.nepal-map-container {
+  position: relative;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  background-color: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.map-base-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: none;
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Marker group position */
+.map-marker-group {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  cursor: pointer;
+}
+
+/* Thumbnail-style pin icon */
+.custom-marker-icon {
+  width: 40px;
+  height: 40px;
+  border: 2.5px solid #ffffff;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  background-color: transparent;
+  transition: transform 0.25s ease;
+}
+
+.custom-marker-icon:hover {
+  transform: scale(1.15);
+  border-color: #007bff;
+}
+
+/* Tooltip that appears on hover */
+.marker-tooltip-card {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  z-index: 10;
+  white-space: nowrap;
+  max-width: 200px;
+  backdrop-filter: blur(4px);
+  background-color: transparent;
+  border: none;
+  padding: 0;
+}
+.marker-tooltip-card {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  z-index: 10;
+  white-space: nowrap;
+  max-width: 200px;
+  backdrop-filter: blur(4px);
+  background-color: transparent;
+  border: none;
+  padding: 0;
+}
+
+
+
+/* Show tooltip on hover */
+/* .map-marker-group:hover .marker-tooltip-card,
+.map-marker-group .marker-tooltip-card:hover {
+  display: block;
+} */
+
+
+/* Card inside the tooltip */
+.tooltip-card {
+  pointer-events: auto;
+  margin-bottom: 6px;
+  transition: opacity 0.2s ease;
+  background: transparent;
+}
+
+/* Image wrapper for the title card */
+.image-wrapper {
+  position: relative;
+  width: 140px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.image-wrapper img {
+  width: 100%;
+  display: block;
+  border-radius: 6px;
+}
+
+.image-title {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 6px 8px;
+  background: transparent;
+  color: black;
+  font-weight: 500;
+  font-size: 0.85rem;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

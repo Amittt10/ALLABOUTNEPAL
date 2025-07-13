@@ -5,7 +5,9 @@ import SubscribeForm from "../../Component/SubscribeForm/SubscribeForm";
 import axios from "axios";
 import "./Home.css";
 import FeaturedCarousel from "../../Component/FeaturedCarousel/FeaturedCarousel";
-import NepalMap from "../../Component/NepalMap/NepalMap";
+import NepalMapImage from "../../Component/NepalMapImage";
+
+
 
 
 const API = import.meta.env.VITE_API_URL || "http://localhost:3000";
@@ -176,7 +178,7 @@ export default function Home() {
           </div>
         </div>
         <div className="explore-right">
-           <NepalMap places={filteredPlaces} />
+           <NepalMapImage places={filteredPlaces} />
         </div>
       </section>
 
