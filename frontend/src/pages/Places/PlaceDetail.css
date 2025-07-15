@@ -67,6 +67,7 @@
 .description-content {
   max-width: 900px;
   margin: 0 auto 2rem;
+  color: black;
 }
 .place-desc-title {
   text-align: left;
@@ -83,13 +84,13 @@
   font-size: 1.2rem;
   font-style: italic;
   margin-bottom: 1rem;
-  color: #555;
+  color: #060000;
 }
 .desc-paragraph {
   text-align: justify;
   line-height: 1.7;
   margin-bottom: 1rem;
-  color: #444;
+  color: #070000;
 }
 
 /* ===== Inline Image Blocks ===== */
