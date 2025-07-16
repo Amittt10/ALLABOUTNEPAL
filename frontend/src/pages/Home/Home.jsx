@@ -6,6 +6,7 @@ import axios from "axios";
 import "./Home.css";
 import FeaturedCarousel from "../../Component/FeaturedCarousel/FeaturedCarousel";
 import NepalMapImage from "../../Component/NepalMapImage";
+import FAQSection from "../../Component/FAQSection/FAQSection";
 
 
 
@@ -184,6 +185,7 @@ export default function Home() {
 
        {/* <FeaturedCarousel items={featuredHeritage} /> */}
 
+      <FAQSection />
       <SubscribeForm />
     </div>
   );
