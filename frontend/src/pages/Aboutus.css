@@ -6,7 +6,7 @@
 }
 
 body {
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: linear-gradient(to bottom right, #fff5f5, #fffaf0);
   color: #1f2937;
   min-height: 100vh;

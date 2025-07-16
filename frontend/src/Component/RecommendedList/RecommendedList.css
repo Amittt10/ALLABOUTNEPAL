@@ -27,6 +27,7 @@
 }
 
 .recommended-title {
+  font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 1.4rem;
   font-weight: 500;
   color: var(--text-dark);

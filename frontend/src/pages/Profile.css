@@ -10,7 +10,7 @@
 body, html, #root {
   height: 100%;
   margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: #fff; /* clean white background */
   color: #222;
   -webkit-font-smoothing: antialiased;

@@ -31,6 +31,7 @@
 .leaflet-tooltip {
   background-color: rgba(0, 0, 0, 0.75);
   color: #ffffff;
+  font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 0.75rem;
   font-weight: 500;
   padding: 4px 8px;
