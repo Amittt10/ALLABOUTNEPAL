@@ -9,28 +9,47 @@ export default function SearchResults() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Extract the `q` param
   const queryParams = new URLSearchParams(location.search);
   const searchQuery = queryParams.get("q");
 
-  // Helper function to get correct image URL based on item type and image string
+  // Determine detail link based on item type
+  const getDetailLink = (item) => {
+    switch (item.type) {
+      case "festival":
+        return `/festival-detail/${item._id}`;
+      case "heritage":
+        return `/heritage/${item._id}`;
+      case "place":
+        return `/places/${item._id}`;
+      default:
+        return "#";
+    }
+  };
+
+  // Get appropriate image URL based on type
   const getImageUrl = (item) => {
-    if (!item.image) return "/default-image.jpg";
 
     if (item.type === "festival") {
-      // Festivals store just filename, so prepend /uploads/
-      return `http://localhost:3000/uploads/${item.image}`;
+      return item.image
+        ? `http://localhost:3000/uploads/${item.image}`
+        : "/default-image.jpg";
     }
 
     if (item.type === "heritage") {
-      // Heritage images may already include 'uploads/' prefix
+      if (!item.image) return "/default-image.jpg";
       return item.image.startsWith("uploads/")
         ? `http://localhost:3000/${item.image}`
         : `http://localhost:3000/uploads/${item.image}`;
     }
 
-    // Default fallback
-    return `http://localhost:3000/uploads/${item.image}`;
+     if (item.type === "place") {
+      if (!item.thumbnail) return "/default-image.jpg";
+     return item.thumbnail.startsWith("/uploads")
+      ? `http://localhost:3000${item.thumbnail}`
+      : `http://localhost:3000/uploads/${item.thumbnail}`;
+  }
+
+    return "/default-image.jpg";
   };
 
   useEffect(() => {
@@ -70,23 +89,22 @@ export default function SearchResults() {
         <ul className="search-results-list">
           {results.map((item) => (
             <li key={item._id} className="search-results-item">
-              <Link
-                to={`/${item.type === "festival" ? "festival-detail" : "heritage"}/${item._id}`}
-                className="search-results-link"
-              >
+              <Link to={getDetailLink(item)} className="search-results-link">
                 <div className="search-results-thumb">
-                  {item.image && (
-                    <img
-                      src={getImageUrl(item)}
-                      alt={item.name_en}
-                      loading="lazy"
-                    />
-                  )}
+                  <img
+                    src={getImageUrl(item)}
+                    alt={item.name_en || item.title_en || "Result Image"}
+                    loading="lazy"
+                  />
                 </div>
                 <div className="search-results-info">
-                  <h3>{item.name_en}</h3>
+                  <h3>{item.name_en || item.title_en}</h3>
                   <span className="search-results-type">
-                    {item.type === "festival" ? "Festival" : "Heritage Site"}
+                    {item.type === "festival"
+                      ? "Festival"
+                      : item.type === "heritage"
+                      ? "Heritage Site"
+                      : "Place"}
                   </span>
                 </div>
               </Link>
