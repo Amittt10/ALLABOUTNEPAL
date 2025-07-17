@@ -25,6 +25,10 @@ import AdminQuizStats from "./pages/AdminQuizStats";
 import AdminQuizFeedback from "./pages/quiz/AdminQuizFeedback";
 import AdminReviewList from "./pages/AdminReviewList";
 
+import BlogList from "./pages/blogs/BlogList";
+import BlogAdd from "./pages/blogs/BlogAdd";
+import BlogEdit from "./pages/blogs/BlogEdit";
+
 function App() {
   return (
     <AuthProvider>
@@ -71,6 +75,10 @@ function App() {
              <Route path="/admin/quiz-attempts" element={<AdminQuizStats />} />
 
              <Route path="/admin/quiz-feedback" element={<AdminQuizFeedback />} />
+
+             <Route path="/admin/blogs" element={<BlogList />} />
+             <Route path="/admin/blogs/add" element={<BlogAdd />} />
+             <Route path="/admin/blogs/edit/:slug" element={<BlogEdit />} />
 
               {/* Reviews */}
              <Route path="/admin/reviews" element={<AdminReviewList />} />

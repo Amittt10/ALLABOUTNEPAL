@@ -41,6 +41,13 @@ export const api = {
   // Review
   submitReview: (data) => axiosInstance.post("/reviews", data),
   getReviewsByTarget: (targetType, targetId, page = 1, limit = 5) =>
-  axiosInstance.get(`/reviews/${targetType}/${targetId}?page=${page}&limit=${limit}`),
+    axiosInstance.get(`/reviews/${targetType}/${targetId}?page=${page}&limit=${limit}`),
 
+  // Blog
+  getBlogs: () => axiosInstance.get("/blogs"),
+  getLatestBlogs: () => axiosInstance.get("/blogs/latest"),
+  getBlogBySlug: (slug) => axiosInstance.get(`/blogs/${slug}`),
+  addBlog: (data) => axiosInstance.post("/blogs", data),
+  updateBlog: (id, data) => axiosInstance.put(`/blogs/${id}`, data),
+  deleteBlog: (id) => axiosInstance.delete(`/blogs/${id}`),
 };

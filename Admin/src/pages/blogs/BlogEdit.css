@@ -1,0 +1,156 @@
+/* BlogAdmin.css */
+
+.blog-form-container,
+.blog-edit-container,
+.blog-list-container {
+  max-width: 700px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+}
+
+h2 {
+  margin-bottom: 20px;
+  color: #333;
+  font-weight: 600;
+  text-align: center;
+}
+
+.blog-form label,
+.blog-edit-form label {
+  display: block;
+  margin: 10px 0 6px;
+  font-weight: 500;
+  color: #444;
+}
+
+.blog-form input[type="text"],
+.blog-form input[type="file"],
+.blog-form textarea,
+.blog-edit-form input[type="text"],
+.blog-edit-form input[type="file"],
+.blog-edit-form textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.blog-form textarea,
+.blog-edit-form textarea {
+  min-height: 120px;
+}
+
+button {
+  margin-top: 20px;
+  padding: 12px 25px;
+  font-weight: 600;
+  font-size: 16px;
+  border: none;
+  background-color: #ff7e42;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #e66a35;
+}
+
+/* Blog List Table */
+
+.blog-list-container .add-btn {
+  margin-bottom: 15px;
+  background-color: #28a745;
+  color: white;
+  border-radius: 4px;
+}
+
+.blog-list-container .add-btn:hover {
+  background-color: #218838;
+}
+
+.blog-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.blog-table th,
+.blog-table td {
+  padding: 12px 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.blog-table th {
+  background-color: #f4f4f4;
+  font-weight: 600;
+}
+
+.blog-table button {
+  margin-right: 8px;
+  padding: 6px 10px;
+  font-size: 14px;
+  border-radius: 3px;
+}
+
+.blog-table button:hover {
+  opacity: 0.85;
+}
+
+/* Thumbnail and Gallery previews */
+
+.thumbnail-preview {
+  max-width: 200px;
+  display: block;
+  margin: 10px 0;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+.gallery-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.gallery-image-container {
+  position: relative;
+  width: 120px;
+  height: 80px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.gallery-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.remove-btn {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: rgba(255, 0, 0, 0.8);
+  border: none;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+  padding: 0;
+}

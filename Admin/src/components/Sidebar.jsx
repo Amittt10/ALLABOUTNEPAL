@@ -13,6 +13,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     { path: "/admin/festivals", label: "Festivals", icon: "🎉" },
     { path: "/admin/places", label: "Places", icon: "📍" },  
     { path: "/admin/quiz", label: "Quiz", icon: "❓" },
+    { path: "/admin/blogs", label: "Blogs", icon: "📰" },
     { path: "/admin/quiz-feedback", label: "Quiz Feedback", icon: "💬" }, 
     { path: "/admin/reviews", label: "User Reviews", icon: "📝" },
 

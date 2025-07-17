@@ -18,7 +18,7 @@ const createStorage = (folderName) =>
     },
     filename: (req, file, cb) => {
       const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-      const sanitizedFilename = file.originalname.replace(/\s+/g, "-");
+      const sanitizedFilename = file.originalname.replace(/[^a-zA-Z0-9.-]/g, "-");
       cb(null, `${uniqueSuffix}-${sanitizedFilename}`);
     },
   });
@@ -38,13 +38,7 @@ export const uploadSingleImage = multer({
   },
 }).single("photo");
 
-/**
- * 2️⃣ Upload place files:
- * - thumbnail (1 image)
- * - video (1 file)
- * - images (up to 10 images for description gallery)
- * Used in: placeRoutes.js
- */
+
 export const uploadPlaceFiles = multer({
   storage: createStorage("places"),
   limits: { fileSize: 200 * 1024 * 1024 }, // 200MB max per file
@@ -62,4 +56,18 @@ export const uploadPlaceFiles = multer({
   { name: "thumbnail", maxCount: 1 },
   { name: "video", maxCount: 1 },
   { name: "images", maxCount: 10 },
+]);
+
+export const uploadBlogFiles = multer({
+  storage: createStorage("blogs"), // uploads/blogs/
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith("image/")) {
+      cb(null, true);
+    } else {
+      cb(new Error("Only image files are allowed for blogs"));
+    }
+  },
+}).fields([
+  { name: "thumbnail", maxCount: 1 },  // single main thumbnail
+  { name: "gallery", maxCount: 10 },   // multiple additional images
 ]);

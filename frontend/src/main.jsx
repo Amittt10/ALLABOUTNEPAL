@@ -40,6 +40,7 @@ import QuizPlay from './pages/Quiz/QuizPlay';
 import QuizResult from './pages/Quiz/QuizResult';
 import Leaderboard from './pages/Quiz/Leaderboard';
 import QuizHistory from "./pages/Quiz/QuizHistory.jsx";
+import BlogDetails from './pages/BlogDetails.jsx';
 
 
 
@@ -78,6 +79,8 @@ const router = createBrowserRouter(
         <Route path="/quiz/result" element={<QuizResult />} />
         <Route path="/quiz/leaderboard" element={<Leaderboard />} />
         <Route path="/quiz/history" element={<QuizHistory />} />
+
+        <Route path="/blog/:slug" element={<BlogDetails />} />
 
 
 

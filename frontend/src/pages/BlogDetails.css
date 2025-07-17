@@ -1,0 +1,195 @@
+/* ===== Base Layout ===== */
+.blog-details-container {
+  font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 0;
+  background-color: #fff;
+  color: #333;
+  position: relative;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ===== Full Width Top Thumbnail ===== */
+.blog-thumbnail-wrapper {
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  margin-left: -50vw;
+  height: 500px;
+  overflow: hidden;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+.blog-details-thumbnail {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+  border-radius: 0 0 12px 12px;
+}
+
+/* ===== Meta info ===== */
+.blog-details-meta {
+  margin: 1rem 0 0.5rem 0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+.blog-category {
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.meta-separator {
+  user-select: none;
+}
+
+/* ===== Title & Snippet ===== */
+.blog-details-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin: 2rem auto 1rem auto;
+}
+.blog-details-snippet {
+  font-style: italic;
+  font-size: 1.1rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #444;
+}
+
+/* ===== Content Area ===== */
+.blog-content {
+  margin: 0 auto 3rem auto;
+  color: #070000;
+}
+
+/* Headings */
+.blog-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.5rem 0;
+  text-align: left;
+}
+.blog-heading {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 1.2rem 0 0.5rem 0;
+  color: #060000;
+}
+.blog-subtitle {
+  font-size: 1.2rem;
+  font-style: italic;
+  margin-bottom: 1rem;
+  color: #060000;
+}
+
+/* Paragraph */
+.blog-paragraph {
+  text-align: justify;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+  color: #070000;
+}
+
+/* ===== Nested Lists ===== */
+.nested-list {
+  padding-left: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+/* Level 1: solid disc */
+.nested-list.level-1 {
+  list-style-type: disc;
+  padding-left: 1.2rem;
+}
+
+/* Level 2 and beyond: hollow circle */
+.nested-list.level-2,
+.nested-list.level-3,
+.nested-list.level-4 {
+  list-style-type: circle;
+  padding-left: 1.8rem;
+}
+
+/* Justify list items */
+.blog-content ul,
+.blog-content li {
+  text-align: justify;
+}
+
+/* ===== Injected Images Between Text ===== */
+.blog-image-wrapper {
+  margin: 2rem 0;
+  text-align: center;
+  cursor: pointer;
+}
+.blog-gallery-img {
+  width: 100%;
+  max-height: 400px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+.blog-gallery-img:hover {
+  transform: scale(1.03);
+}
+
+/* ===== Fullscreen Modal Image ===== */
+.fullscreen-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fullscreen-modal img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* ===== Loading & Error Text ===== */
+.blog-loading,
+.blog-error {
+  text-align: center;
+  margin-top: 2rem;
+  color: #777;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .blog-details-title {
+    font-size: 2rem;
+  }
+  .blog-title {
+    font-size: 1.5rem;
+  }
+  .blog-heading {
+    font-size: 1.3rem;
+  }
+  .blog-subtitle {
+    font-size: 1rem;
+  }
+  .blog-paragraph {
+    font-size: 1rem;
+  }
+}
+@media (max-width: 480px) {
+  .blog-details-title {
+    font-size: 1.6rem;
+  }
+}
