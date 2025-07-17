@@ -6,6 +6,7 @@ import {
   createBlog,
   updateBlog,
   deleteBlog,
+  getBlogCategories,
 } from "../controllers/blogController.js";
 import { uploadBlogFiles } from "../middleware/uploadMiddleware.js";
 
@@ -16,6 +17,9 @@ const router = express.Router();
 router.get("/", getAllBlogs);
 router.get("/latest", getLatestBlogs);
 router.get("/:slug", getBlogBySlug);
+
+// Get blog categories
+router.get("/categories", getBlogCategories);
 
 // Admin (protected later if needed)
 router.post("/", uploadBlogFiles, createBlog);  // use uploadBlogThumbnail middleware here

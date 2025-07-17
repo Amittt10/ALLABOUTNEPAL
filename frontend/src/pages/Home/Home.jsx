@@ -20,8 +20,11 @@ export default function Home() {
   const [places, setPlaces] = useState([]);
   const [festivals, setFestivals] = useState([]);
   const [blogs, setBlogs] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [message, setMessage] = useState("");
 
+  // Fetch latest blogs
   useEffect(() => {
     axios
       .get(`${API}/api/blogs/latest?limit=3`)
@@ -29,6 +32,15 @@ export default function Home() {
       .catch((err) => console.error("Failed to load blogs:", err));
   }, []);
 
+  // Fetch blog categories
+  useEffect(() => {
+    axios
+      .get(`${API}/api/blogs/categories`)
+      .then((res) => setCategories(res.data))
+      .catch((err) => console.error("Error fetching categories:", err));
+  }, []);
+
+  // Fetch places and festivals
   useEffect(() => {
     const fetchPlaces = async () => {
       try {
@@ -36,6 +48,7 @@ export default function Home() {
         setPlaces(res.data);
       } catch (err) {
         setMessage("Failed to load places.");
+        console.error(err);
       }
     };
 
@@ -44,7 +57,7 @@ export default function Home() {
         const res = await axios.get(`${API}/api/festivals`);
         setFestivals(res.data);
       } catch (err) {
-        console.error("Failed to load festivals.");
+        console.error("Failed to load festivals.", err);
       }
     };
 
@@ -52,33 +65,35 @@ export default function Home() {
     fetchFestivals();
   }, []);
 
-  // Helper to generate correct full image URL based on type
+  // Helper to get full image URLs
   const getFullImageUrl = (path, type = "general") => {
     if (!path) return "";
-    if (path.startsWith("http")) return path; // already full URL
+    if (path.startsWith("http")) return path;
+
+    const baseUrl = API.replace(/\/$/, "");
 
     if (type === "blog") {
-      // blog thumbnails already include leading /uploads/
-      return `${API.replace(/\/$/, "")}${path}`;
+      return `${baseUrl}${path}`; // blog thumbnails include leading /uploads/
     }
 
     if (type === "festival") {
-      // festival images are just filenames, prepend /uploads/
-      return `${API.replace(/\/$/, "")}/uploads/${path}`;
+      return `${baseUrl}/uploads/${path}`;
     }
 
-    // default: places or others
+    // default for places or others
     if (path.startsWith("/uploads/")) {
-      return `${API.replace(/\/$/, "")}${path}`;
+      return `${baseUrl}${path}`;
     } else {
-      return `${API.replace(/\/$/, "")}/uploads/${path}`;
+      return `${baseUrl}/uploads/${path}`;
     }
   };
 
+  // Filtered places by selected category and limited count
   const filteredPlaces = places
     .filter((p) => p.category === category)
     .slice(0, 9);
 
+  // Featured UNESCO heritage places with short description
   const featuredHeritage = places
     .filter((p) => p.category === "unesco")
     .slice(0, 5)
@@ -87,6 +102,7 @@ export default function Home() {
       shortDescription: place.description_en?.slice(0, 100) + "...",
     }));
 
+  // Upcoming festivals sorted by date
   const today = new Date();
   const futureFestivals = festivals
     .filter((f) => f.dateAD && new Date(f.dateAD) >= today)
@@ -122,15 +138,28 @@ export default function Home() {
         <h2>{i18n.language === "np" ? "ब्लग र कथा" : "Latest Blogs & Stories"}</h2>
         <div className="blog-list">
           {blogs.map((blog) => (
-            <div key={blog._id} className="blog-card">
+            <div
+              key={blog._id}
+              className="blog-card"
+              data-category={blog.category || "Other"}
+            >
+               {blog.category && (
+              <span className="blog-category-label">
+               {blog.category.toUpperCase()}
+               </span>
+               )}
+
               <img
                 src={getFullImageUrl(blog.thumbnail, "blog")}
                 alt={blog.title}
                 loading="lazy"
               />
               <h3>{blog.title}</h3>
+              <div className="meta">
+                BY {blog.author?.toUpperCase() || "ALLABOUTNEPAL"} —{" "}
+                {new Date(blog.createdAt).toLocaleDateString()}
+              </div>
               <p>{blog.snippet}</p>
-              <span>{new Date(blog.createdAt).toLocaleDateString()}</span>
               <Link to={`/blog/${blog.slug}`}>
                 {i18n.language === "np" ? "थप पढ्नुहोस्" : "Read More"}
               </Link>
@@ -155,6 +184,7 @@ export default function Home() {
                   <img
                     src={getFullImageUrl(festival.image, "festival")}
                     alt={i18n.language === "np" ? festival.name_np : festival.name_en}
+                    loading="lazy"
                   />
                 </div>
                 <div className="festival-info">
