@@ -175,11 +175,12 @@ export default function BlogDetails() {
       )}
 
       {/* Meta info top-right with dot separator */}
-      <div className="blog-details-meta">
-        <span className="blog-category">{blog.category.toUpperCase()}</span>
-        <span className="meta-separator">·</span>
-        <span className="blog-date">{new Date(blog.createdAt).toLocaleDateString()}</span>
+      <div className="blog-details-author-date">
+        <span className="blog-author">By Cultural Heritage Guide</span>
+        <span className="meta-separator">-</span>
+         <span className="blog-date">{new Date(blog.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
       </div>
+
 
       {/* Title */}
       <h1 className="blog-details-title">{blog.title}</h1>

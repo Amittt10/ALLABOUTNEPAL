@@ -34,6 +34,28 @@ body {
   cursor: pointer;
 }
 
+.festival-author-date {
+  margin: 1rem auto 1rem auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 0.95rem;
+  font-style: italic;
+  color: #777;
+}
+
+.festival-author {
+  font-weight: 500;
+}
+
+.meta-separator {
+  font-weight: bold;
+  color: #aaa;
+}
+
+
+
 .desc-title {
   font-size: 2rem;
   font-weight: 600;

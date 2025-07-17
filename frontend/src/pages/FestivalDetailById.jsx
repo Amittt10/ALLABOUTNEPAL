@@ -158,6 +158,11 @@ const FestivalDetailById = () => {
           onClick={() => setFullscreenImg(`${API}/uploads/${festival.image}`)}
         />
       )}
+    <div className="festival-author-date">
+      <span className="festival-author">By Cultural Heritage Guide</span>
+      <span className="meta-separator">-</span>
+      <span className="festival-created-date">{formatDate(festival.createdAt)}</span>
+    </div>
 
       <h2 className="desc-title semibold">{name}</h2>
       <p className="festival-date">{formatDate(dateAD)}</p>

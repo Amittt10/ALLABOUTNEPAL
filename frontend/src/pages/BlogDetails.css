@@ -31,21 +31,26 @@
 }
 
 /* ===== Meta info ===== */
-.blog-details-meta {
-  margin: 1rem 0 0.5rem 0;
+.blog-details-author-date {
+  margin: 1rem auto 1rem auto;
   display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  font-size: 0.9rem;
-  color: #666;
+  justify-content: center;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 0.95rem;
+  font-style: italic;
+  color: #777;
 }
-.blog-category {
-  font-weight: 600;
-  text-transform: uppercase;
+
+.blog-author {
+  font-weight: 500;
 }
+
 .meta-separator {
-  user-select: none;
+  font-weight: bold;
+  color: #aaa;
 }
+
 
 /* ===== Title & Snippet ===== */
 .blog-details-title {
