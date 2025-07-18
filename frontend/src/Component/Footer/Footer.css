@@ -150,3 +150,26 @@
     justify-content: flex-start;
   }
 }
+.footer-follow {
+  position: relative;
+}
+
+.scroll-to-top-inside {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  width: 34px;
+  height: 34px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  z-index: 1;
+}
+
+.scroll-to-top-inside:hover {
+  background-color: #555;
+}
