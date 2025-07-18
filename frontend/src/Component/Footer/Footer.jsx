@@ -7,7 +7,7 @@ const Footer = () => {
     <footer className="footer">
       {/* Decorative footer image */}
       <div className="footer-image-wrapper">
-        <img src="/images/footer4.png" alt="Footer Graphic" className="footer-image" />
+        <img src="/images/footer.png" alt="Footer Graphic" className="footer-image" />
       </div>
 
       {/* Footer content */}

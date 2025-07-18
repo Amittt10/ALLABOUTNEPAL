@@ -1,4 +1,9 @@
 /* ==================== CSS Reset & Variables ==================== */
+/* Home.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Edu+NSW+ACT+Cursive:wght@400..700&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Outfit:wght@100..900&family=Prata&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
+
 * {
   margin: 0;
   padding: 0;
@@ -204,11 +209,11 @@ body {
 
 /* Title */
 .explore-title {
-  font-family:  'Poppins', sans-serif;
+  font-family: "Edu NSW ACT Cursive", cursive;
   font-size: 2rem;
   margin-bottom: 1.5rem;
   font-weight: 700;
-  color: #333;
+  color: #ebe4e4;
   text-align: left;
   margin-left: 0;
 }
@@ -362,9 +367,9 @@ body {
 
 /* Section heading */
 .upcoming-festivals-section h2 {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Edu NSW ACT Cursive", cursive;
   font-weight: 600;
-  font-size: 2rem;
+  font-size: 2.2rem;
   color: #1e2a38;
   margin-bottom: 2rem;
   text-align: center;
@@ -505,15 +510,16 @@ body {
 /* Container for latest blogs */
 .latest-blogs {
   padding: 2rem 1rem;
-  background-color: #fafafa;
+  background-color: transparent;
 }
 
 .latest-blogs h2 {
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 2.2rem;
+  font-weight: 600;
   color: var(--text-primary, #222);
   text-align: center;
   margin-bottom: 2rem;
+  font-family: "Edu NSW ACT Cursive", cursive;
 }
 
 /* Blog cards grid */

@@ -88,10 +88,11 @@ export default function Home() {
 
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
-    return date.toLocaleDateString(
-      i18n.language === "np" ? "ne-NP" : "en-US",
-      { year: "numeric", month: "short", day: "numeric" }
-    );
+    return date.toLocaleDateString(i18n.language === "np" ? "ne-NP" : "en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
   };
 
   return (
@@ -113,7 +114,9 @@ export default function Home() {
 
       {/* Latest Blogs */}
       <section className="latest-blogs">
-        <h2>{i18n.language === "np" ? "ब्लग र कथा" : "Latest Blogs & Stories"}</h2>
+        <h2>
+          {i18n.language === "np" ? "ब्लग र कथा" : "Latest Blogs & Stories"}
+        </h2>
         <div className="blog-list">
           {blogs.map((blog) => (
             <BlogCard
@@ -130,7 +133,9 @@ export default function Home() {
       {/* Upcoming Festivals */}
       <div className="fullwidth-bg-wrapper">
         <section className="upcoming-festivals-section">
-          <h2>{i18n.language === "np" ? "आगामी चाडपर्वहरू" : "Upcoming Festivals"}</h2>
+          <h2>
+            {i18n.language === "np" ? "आगामी चाडपर्वहरू" : "Upcoming Festivals"}
+          </h2>
           <div className="festival-card-list">
             {futureFestivals.slice(0, 3).map((festival) => (
               <FestivalCard
@@ -163,18 +168,30 @@ export default function Home() {
         <div className="explore-hero-overlay" />
         <div className="explore-left">
           <h2 className="explore-title">
-            {i18n.language === "np" ? "अन्वेषण गर्न ठाउँहरू" : "Places to Explore"}
+            {i18n.language === "np"
+              ? "अन्वेषण गर्न ठाउँहरू"
+              : "Places to Explore"}
           </h2>
 
           <aside className="explore-sidebar">
             <div className="category-row">
               {[
-                { key: "unesco", label_en: "World Heritage (UNESCO)", label_np: "विश्व सम्पदा" },
-                { key: "province", label_en: "Provinces", label_np: "प्रदेशहरू" },
+                {
+                  key: "unesco",
+                  label_en: "World Heritage (UNESCO)",
+                  label_np: "विश्व सम्पदा",
+                },
+                {
+                  key: "province",
+                  label_en: "Provinces",
+                  label_np: "प्रदेशहरू",
+                },
               ].map((c) => (
                 <button
                   key={c.key}
-                  className={`category-btn ${category === c.key ? "active" : ""}`}
+                  className={`category-btn ${
+                    category === c.key ? "active" : ""
+                  }`}
                   onClick={() => setCategory(c.key)}
                 >
                   {i18n.language === "np" ? c.label_np : c.label_en}
@@ -183,7 +200,9 @@ export default function Home() {
             </div>
             <div className="category-row centered">
               <button
-                className={`category-btn ${category === "pilgrims" ? "active" : ""}`}
+                className={`category-btn ${
+                  category === "pilgrims" ? "active" : ""
+                }`}
                 onClick={() => setCategory("pilgrims")}
               >
                 {i18n.language === "np" ? "तीर्थ स्थल" : "Pilgrimage Sites"}
@@ -191,17 +210,17 @@ export default function Home() {
             </div>
           </aside>
 
-         <div className="explore-places-grid">
-  {filteredPlaces.map((place) => (
-    <PlaceCard
-      key={place._id}
-      place={place}
-      getFullImageUrl={getFullImageUrl}
-      i18n={i18n}
-      onClick={() => navigate(`/places/${place._id}`)}
-    />
-  ))}
-</div>
+          <div className="explore-places-grid">
+            {filteredPlaces.map((place) => (
+              <PlaceCard
+                key={place._id}
+                place={place}
+                getFullImageUrl={getFullImageUrl}
+                i18n={i18n}
+                onClick={() => navigate(`/places/${place._id}`)}
+              />
+            ))}
+          </div>
         </div>
 
         <div className="explore-right">
