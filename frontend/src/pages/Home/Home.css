@@ -118,10 +118,11 @@ body {
 }
 
 .video-overlay h1 {
+  font-family: "Edu NSW ACT Cursive", cursive;
   color: var(--text-white);
   text-align: center;
-  font-size: clamp(1.8rem, 5vw, 4rem);
-  font-weight: 800;
+  font-size: clamp(1rem, 4vw, 4rem);
+  font-weight: 600;
   max-width: min(90%, 800px);
   text-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
   line-height: 1.1;
