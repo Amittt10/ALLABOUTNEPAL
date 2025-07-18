@@ -7,7 +7,6 @@ import { useTranslation } from "react-i18next";
 import festivalsData from "../../data/festivalsData";
 import FestivalBell from "../../Component/FestivalBell";
 
-
 const Header = () => {
   const { t, i18n } = useTranslation();
   const { user, logout } = useContext(AuthContext);
@@ -27,10 +26,17 @@ const Header = () => {
 
   useEffect(() => {
     function handleClickOutside(e) {
-      if (profileRef.current && !profileRef.current.contains(e.target)) setProfileMenuOpen(false);
-      if (langDropdownRef.current && !langDropdownRef.current.contains(e.target)) setLangDropdownOpen(false);
-      if (heritageRef.current && !heritageRef.current.contains(e.target)) setHeritageDropdownOpen(false);
-      if (festivalsRef.current && !festivalsRef.current.contains(e.target)) setFestivalsDropdownOpen(false);
+      if (profileRef.current && !profileRef.current.contains(e.target))
+        setProfileMenuOpen(false);
+      if (
+        langDropdownRef.current &&
+        !langDropdownRef.current.contains(e.target)
+      )
+        setLangDropdownOpen(false);
+      if (heritageRef.current && !heritageRef.current.contains(e.target))
+        setHeritageDropdownOpen(false);
+      if (festivalsRef.current && !festivalsRef.current.contains(e.target))
+        setFestivalsDropdownOpen(false);
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -79,20 +85,31 @@ const Header = () => {
               </NavLink>
             </li>
 
+
             {/* Heritage Sites dropdown */}
-            <li className="nav_item dropdown" ref={heritageRef}>
+            <li
+              className="nav_item dropdown"
+              ref={heritageRef}
+              onMouseEnter={() => setHeritageDropdownOpen(true)}
+              onMouseLeave={() => setHeritageDropdownOpen(false)}
+            >
               <span
                 className="dropdown-toggle"
-                onClick={() => setHeritageDropdownOpen(!heritageDropdownOpen)}
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent click bubbling
+                  setHeritageDropdownOpen((prev) => !prev);
+                }}
                 aria-haspopup="true"
                 aria-expanded={heritageDropdownOpen}
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter") setHeritageDropdownOpen(!heritageDropdownOpen);
+                  if (e.key === "Enter")
+                    setHeritageDropdownOpen((prev) => !prev);
                 }}
               >
-                {t("nav.heritageSites")} <i className="ri-arrow-down-s-line"></i>
+                {t("nav.heritageSites")}{" "}
+                <i className="ri-arrow-down-s-line"></i>
               </span>
 
               {heritageDropdownOpen && (
@@ -133,21 +150,32 @@ const Header = () => {
                 </ul>
               )}
             </li>
+            
 
             {/* Festivals & Events — Mega Dropdown */}
-            <li className="nav_item dropdown mega-dropdown" ref={festivalsRef}>
+            <li
+              className="nav_item dropdown mega-dropdown"
+              ref={festivalsRef}
+              onMouseEnter={() => setFestivalsDropdownOpen(true)}
+              onMouseLeave={() => setFestivalsDropdownOpen(false)}
+            >
               <span
                 className="dropdown-toggle"
-                onClick={() => setFestivalsDropdownOpen(!festivalsDropdownOpen)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setFestivalsDropdownOpen((prev) => !prev);
+                }}
                 aria-haspopup="true"
                 aria-expanded={festivalsDropdownOpen}
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter") setFestivalsDropdownOpen(!festivalsDropdownOpen);
+                  if (e.key === "Enter")
+                    setFestivalsDropdownOpen((prev) => !prev);
                 }}
               >
-                {t("nav.festivalsEvents")} <i className="ri-arrow-down-s-line"></i>
+                {t("nav.festivalsEvents")}{" "}
+                <i className="ri-arrow-down-s-line"></i>
               </span>
 
               {festivalsDropdownOpen && (
@@ -155,7 +183,10 @@ const Header = () => {
                   <div className="mega-menu-left">
                     <ul>
                       {Object.values(festivalsData).map((festival) => (
-                        <li key={festival.slug} className="festival-dropdown-item">
+                        <li
+                          key={festival.slug}
+                          className="festival-dropdown-item"
+                        >
                           <Link
                             to={`/festivals/${festival.slug}`}
                             onClick={() => {
@@ -164,7 +195,11 @@ const Header = () => {
                             }}
                             className="festival-dropdown-link"
                           >
-                            <img src={festival.image} alt={festival.name_en} className="festival-thumb" />
+                            <img
+                              src={festival.image}
+                              alt={festival.name_en}
+                              className="festival-thumb"
+                            />
                             <span>{festival.name_en}</span>
                           </Link>
                         </li>
@@ -173,7 +208,11 @@ const Header = () => {
                   </div>
 
                   <div className="mega-menu-right">
-                    <img src="/images/event-thumbnail.jpg" alt="Upcoming Event" className="mega-menu-thumbnail" />
+                    <img
+                      src="/images/event-thumbnail.jpg"
+                      alt="Upcoming Event"
+                      className="mega-menu-thumbnail"
+                    />
                     <div className="mega-menu-buttons">
                       <button
                         onClick={() => {
@@ -243,12 +282,18 @@ const Header = () => {
               {langDropdownOpen && (
                 <ul className="lang-dropdown centered-dropdown">
                   <li>
-                    <button onClick={() => changeLanguage("en")} className={i18n.language === "en" ? "active" : ""}>
+                    <button
+                      onClick={() => changeLanguage("en")}
+                      className={i18n.language === "en" ? "active" : ""}
+                    >
                       English
                     </button>
                   </li>
                   <li>
-                    <button onClick={() => changeLanguage("np")} className={i18n.language === "np" ? "active" : ""}>
+                    <button
+                      onClick={() => changeLanguage("np")}
+                      className={i18n.language === "np" ? "active" : ""}
+                    >
                       नेपाली
                     </button>
                   </li>
@@ -256,11 +301,10 @@ const Header = () => {
               )}
             </div>
 
-          
-                {/* Notification bell */}
-              <div className="festival-bell-wrapper">
-                <FestivalBell />
-              </div>
+            {/* Notification bell */}
+            <div className="festival-bell-wrapper">
+              <FestivalBell />
+            </div>
 
             {/* User profile */}
             <div className="nav_btns" ref={profileRef}>
@@ -276,22 +320,29 @@ const Header = () => {
               ) : (
                 <div className="profile-menu">
                   <div className="avatar-wrapper">
-                  <img
-                    src={user.photo ? `http://localhost:3000/${user.photo}` : "/default-avatar.png"}
-                    alt="Profile"
-                    className="avatar"
-                    onClick={() => setProfileMenuOpen(!profileMenuOpen)}
-                    aria-haspopup="true"
-                    aria-expanded={profileMenuOpen}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") setProfileMenuOpen(!profileMenuOpen);
-                    }}
-                  />
-                  {user?.username && (
-                    <span className="header-greeting">Hi, {user.username}!</span>
-                  )}
+                    <img
+                      src={
+                        user.photo
+                          ? `http://localhost:3000/${user.photo}`
+                          : "/default-avatar.png"
+                      }
+                      alt="Profile"
+                      className="avatar"
+                      onClick={() => setProfileMenuOpen(!profileMenuOpen)}
+                      aria-haspopup="true"
+                      aria-expanded={profileMenuOpen}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter")
+                          setProfileMenuOpen(!profileMenuOpen);
+                      }}
+                    />
+                    {user?.username && (
+                      <span className="header-greeting">
+                        Hi, {user.username}!
+                      </span>
+                    )}
                   </div>
                   {profileMenuOpen && (
                     <div className="dropdown">
@@ -307,7 +358,7 @@ const Header = () => {
                             {t("profile.myProfile")}
                           </Link>
                         </li>
-                         <li>
+                        <li>
                           <Link
                             to="/quiz/history"
                             onClick={() => {
@@ -319,7 +370,9 @@ const Header = () => {
                           </Link>
                         </li>
                         <li>
-                          <button onClick={handleLogout}>{t("auth.logout")}</button>
+                          <button onClick={handleLogout}>
+                            {t("auth.logout")}
+                          </button>
                         </li>
                       </ul>
                     </div>
