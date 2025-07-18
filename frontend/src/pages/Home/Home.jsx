@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
 
 import SubscribeForm from "../../Component/SubscribeForm/SubscribeForm";
-import FeaturedCarousel from "../../Component/FeaturedCarousel/FeaturedCarousel";
 import NepalMapImage from "../../Component/NepalMapImage";
 import FAQSection from "../../Component/FAQSection/FAQSection";
+
+import BlogCard from "../../Component/Cards/BlogCard";
+import FestivalCard from "../../Component/Cards/FestivalCard";
+import PlaceCard from "../../Component/Cards/PlaceCard";
 
 import "./Home.css";
 
@@ -20,11 +23,8 @@ export default function Home() {
   const [places, setPlaces] = useState([]);
   const [festivals, setFestivals] = useState([]);
   const [blogs, setBlogs] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState("All");
   const [message, setMessage] = useState("");
 
-  // Fetch latest blogs
   useEffect(() => {
     axios
       .get(`${API}/api/blogs/latest?limit=3`)
@@ -32,15 +32,6 @@ export default function Home() {
       .catch((err) => console.error("Failed to load blogs:", err));
   }, []);
 
-  // Fetch blog categories
-  useEffect(() => {
-    axios
-      .get(`${API}/api/blogs/categories`)
-      .then((res) => setCategories(res.data))
-      .catch((err) => console.error("Error fetching categories:", err));
-  }, []);
-
-  // Fetch places and festivals
   useEffect(() => {
     const fetchPlaces = async () => {
       try {
@@ -65,7 +56,6 @@ export default function Home() {
     fetchFestivals();
   }, []);
 
-  // Helper to get full image URLs
   const getFullImageUrl = (path, type = "general") => {
     if (!path) return "";
     if (path.startsWith("http")) return path;
@@ -73,14 +63,13 @@ export default function Home() {
     const baseUrl = API.replace(/\/$/, "");
 
     if (type === "blog") {
-      return `${baseUrl}${path}`; // blog thumbnails include leading /uploads/
+      return `${baseUrl}${path}`;
     }
 
     if (type === "festival") {
       return `${baseUrl}/uploads/${path}`;
     }
 
-    // default for places or others
     if (path.startsWith("/uploads/")) {
       return `${baseUrl}${path}`;
     } else {
@@ -88,21 +77,10 @@ export default function Home() {
     }
   };
 
-  // Filtered places by selected category and limited count
   const filteredPlaces = places
     .filter((p) => p.category === category)
     .slice(0, 9);
 
-  // Featured UNESCO heritage places with short description
-  const featuredHeritage = places
-    .filter((p) => p.category === "unesco")
-    .slice(0, 5)
-    .map((place) => ({
-      ...place,
-      shortDescription: place.description_en?.slice(0, 100) + "...",
-    }));
-
-  // Upcoming festivals sorted by date
   const today = new Date();
   const futureFestivals = festivals
     .filter((f) => f.dateAD && new Date(f.dateAD) >= today)
@@ -138,32 +116,13 @@ export default function Home() {
         <h2>{i18n.language === "np" ? "ब्लग र कथा" : "Latest Blogs & Stories"}</h2>
         <div className="blog-list">
           {blogs.map((blog) => (
-            <div
+            <BlogCard
               key={blog._id}
-              className="blog-card"
-              data-category={blog.category || "Other"}
-            >
-               {blog.category && (
-              <span className="blog-category-label">
-               {blog.category.toUpperCase()}
-               </span>
-               )}
-
-              <img
-                src={getFullImageUrl(blog.thumbnail, "blog")}
-                alt={blog.title}
-                loading="lazy"
-              />
-              <h3>{blog.title}</h3>
-              <div className="meta">
-                BY {blog.author?.toUpperCase() || "ALLABOUTNEPAL"} —{" "}
-                {new Date(blog.createdAt).toLocaleDateString()}
-              </div>
-              <p>{blog.snippet}</p>
-              <Link to={`/blog/${blog.slug}`}>
-                {i18n.language === "np" ? "थप पढ्नुहोस्" : "Read More"}
-              </Link>
-            </div>
+              blog={blog}
+              getFullImageUrl={getFullImageUrl}
+              i18n={i18n}
+              onClick={() => navigate(`/blog/${blog.slug}`)}
+            />
           ))}
         </div>
       </section>
@@ -172,26 +131,16 @@ export default function Home() {
       <div className="fullwidth-bg-wrapper">
         <section className="upcoming-festivals-section">
           <h2>{i18n.language === "np" ? "आगामी चाडपर्वहरू" : "Upcoming Festivals"}</h2>
-
           <div className="festival-card-list">
             {futureFestivals.slice(0, 3).map((festival) => (
-              <div
+              <FestivalCard
                 key={festival._id}
-                className="festival-card"
+                festival={festival}
+                getFullImageUrl={getFullImageUrl}
+                i18n={i18n}
                 onClick={() => navigate(`/festival-detail/${festival._id}`)}
-              >
-                <div className="festival-image-wrapper">
-                  <img
-                    src={getFullImageUrl(festival.image, "festival")}
-                    alt={i18n.language === "np" ? festival.name_np : festival.name_en}
-                    loading="lazy"
-                  />
-                </div>
-                <div className="festival-info">
-                  <p className="festival-date">{formatDate(festival.dateAD)}</p>
-                  <h3>{i18n.language === "np" ? festival.name_np : festival.name_en}</h3>
-                </div>
-              </div>
+                formatDate={formatDate}
+              />
             ))}
           </div>
 
@@ -242,32 +191,23 @@ export default function Home() {
             </div>
           </aside>
 
-          <div className="explore-places-grid">
-            {filteredPlaces.map((place) => (
-              <div
-                key={place._id}
-                className="place-card"
-                onClick={() => navigate(`/places/${place._id}`)}
-              >
-                <img
-                  src={getFullImageUrl(place.thumbnail)}
-                  alt={i18n.language === "np" ? place.title_np : place.title_en}
-                  className="place-thumbnail"
-                  loading="lazy"
-                />
-                <h2>{i18n.language === "np" ? place.title_np : place.title_en}</h2>
-              </div>
-            ))}
-          </div>
+         <div className="explore-places-grid">
+  {filteredPlaces.map((place) => (
+    <PlaceCard
+      key={place._id}
+      place={place}
+      getFullImageUrl={getFullImageUrl}
+      i18n={i18n}
+      onClick={() => navigate(`/places/${place._id}`)}
+    />
+  ))}
+</div>
         </div>
 
         <div className="explore-right">
           <NepalMapImage places={filteredPlaces} />
         </div>
       </section>
-
-      {/* Optional Carousel */}
-      {/* <FeaturedCarousel items={featuredHeritage} /> */}
 
       {/* FAQ and Subscribe */}
       <FAQSection />

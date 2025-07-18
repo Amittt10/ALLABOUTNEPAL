@@ -614,6 +614,7 @@ body {
   color: var(--primary-hover, #004a99);
 }
 
+
 /* Responsive tweaks */
 @media (max-width: 768px) {
   .blog-list {
