@@ -6,7 +6,7 @@ import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import "./PlaceDetail.css";
 import ReviewSection from "../../Component/ReviewSection/ReviewSection";
 import TTSControl from "../../Component/TTSControl/TTSControl";
-import RecommendedList from '../../Component/RecommendedList/RecommendedList';
+import RecommendedList from "../../Component/RecommendedList/RecommendedList";
 
 const API = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -51,17 +51,20 @@ export default function PlaceDetail() {
   if (error) return <p className="error">{error}</p>;
   if (!place) return <p className="error">Place not found</p>;
 
-  const title = place?.[`title_${lang}`] || place?.title_en || place?.title || "No Title";
-  const descriptionRaw = place?.[`description_${lang}`] || place?.description_en || "No description.";
+  const title =
+    place?.[`title_${lang}`] || place?.title_en || place?.title || "No Title";
+  const descriptionRaw =
+    place?.[`description_${lang}`] ||
+    place?.description_en ||
+    "No description.";
   const videoUrl = place?.video_url || "";
   const gallery = place?.images || [];
 
   const rawLines = descriptionRaw
-  .replace(/^[\u2022\u2013\u2014•]/gm, "-")  // Replace common bullets/dashes
-  .replace(/\t/g, "  ")
-  .split("\n")
-  .map(line => line.trimEnd());
-
+    .replace(/^[\u2022\u2013\u2014•]/gm, "-") // Replace common bullets/dashes
+    .replace(/\t/g, "  ")
+    .split("\n")
+    .map((line) => line.trimEnd());
 
   function parseNestedList(lines, startIndex = 0, baseIndent = 0) {
     const items = [];
@@ -74,7 +77,11 @@ export default function PlaceDetail() {
         if (leadingSpaces < baseIndent) break;
         if (leadingSpaces > baseIndent) {
           if (items.length === 0) break;
-          const [nestedList, nextIndex] = parseNestedList(lines, i, leadingSpaces);
+          const [nestedList, nextIndex] = parseNestedList(
+            lines,
+            i,
+            leadingSpaces
+          );
           items[items.length - 1].children = nestedList;
           i = nextIndex;
           continue;
@@ -138,7 +145,9 @@ export default function PlaceDetail() {
           </strong>
         );
       } else if (part.startsWith("**") && part.endsWith("**")) {
-        elements.push(<strong key={elements.length}>{part.slice(2, -2)}</strong>);
+        elements.push(
+          <strong key={elements.length}>{part.slice(2, -2)}</strong>
+        );
       } else if (part.startsWith("*") && part.endsWith("*")) {
         elements.push(<em key={elements.length}>{part.slice(1, -1)}</em>);
       } else {
@@ -153,7 +162,8 @@ export default function PlaceDetail() {
       {items.map((item, idx) => (
         <li key={`${keyPrefix}-${idx}`}>
           {renderFormattedText(item.content)}
-          {item.children && item.children.length > 0 &&
+          {item.children &&
+            item.children.length > 0 &&
             renderList(item.children, `${keyPrefix}-${idx}`, level + 1)}
         </li>
       ))}
@@ -163,15 +173,31 @@ export default function PlaceDetail() {
   const renderBlock = (block, key) => {
     switch (block.type) {
       case "paragraph":
-        return <p key={key} className="desc-paragraph justify-text">{renderFormattedText(block.content)}</p>;
+        return (
+          <p key={key} className="desc-paragraph justify-text">
+            {renderFormattedText(block.content)}
+          </p>
+        );
       case "list":
         return renderList(block.items, `list-${key}`);
       case "title":
-        return <h2 key={key} className="place-desc-title semibold">{block.content}</h2>;
+        return (
+          <h2 key={key} className="place-desc-title semibold">
+            {block.content}
+          </h2>
+        );
       case "heading":
-        return <h3 key={key} className="place-desc-heading bold">{block.content}</h3>;
+        return (
+          <h3 key={key} className="place-desc-heading bold">
+            {block.content}
+          </h3>
+        );
       case "subtitle":
-        return <h4 key={key} className="place-desc-subtitle italics">{block.content}</h4>;
+        return (
+          <h4 key={key} className="place-desc-subtitle italics">
+            {block.content}
+          </h4>
+        );
       default:
         return null;
     }
@@ -184,27 +210,33 @@ export default function PlaceDetail() {
       </button> */}
 
       {/* Media at the top (video or fallback thumbnail) */}
-{videoUrl ? (
-  <div className="video-wrapper">
-    <video
-      src={videoUrl}
-      autoPlay
-      loop
-      muted
-      playsInline
-      className="place-video-top"
-    />
-  </div>
-) : place.thumbnail ? (
-  <div className="thumbnail-wrapper">
-    <img
-      src={place.thumbnail}
-      alt={`${title} thumbnail`}
-      className="place-thumbnail-top"
-    />
-  </div>
-) : null}
+      {videoUrl ? (
+        <div className="video-wrapper">
+          <video
+            src={videoUrl}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="place-video-top"
+          />
+        </div>
+      ) : place.thumbnail ? (
+        <div className="thumbnail-wrapper">
+          <img
+            src={place.thumbnail}
+            alt={`${title} thumbnail`}
+            className="place-thumbnail-top"
+          />
+        </div>
+      ) : null}
 
+      {/* Meta info top-right with dot separator */}
+      <div className="place-details-author-date">
+        <span className="place-author">By Cultural Heritage Guide</span>
+        <span className="meta-separator">-</span>
+         <span className="place-date">{new Date(place.createdAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+      </div>
 
       {/* Title */}
       <h1 className="place-main-title">{title}</h1>
@@ -216,7 +248,10 @@ export default function PlaceDetail() {
 
           descriptionBlocks.forEach((block, idx) => {
             // Detect [image1], [image2], etc. placeholders inside paragraph blocks
-            if (block.type === "paragraph" && /\[image(\d+)\]/i.test(block.content)) {
+            if (
+              block.type === "paragraph" &&
+              /\[image(\d+)\]/i.test(block.content)
+            ) {
               const parts = block.content.split(/(\[image\d+\])/i);
 
               parts.forEach((part, i) => {
@@ -239,7 +274,9 @@ export default function PlaceDetail() {
                     );
                   }
                 } else if (part.trim() !== "") {
-                  blocks.push(renderBlock({ ...block, content: part }, `${idx}-${i}`));
+                  blocks.push(
+                    renderBlock({ ...block, content: part }, `${idx}-${i}`)
+                  );
                 }
               });
             } else {
@@ -259,23 +296,25 @@ export default function PlaceDetail() {
             zoom={13}
             mapContainerStyle={{ width: "100%", height: "100%" }}
           >
-            <Marker position={{ lat: place.location.lat, lng: place.location.lng }} />
+            <Marker
+              position={{ lat: place.location.lat, lng: place.location.lng }}
+            />
           </GoogleMap>
         </div>
       )}
-      
-       {descriptionRaw && (
-       <TTSControl text={descriptionRaw} lang={langCode} />
-      )}
+
+      {descriptionRaw && <TTSControl text={descriptionRaw} lang={langCode} />}
 
       <ReviewSection targetType="place" targetId={place._id} />
 
       <RecommendedList targetType="place" excludeId={place._id} lang={lang} />
 
-
       {/* Fullscreen Image Modal */}
       {fullscreenImg && (
-        <div className="fullscreen-modal" onClick={() => setFullscreenImg(null)}>
+        <div
+          className="fullscreen-modal"
+          onClick={() => setFullscreenImg(null)}
+        >
           <img src={fullscreenImg} alt={`${title} - Fullscreen`} />
         </div>
       )}

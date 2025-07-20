@@ -152,7 +152,7 @@ export default function Home() {
           <div style={{ textAlign: "center", marginTop: "1.5rem" }}>
             <button
               className="view-all-btn"
-              onClick={() => navigate("/festivals-highlight")}
+              onClick={() => navigate("/festival-calendar")}
             >
               {i18n.language === "np" ? "सबै हेर्नुहोस्" : "View All Festivals"}
             </button>

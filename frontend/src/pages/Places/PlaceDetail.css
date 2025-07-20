@@ -53,6 +53,27 @@
   object-position: center center;
 }
 
+/* ===== Meta info ===== */
+.place-details-author-date {
+  margin: 1rem auto 1rem auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 0.95rem;
+  font-style: italic;
+  color: #777;
+}
+
+.place-author {
+  font-weight: 500;
+}
+
+.meta-separator {
+  font-weight: bold;
+  color: #aaa;
+}
+
 
 /* ===== Title ===== */
 .place-main-title {
