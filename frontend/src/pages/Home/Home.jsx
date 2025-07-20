@@ -143,7 +143,7 @@ export default function Home() {
                 festival={festival}
                 getFullImageUrl={getFullImageUrl}
                 i18n={i18n}
-                onClick={() => navigate(`/festival-detail/${festival._id}`)}
+                onClick={() => navigate(`/festival-detail/${festival.slug}`)}
                 formatDate={formatDate}
               />
             ))}

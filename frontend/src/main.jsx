@@ -60,7 +60,7 @@ const router = createBrowserRouter(
 
         {/* 📦 Detail pages */}
         <Route path="/festivals/:slug" element={<FestivalDetailBySlug />} /> {/* Static */}
-        <Route path="/festival-detail/:id" element={<FestivalDetailById />} />       {/* Dynamic */}
+        <Route path="/festival-detail/:slug" element={<FestivalDetailById />} />       {/* Dynamic */}
 
         {/* <Route path="/quiz" element={<Quiz />} /> */}
         <Route path="/about" element={<Aboutus />} />

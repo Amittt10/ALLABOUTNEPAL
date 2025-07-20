@@ -47,6 +47,23 @@ export const getFestivalById = async (req, res) => {
   }
 };
 
+// GET festival by slug
+export const getFestivalBySlug = async (req, res) => {
+  const festivalCollection = req.db.festivalCollection;
+  const slug = req.params.slug;
+
+  try {
+    const festival = await festivalCollection.findOne({ slug });
+    if (!festival) {
+      return res.status(404).json({ message: 'Festival not found' });
+    }
+    res.json(festival);
+  } catch (err) {
+    console.error('Error fetching festival by slug:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 // ADD new festival (Admin)
 export const adminAddFestival = async (req, res) => {
   const festivalCollection = req.db.festivalCollection;
@@ -71,9 +88,12 @@ export const adminAddFestival = async (req, res) => {
   const gallery = req.files?.gallery ? req.files.gallery.map(file => file.filename) : [];
 
   try {
+    const slug = slugify(name_en, { lower: true, strict: true });
+
     const newFestival = {
       name_en,
       name_np,
+      slug,
       dateBS,
       dateAD: dateAD || null,
       description_en: description_en || '',
@@ -94,7 +114,6 @@ export const adminAddFestival = async (req, res) => {
   }
 };
 
-
 // UPDATE festival (Admin)
 export const adminUpdateFestival = async (req, res) => {
   const festivalCollection = req.db.festivalCollection;
@@ -112,13 +131,20 @@ export const adminUpdateFestival = async (req, res) => {
     category,
   } = req.body;
 
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).json({ success: false, message: 'Invalid festival ID' });
+  }
+
   try {
     const existing = await festivalCollection.findOne({ _id: new ObjectId(id) });
     if (!existing) return res.status(404).json({ success: false, message: 'Festival not found' });
 
+    const slug = slugify(name_en, { lower: true, strict: true });
+
     const updateFields = {
       name_en,
       name_np,
+      slug,
       dateBS,
       dateAD: dateAD || null,
       description_en: description_en || '',
@@ -136,7 +162,6 @@ export const adminUpdateFestival = async (req, res) => {
 
     // Handle gallery update - replace with new gallery files if uploaded
     if (req.files?.gallery) {
-      // Delete old gallery images from disk
       if (existing.gallery && Array.isArray(existing.gallery)) {
         existing.gallery.forEach((filename) => {
           deleteFileIfExists(`uploads/${filename}`);
@@ -158,11 +183,14 @@ export const adminUpdateFestival = async (req, res) => {
   }
 };
 
-
 // DELETE festival (Admin)
 export const adminDeleteFestival = async (req, res) => {
   const festivalCollection = req.db.festivalCollection;
   const id = req.params.id;
+
+  if (!ObjectId.isValid(id)) {
+    return res.status(400).json({ success: false, message: 'Invalid festival ID' });
+  }
 
   try {
     const existing = await festivalCollection.findOne({ _id: new ObjectId(id) });

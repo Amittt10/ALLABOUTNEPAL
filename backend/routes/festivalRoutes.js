@@ -1,8 +1,8 @@
-// backend/routes/festivalRoutes.js
 import express from 'express';
 import {
   getFestivals,
   getFestivalById,
+  getFestivalBySlug,
   getUpcomingFestivals,
 } from '../controllers/festivalController.js';
 
@@ -11,6 +11,7 @@ const router = express.Router();
 // Public routes
 router.get('/', getFestivals);
 router.get('/upcoming', getUpcomingFestivals);
+router.get('/slug/:slug', getFestivalBySlug);
 router.get('/by-name/:name', async (req, res) => {
   try {
     const { festivalCollection } = req.db;

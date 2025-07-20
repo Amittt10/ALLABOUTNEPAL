@@ -10,7 +10,7 @@ import RecommendedList from '../Component/RecommendedList/RecommendedList';
 const API = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 const FestivalDetailById = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const navigate = useNavigate();
   const { i18n } = useTranslation();
 
@@ -30,7 +30,7 @@ const FestivalDetailById = () => {
       try {
         setLoading(true);
         setError(null);
-        const res = await fetch(`${API}/api/festivals/${id}`);
+        const res = await fetch(`${API}/api/festivals/slug/${slug}`);
         if (!res.ok) throw new Error("Error fetching festival");
         const data = await res.json();
         setFestival(data);
@@ -43,7 +43,7 @@ const FestivalDetailById = () => {
     };
 
     fetchFestival();
-  }, [id]);
+  }, [slug]);
 
   const name = festival?.[`name_${lang}`] || festival?.name_en || "No Name";
   const dateAD = festival?.dateAD || "";
@@ -179,10 +179,10 @@ const FestivalDetailById = () => {
       )}
 
 
-      <ReviewSection targetType="festival" targetId={id} />
+      <ReviewSection targetType="festival" targetId={festival._id} />
 
       {/* Recommended Festivals Section */}
-      <RecommendedList targetType="festival" excludeId={id} lang={lang} />
+      <RecommendedList targetType="festival" excludeId={festival._id} lang={lang} />
 
       {fullscreenImg && (
         <div className="fullscreen-modal" onClick={() => setFullscreenImg(null)}>

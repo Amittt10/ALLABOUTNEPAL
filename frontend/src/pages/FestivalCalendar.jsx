@@ -52,8 +52,8 @@ export default function FestivalCalendar() {
 
   const nextFestival = futureFestivals[0];
 
-  const handleFestivalClick = (id) => {
-    navigate(`/festival-detail/${id}`);
+  const handleFestivalClick = (festival) => {
+    navigate(`/festival-detail/${festival.slug}`);
   };
 
   const handleAddToCalendar = (festival) => {
@@ -218,7 +218,7 @@ export default function FestivalCalendar() {
                 <div
                   key={festival._id}
                   className="masonry-item small"
-                  onClick={() => handleFestivalClick(festival._id)}
+                  onClick={() => handleFestivalClick(festival)}
                 >
                   <button
                     className="add-calendar"

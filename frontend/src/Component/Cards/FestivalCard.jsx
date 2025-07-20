@@ -19,7 +19,7 @@ export default function FestivalCard({ festival, getFullImageUrl, i18n }) {
     <div
       ref={ref}
       className={`festival-card fade-in-section ${visible ? "fade-in-visible" : ""}`}
-      onClick={() => navigate(`/festival-detail/${festival._id}`)}
+      onClick={() => navigate(`/festival-detail/${festival.slug}`)}
     >
       <div className="festival-image-wrapper">
         <img

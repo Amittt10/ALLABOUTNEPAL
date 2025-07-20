@@ -37,7 +37,7 @@ export default function FestivalsHighlight() {
     fetchFestivals();
   }, []);
 
-  const handleClick = (id) => navigate(`/festival-detail/${id}`);
+  const handleClick = (festival) => navigate(`/festival-detail/${festival.slug}`);
 
   if (loading) return <div className="loading">{t("loading")}...</div>;
   if (error) return <div className="error">{error}</div>;
@@ -60,10 +60,10 @@ export default function FestivalsHighlight() {
             <div
               key={festival._id}
               className={`masonry-item ${sizeClass}`}
-              onClick={() => handleClick(festival._id)}
+              onClick={() => handleClick(festival)}
               role="button"
               tabIndex={0}
-              onKeyDown={(e) => e.key === "Enter" && handleClick(festival._id)}
+              onKeyDown={(e) => e.key === "Enter" && handleClick(festival)}
               aria-label={`View details for ${
                 i18n.language === "np" ? festival.name_np : festival.name_en
               }`}
