@@ -84,6 +84,7 @@ export const getRecommended = async (req, res) => {
 
       return {
         _id: item._id,
+        slug: item.slug,
         name,
         image,
         extra,

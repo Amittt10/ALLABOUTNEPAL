@@ -1,4 +1,5 @@
 import fs from "fs";
+import slugify from "slugify";
 import Place from "../models/Place.js";
 
 // GET all places
@@ -11,10 +12,21 @@ export const getAllPlaces = async (req, res) => {
   }
 };
 
-// GET single place
+// GET place by ID
 export const getPlaceById = async (req, res) => {
   try {
     const place = await Place.findById(req.params.id);
+    if (!place) return res.status(404).json({ message: "Place not found" });
+    res.json(place);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// GET place by slug
+export const getPlaceBySlug = async (req, res) => {
+  try {
+    const place = await Place.findOne({ slug: req.params.slug });
     if (!place) return res.status(404).json({ message: "Place not found" });
     res.json(place);
   } catch (err) {
@@ -36,9 +48,17 @@ export const createPlace = async (req, res) => {
       lng,
     } = req.body;
 
-    const thumbnail = req.files?.thumbnail ? `/uploads/places/${req.files.thumbnail[0].filename}` : "";
-    const videoFile = req.files?.video ? `/uploads/places/${req.files.video[0].filename}` : "";
-    const images = req.files?.images ? req.files.images.map(img => `/uploads/places/${img.filename}`) : [];
+    const thumbnail = req.files?.thumbnail
+      ? `/uploads/places/${req.files.thumbnail[0].filename}`
+      : "";
+    const videoFile = req.files?.video
+      ? `/uploads/places/${req.files.video[0].filename}`
+      : "";
+    const images = req.files?.images
+      ? req.files.images.map((img) => `/uploads/places/${img.filename}`)
+      : [];
+
+    const slug = slugify(title_en, { lower: true, strict: true });
 
     const placeData = {
       title_en,
@@ -49,6 +69,7 @@ export const createPlace = async (req, res) => {
       thumbnail,
       video_url: video_url || videoFile,
       images,
+      slug,
       location: {
         lat: lat ? parseFloat(lat) : undefined,
         lng: lng ? parseFloat(lng) : undefined,
@@ -81,10 +102,15 @@ export const updatePlace = async (req, res) => {
       lng,
     } = req.body;
 
+    // Delete old files if replaced
     if (req.files?.thumbnail?.[0] && place.thumbnail) {
       fs.unlink(`.${place.thumbnail}`, () => {});
     }
-    if (req.files?.video?.[0] && place.video_url && place.video_url.startsWith("/uploads/")) {
+    if (
+      req.files?.video?.[0] &&
+      place.video_url &&
+      place.video_url.startsWith("/uploads/")
+    ) {
       fs.unlink(`.${place.video_url}`, () => {});
     }
 
@@ -94,6 +120,11 @@ export const updatePlace = async (req, res) => {
     place.description_np = description_np || place.description_np;
     place.category = category || place.category;
     place.video_url = video_url || place.video_url;
+
+    // Update slug if title_en changed
+    if (title_en && title_en !== place.title_en) {
+      place.slug = slugify(title_en, { lower: true, strict: true });
+    }
 
     if (lat) place.location.lat = parseFloat(lat);
     if (lng) place.location.lng = parseFloat(lng);
@@ -107,7 +138,9 @@ export const updatePlace = async (req, res) => {
     }
 
     if (req.files?.images?.length) {
-      place.images = req.files.images.map(file => `/uploads/places/${file.filename}`);
+      place.images = req.files.images.map(
+        (file) => `/uploads/places/${file.filename}`
+      );
     }
 
     const updatedPlace = await place.save();
@@ -125,9 +158,10 @@ export const deletePlace = async (req, res) => {
     if (!place) return res.status(404).json({ message: "Place not found" });
 
     if (place.thumbnail) fs.unlink(`.${place.thumbnail}`, () => {});
-    if (place.video_url && place.video_url.startsWith("/uploads/")) fs.unlink(`.${place.video_url}`, () => {});
+    if (place.video_url && place.video_url.startsWith("/uploads/"))
+      fs.unlink(`.${place.video_url}`, () => {});
     if (place.images?.length) {
-      place.images.forEach(img => fs.unlink(`.${img}`, () => {}));
+      place.images.forEach((img) => fs.unlink(`.${img}`, () => {}));
     }
 
     await place.deleteOne();

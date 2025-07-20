@@ -71,7 +71,7 @@ const router = createBrowserRouter(
         <Route path="/heritage-detail/:slug" element={<HeritageDetails />} />
         <Route path="/festivals-highlight" element={<FestivalsHighlight />} />
         <Route path="/search" element={<SearchResults />} />
-        <Route path="/places/:placeId" element={<PlaceDetail />} />
+        <Route path="/places/:slug" element={<PlaceDetail />} />
 
         
         <Route path="/quiz" element={<QuizHome />} />

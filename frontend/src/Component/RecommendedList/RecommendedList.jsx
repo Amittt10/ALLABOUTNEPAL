@@ -10,14 +10,14 @@ const RecommendedList = ({ targetType, excludeId, lang = 'en' }) => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const getRoute = (type, id) => {
+  const getRoute = (type, idOrSlug) => {
     switch (type) {
       case 'place':
-        return `/places/${id}`;
+        return `/places/${idOrSlug}`;
       case 'festival':
-        return `/festival-detail/${id}`;
+        return `/festival-detail/${idOrSlug}`;
       case 'heritage':
-        return `/heritage/${id}`;
+        return `/heritage/${idOrSlug}`;
       default:
         return '/';
     }
@@ -65,7 +65,7 @@ const RecommendedList = ({ targetType, excludeId, lang = 'en' }) => {
               <div
                 key={item._id}
                 className="masonry-item"
-                onClick={() => navigate(getRoute(targetType, item._id))}
+                onClick={() => navigate(getRoute(targetType, item.slug))}
                 style={{ cursor: 'pointer' }}
               >
                 {image && (

@@ -217,7 +217,7 @@ export default function Home() {
                 place={place}
                 getFullImageUrl={getFullImageUrl}
                 i18n={i18n}
-                onClick={() => navigate(`/places/${place._id}`)}
+                onClick={() => navigate(`/places/${place.slug}`)}
               />
             ))}
           </div>

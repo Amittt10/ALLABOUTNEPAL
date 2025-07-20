@@ -11,7 +11,7 @@ import RecommendedList from '../../Component/RecommendedList/RecommendedList';
 const API = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 export default function PlaceDetail() {
-  const { placeId } = useParams();
+  const { slug } = useParams();
   const navigate = useNavigate();
   const { i18n } = useTranslation();
 
@@ -32,7 +32,7 @@ export default function PlaceDetail() {
       try {
         setLoading(true);
         setError(null);
-        const res = await axios.get(`${API}/api/places/${placeId}`);
+        const res = await axios.get(`${API}/api/places/slug/${slug}`);
         setPlace(res.data);
       } catch (err) {
         setError("Failed to load place details.");
@@ -41,7 +41,7 @@ export default function PlaceDetail() {
       }
     };
     fetchPlace();
-  }, [placeId]);
+  }, [slug]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -268,9 +268,9 @@ export default function PlaceDetail() {
        <TTSControl text={descriptionRaw} lang={langCode} />
       )}
 
-      <ReviewSection targetType="place" targetId={placeId} />
+      <ReviewSection targetType="place" targetId={place._id} />
 
-      <RecommendedList targetType="place" excludeId={placeId} lang={lang} />
+      <RecommendedList targetType="place" excludeId={place._id} lang={lang} />
 
 
       {/* Fullscreen Image Modal */}
