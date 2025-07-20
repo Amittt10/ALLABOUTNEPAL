@@ -1,7 +1,9 @@
 import { ObjectId } from 'mongodb';
 import fs from 'fs';
 import path from 'path';
+import slugify from 'slugify'; 
 
+// Helper: Delete single file
 const deleteFileIfExists = (filePath) => {
   if (filePath && fs.existsSync(filePath)) {
     fs.unlink(filePath, (err) => {
@@ -10,11 +12,13 @@ const deleteFileIfExists = (filePath) => {
   }
 };
 
+// Helper: Delete multiple files
 const deleteFilesIfExist = (filePaths) => {
   filePaths.forEach((filePath) => deleteFileIfExists(filePath));
 };
 
 // ================= Public GET =================
+
 export const getHeritageSites = async (req, res) => {
   try {
     const { location } = req.query;
@@ -33,11 +37,10 @@ export const getHeritageSites = async (req, res) => {
 };
 
 export const getHeritageSiteById = async (req, res) => {
-  const heritageCollection = req.db.heritageCollection;
-  const id = req.params.id;
+  const { id } = req.params;
 
   try {
-    const site = await heritageCollection.findOne({ _id: new ObjectId(id) });
+    const site = await req.db.heritageCollection.findOne({ _id: new ObjectId(id) });
     if (!site) {
       return res.status(404).json({ success: false, message: 'Heritage site not found' });
     }
@@ -48,13 +51,27 @@ export const getHeritageSiteById = async (req, res) => {
   }
 };
 
-// ================= Admin GET =================
-export const adminGetHeritageSiteById = async (req, res) => {
-  const heritageCollection = req.db.heritageCollection;
-  const id = req.params.id;
+// ✅ GET heritage site by slug
+export const getHeritageSiteBySlug = async (req, res) => {
+  const { slug } = req.params;
 
   try {
-    const site = await heritageCollection.findOne({ _id: new ObjectId(id) });
+    const site = await req.db.heritageCollection.findOne({ slug });
+    if (!site) {
+      return res.status(404).json({ message: 'Heritage site not found' });
+    }
+    res.json(site);
+  } catch (err) {
+    console.error('Error fetching heritage site by slug:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// ================= Admin GET =================
+
+export const adminGetHeritageSiteById = async (req, res) => {
+  try {
+    const site = await req.db.heritageCollection.findOne({ _id: new ObjectId(req.params.id) });
     if (!site) return res.status(404).json({ success: false, message: 'Heritage site not found' });
     res.json(site);
   } catch (err) {
@@ -64,10 +81,8 @@ export const adminGetHeritageSiteById = async (req, res) => {
 };
 
 export const adminGetHeritageSites = async (req, res) => {
-  const heritageCollection = req.db.heritageCollection;
-
   try {
-    const heritage = await heritageCollection.find().toArray();
+    const heritage = await req.db.heritageCollection.find().toArray();
     res.json(heritage);
   } catch (err) {
     res.status(500).json({ success: false, message: 'Failed to fetch heritage sites' });
@@ -75,15 +90,15 @@ export const adminGetHeritageSites = async (req, res) => {
 };
 
 // ================= Admin POST =================
+
 export const adminAddHeritageSite = async (req, res) => {
-  const heritageCollection = req.db.heritageCollection;
   const {
     name_en, name_np,
     shortDescription_en, shortDescription_np,
     history_en, history_np,
     location_en, location_np,
     entryFee,
-    lat, lng // ✅ NEW
+    lat, lng
   } = req.body;
 
   if (!name_en || !name_np) {
@@ -92,6 +107,7 @@ export const adminAddHeritageSite = async (req, res) => {
 
   const image = req.files?.image ? req.files.image[0].path : null;
   const gallery = req.files?.gallery ? req.files.gallery.map(f => f.path) : [];
+  const slug = slugify(name_en, { lower: true, strict: true });
 
   try {
     const newHeritage = {
@@ -104,13 +120,14 @@ export const adminAddHeritageSite = async (req, res) => {
       location_en,
       location_np,
       entryFee: entryFee ? parseFloat(entryFee) : null,
-      lat: lat ? parseFloat(lat) : null, // ✅ NEW
-      lng: lng ? parseFloat(lng) : null, // ✅ NEW
+      lat: lat ? parseFloat(lat) : null,
+      lng: lng ? parseFloat(lng) : null,
       image,
       gallery,
+      slug, // ✅
     };
 
-    const result = await heritageCollection.insertOne(newHeritage);
+    const result = await req.db.heritageCollection.insertOne(newHeritage);
     res.status(201).json({ success: true, _id: result.insertedId, ...newHeritage });
   } catch (err) {
     console.error('Add heritage error:', err);
@@ -119,9 +136,9 @@ export const adminAddHeritageSite = async (req, res) => {
 };
 
 // ================= Admin PUT =================
+
 export const adminUpdateHeritageSite = async (req, res) => {
-  const heritageCollection = req.db.heritageCollection;
-  const id = req.params.id;
+  const { id } = req.params;
 
   const {
     name_en, name_np,
@@ -129,11 +146,11 @@ export const adminUpdateHeritageSite = async (req, res) => {
     history_en, history_np,
     location_en, location_np,
     entryFee,
-    lat, lng // ✅ NEW
+    lat, lng
   } = req.body;
 
   try {
-    const existing = await heritageCollection.findOne({ _id: new ObjectId(id) });
+    const existing = await req.db.heritageCollection.findOne({ _id: new ObjectId(id) });
     if (!existing) return res.status(404).json({ success: false, message: 'Heritage site not found' });
 
     const updateFields = {
@@ -146,23 +163,24 @@ export const adminUpdateHeritageSite = async (req, res) => {
       location_en,
       location_np,
       entryFee: entryFee ? parseFloat(entryFee) : null,
-      lat: lat ? parseFloat(lat) : null, // ✅ NEW
-      lng: lng ? parseFloat(lng) : null, // ✅ NEW
+      lat: lat ? parseFloat(lat) : null,
+      lng: lng ? parseFloat(lng) : null,
+      slug: typeof name_en === 'string' && name_en.trim()
+      ? slugify(name_en.trim(), { lower: true, strict: true })
+      : existing.slug, // fallback to old slug if no new name provided
     };
 
-    // Image
     if (req.files?.image) {
       deleteFileIfExists(existing.image);
       updateFields.image = req.files.image[0].path;
     }
 
-    // Gallery
     if (req.files?.gallery) {
       deleteFilesIfExist(existing.gallery || []);
       updateFields.gallery = req.files.gallery.map(f => f.path);
     }
 
-    const result = await heritageCollection.findOneAndUpdate(
+    const result = await req.db.heritageCollection.findOneAndUpdate(
       { _id: new ObjectId(id) },
       { $set: updateFields },
       { returnDocument: 'after' }
@@ -176,18 +194,18 @@ export const adminUpdateHeritageSite = async (req, res) => {
 };
 
 // ================= Admin DELETE =================
+
 export const adminDeleteHeritageSite = async (req, res) => {
-  const heritageCollection = req.db.heritageCollection;
-  const id = req.params.id;
+  const { id } = req.params;
 
   try {
-    const existing = await heritageCollection.findOne({ _id: new ObjectId(id) });
+    const existing = await req.db.heritageCollection.findOne({ _id: new ObjectId(id) });
     if (!existing) return res.status(404).json({ success: false, message: 'Heritage site not found' });
 
     deleteFileIfExists(existing.image);
     deleteFilesIfExist(existing.gallery || []);
 
-    await heritageCollection.deleteOne({ _id: new ObjectId(id) });
+    await req.db.heritageCollection.deleteOne({ _id: new ObjectId(id) });
 
     res.json({ success: true, message: 'Heritage site deleted' });
   } catch (err) {

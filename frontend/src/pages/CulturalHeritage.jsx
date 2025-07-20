@@ -45,7 +45,7 @@ const CulturalHeritage = () => {
           <div
             key={site._id}
             className="heritage-card"
-            onClick={() => navigate(`/heritage/${site._id}`)}
+            onClick={() => navigate(`/heritage-detail/${site.slug}`)}
           >
             {site.image && (
               <img

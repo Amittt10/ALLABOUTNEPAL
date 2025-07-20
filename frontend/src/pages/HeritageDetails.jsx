@@ -12,7 +12,7 @@ import RecommendedList from "../Component/RecommendedList/RecommendedList";
 const API = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 const HeritageDetails = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const navigate = useNavigate();
   const { i18n } = useTranslation();
 
@@ -35,7 +35,7 @@ const HeritageDetails = () => {
       try {
         setLoading(true);
         setError(null);
-        const res = await fetch(`${API}/api/heritage/${id}`);
+        const res = await fetch(`${API}/api/heritage/slug/${slug}`);
         if (!res.ok) throw new Error('Error fetching heritage site');
         const data = await res.json();
         setSite(data);
@@ -48,7 +48,7 @@ const HeritageDetails = () => {
     };
 
     fetchSite();
-  }, [id, i18n.language]);
+  }, [slug, i18n.language]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -204,9 +204,9 @@ const HeritageDetails = () => {
         <TTSControl text={historyRaw} lang={langCode} />
       )}
 
-      <ReviewSection targetType="heritage" targetId={id} />
+      <ReviewSection targetType="heritage" targetId={site?._id} />
 
-      <RecommendedList targetType="heritage" excludeId={id} lang={lang} />
+      <RecommendedList targetType="heritage" excludeId={site._id} lang={lang} />
 
 
       {fullscreenImg && (

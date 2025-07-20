@@ -1,13 +1,20 @@
 import express from 'express';
-import { getHeritageSites, getHeritageSiteById } from '../controllers/heritageController.js';
+import {
+  getHeritageSites,
+  getHeritageSiteById,
+  getHeritageSiteBySlug,
+} from '../controllers/heritageController.js';
 
 const router = express.Router();
 
 // Get all heritage sites
-router.get('/heritage', getHeritageSites);        
+router.get('/heritage', getHeritageSites);
 
-// Get a single heritage site by ID
-router.get('/heritage/:id', getHeritageSiteById);
+// Get heritage site by ID (must be before slug or use /by-id/:id)
+router.get('/heritage/by-id/:id', getHeritageSiteById);
+
+// Get heritage site by slug
+router.get('/heritage/slug/:slug', getHeritageSiteBySlug);
 
 // Fetch heritage site by name_en
 router.get('/heritage/by-name/:name', async (req, res) => {

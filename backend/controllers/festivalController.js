@@ -1,5 +1,6 @@
 import { ObjectId } from 'mongodb';
 import fs from 'fs';
+import slugify from 'slugify';
 
 // Helper: delete file from disk
 const deleteFileIfExists = (filePath) => {

@@ -68,7 +68,7 @@ const router = createBrowserRouter(
         <Route path="/verify" element={<Verify />} />
         <Route path="/forgot" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/heritage/:id" element={<HeritageDetails />} />
+        <Route path="/heritage-detail/:slug" element={<HeritageDetails />} />
         <Route path="/festivals-highlight" element={<FestivalsHighlight />} />
         <Route path="/search" element={<SearchResults />} />
         <Route path="/places/:placeId" element={<PlaceDetail />} />
