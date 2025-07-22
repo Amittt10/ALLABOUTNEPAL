@@ -23,6 +23,26 @@ export default function PlaceDetail() {
   const lang = i18n.language || "en";
   const langCode = lang === "np" ? "ne-NP" : "en-US";
 
+
+  const addToRecentlyViewed = (item) => {
+  const existing = JSON.parse(localStorage.getItem("recentlyViewed")) || [];
+  const filtered = existing.filter(
+    (i) => !(i._id === item._id && i.type === item.type)
+  );
+  const cleaned = {
+    _id: item._id,
+    title: item.title_en || item.title || "No Title", // localize as needed
+    slug: item.slug,
+    image: item.thumbnail || item.image?.[0] || item.image || "",
+    type: item.type || "unknown",
+  };
+  // Put newest at front and limit to 10 items max
+  const updated = [cleaned, ...filtered].slice(0, 10);
+  localStorage.setItem("recentlyViewed", JSON.stringify(updated));
+};
+
+
+
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_KEY,
   });
@@ -42,6 +62,13 @@ export default function PlaceDetail() {
     };
     fetchPlace();
   }, [slug]);
+
+useEffect(() => {
+  if (place) {
+    addToRecentlyViewed({ ...place, type: "place" });
+  }
+}, [place]);
+
 
   useEffect(() => {
     window.scrollTo(0, 0);

@@ -179,6 +179,7 @@ body {
   background-size: cover;
   background-position: center;
   margin-top: 4rem;
+  margin-bottom: 2rem;
   min-height: 70vh;
 }
 .explore-hero-overlay {
@@ -213,10 +214,10 @@ body {
   font-family: "Edu NSW ACT Cursive", cursive;
   font-size: 2rem;
   margin-bottom: 1.5rem;
-  font-weight: 700;
-  color: #ebe4e4;
+  font-weight: 600;
+  color: #222;
   text-align: left;
-  margin-left: 0;
+  margin-left: 6.8rem;
 }
 
 /* Sidebar categories centered */
@@ -348,66 +349,77 @@ body {
   color: var(--text-secondary);
 }
 
-/* Full-width background wrapper */
+/* ==================== Upcoming Festivals Section ==================== */
 .fullwidth-bg-wrapper {
   width: 100%;
-  background-color: #f4f6f8;
-}
-
-/* Full-width background wrapper */
-.fullwidth-bg-wrapper {
-  background-color: #f5f7fa; /* Light gray background for full section */
+  background-color: #f5f7fa;
   padding: 3rem 1rem;
 }
 
-/* Section container */
 .upcoming-festivals-section {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
-/* Section heading */
 .upcoming-festivals-section h2 {
+  font-family: "Edu NSW ACT Cursive", cursive;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  color: #222;
+  text-align: left;
+  margin-left: 0;
+}
+
+.festival-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 0 16px;
+}
+
+.festival-header h2 {
   font-family: "Edu NSW ACT Cursive", cursive;
   font-weight: 600;
   font-size: 2.2rem;
   color: #1e2a38;
-  margin-bottom: 2rem;
-  text-align: center;
-  letter-spacing: 0.02em;
-}
-
-/* Festival card list: grid layout for neatness */
-.festival-card-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.8rem 1.5rem;
-  padding: 0;
   margin: 0;
-  list-style: none;
 }
 
-/* Festival card */
-.festival-card {
-  background-color: #ffffff;
-  border-radius: none;
-  box-shadow: 0 3px 6px rgb(0 0 0 / 0.1);
+.view-all-btn-top {
+  background: none;
+  border: none;
+  color: #ff6f00;
+  font-weight: 600;
+  font-size: 0.9rem;
   cursor: pointer;
   display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  align-items: center;
+  gap: 4px;
+  padding: 0.3rem 0.8rem;
+  transition: color 0.3s ease;
 }
 
-/* Hover effect */
-.festival-card:hover {
-  box-shadow: 0 8px 16px rgb(0 0 0 / 0.15);
-  transform: translateY(-5px);
+.view-all-btn-top:hover {
+  color: #e69a67;
 }
 
+.festival-card-list {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding: 0 16px 40px;
+  box-sizing: border-box;
+  justify-content: center; /* center items when fewer cards */
+}
+
+/* Festival Image Block */
 .festival-image-wrapper {
-  line-height: 0;   /* removes whitespace below the image */
-  margin-bottom: -40px; /* no gap below image */
+  line-height: 0;
+  margin-bottom: 0;
 }
 
 .festival-card img {
@@ -415,76 +427,33 @@ body {
   width: 100%;
   height: 200px;
   object-fit: cover;
-  margin: 0;
-  padding: 0;
   border-radius: 6px 6px 0 0;
-}
-
-.festival-info {
-  /* padding: 0 0.8rem 1rem 0.8rem; */
-  margin-top: 0;
-  display: flex;
-  flex-direction: column;
-  /* gap: -3rem; */
-}
-
-.festival-date {
-  margin: -6px;
-  padding: 0;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #ff6f00;
-  letter-spacing: 0.03em;
-}
-
-
-/* Festival name */
-.festival-info h3 {
-  font-size: 1.1rem;
-  font-weight: 700;
   margin: 0;
-  color: #1e2a38;
-  line-height: 1.3;
-  text-transform: capitalize;
+  padding: 0;
 }
 
-/* View All button container */
-.upcoming-festivals-section > div {
-  margin-top: 2.5rem;
-  text-align: center;
+/* Hover effect */
+.festival-card:hover img {
+  transform: scale(1.02);
 }
 
-/* View All button */
-.view-all-btn {
-  background-color: #ff6f00;
-  color: white;
-  padding: 0.65rem 2.5rem;
-  font-size: 1rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 25px;
-  cursor: pointer;
-  box-shadow: 0 5px 12px rgb(255 111 0 / 0.35);
-  transition: background-color 0.3s ease;
-}
 
-.view-all-btn:hover {
-  background-color: #e65c00;
-}
-
-/* Responsive tweaks */
+/* Responsive for flex layout */
 @media (max-width: 768px) {
   .festival-card-list {
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem 1rem;
+    justify-content: center;
+    gap: 20px;
   }
 }
 
 @media (max-width: 480px) {
   .festival-card-list {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    gap: 20px;
   }
 }
+
+
 
 .explore-hero-section {
   display: flex;
@@ -508,127 +477,30 @@ body {
   z-index: 2;
 }
 
-/* Container for latest blogs */
 .latest-blogs {
-  padding: 2rem 1rem;
-  background-color: transparent;
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 .latest-blogs h2 {
-  font-size: 2.2rem;
-  font-weight: 600;
-  color: var(--text-primary, #222);
-  text-align: center;
-  margin-bottom: 2rem;
   font-family: "Edu NSW ACT Cursive", cursive;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  color: #222;
+  text-align: left;
+  margin-left: 0;
 }
 
-/* Blog cards grid */
 .blog-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.75rem;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-/* Individual blog card */
-.blog-card {
-  position: relative;
-  width: 100%;
-  max-width: 340px;
-  background-color: #fff;
-  border-radius: 12px; /* or var(--radius-md) */
-  overflow: hidden;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-}
-
-.blog-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-}
-
-/* Blog image */
-.blog-card img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  display: block;
-  position: relative;
-}
-
-/* Dynamic category label inside blog card */
-.blog-category-label {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  background-color: #000;
-  color: #fff;
-  font-size: 0.75rem; /* var(--font-sm) */
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 6px; /* var(--radius-sm) */
-  z-index: 2;
-  letter-spacing: 0.05em;
-  pointer-events: none;
-  text-transform: uppercase;
-}
-
-/* Blog title */
-.blog-card h3 {
-  font-size: 1.2rem;
-  font-weight: 700;
-  margin: 1rem 1rem 0.25rem;
-  color: var(--text-primary, #222);
-  line-height: 1.3;
-}
-
-/* Meta info */
-.blog-card .meta {
-  font-size: 0.85rem;
-  font-weight: 600;
-  margin: 0 1rem 0.5rem;
-  color: #d93025; /* red-ish */
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-/* Snippet paragraph */
-.blog-card p {
-  font-size: 0.95rem;
-  color: var(--text-secondary, #555);
-  margin: 0 1rem 1rem;
-  line-height: 1.5;
-  flex-grow: 1;
-}
-
-/* Read more link */
-.blog-card a {
-  margin: 0 1rem 1.2rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--primary-color, #0066cc);
-  text-decoration: none;
-  transition: color 0.2s ease;
-  align-self: flex-start;
-}
-
-.blog-card a:hover {
-  color: var(--primary-hover, #004a99);
+  gap: 24px;
+  padding-bottom: 40px;
 }
 
 
-/* Responsive tweaks */
-@media (max-width: 768px) {
-  .blog-list {
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  }
 
-  .blog-card {
-    max-width: 100%;
-  }
-}
+

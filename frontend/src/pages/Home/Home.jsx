@@ -10,6 +10,7 @@ import FAQSection from "../../Component/FAQSection/FAQSection";
 import BlogCard from "../../Component/Cards/BlogCard";
 import FestivalCard from "../../Component/Cards/FestivalCard";
 import PlaceCard from "../../Component/Cards/PlaceCard";
+import RecentlyViewed from "../../Component/RecentlyViewed/RecentlyViewed";
 
 import "./Home.css";
 
@@ -133,9 +134,20 @@ export default function Home() {
       {/* Upcoming Festivals */}
       <div className="fullwidth-bg-wrapper">
         <section className="upcoming-festivals-section">
-          <h2>
-            {i18n.language === "np" ? "आगामी चाडपर्वहरू" : "Upcoming Festivals"}
-          </h2>
+          <div className="festival-header">
+            <h2>
+              {i18n.language === "np"
+                ? "आगामी चाडपर्वहरू"
+                : "Upcoming Festivals"}
+            </h2>
+            <button
+              className="view-all-btn-top"
+              onClick={() => navigate("/festival-calendar")}
+            >
+              {i18n.language === "np" ? "सबै हेर्नुहोस्" : "View All"} →
+            </button>
+          </div>
+
           <div className="festival-card-list">
             {futureFestivals.slice(0, 3).map((festival) => (
               <FestivalCard
@@ -147,15 +159,6 @@ export default function Home() {
                 formatDate={formatDate}
               />
             ))}
-          </div>
-
-          <div style={{ textAlign: "center", marginTop: "1.5rem" }}>
-            <button
-              className="view-all-btn"
-              onClick={() => navigate("/festival-calendar")}
-            >
-              {i18n.language === "np" ? "सबै हेर्नुहोस्" : "View All Festivals"}
-            </button>
           </div>
         </section>
       </div>
@@ -227,6 +230,8 @@ export default function Home() {
           <NepalMapImage places={filteredPlaces} />
         </div>
       </section>
+
+      <RecentlyViewed />
 
       {/* FAQ and Subscribe */}
       <FAQSection />

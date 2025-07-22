@@ -163,3 +163,45 @@ export const addReplyToReview = async (req, res) => {
     res.status(500).json({ message: "Server error while adding reply" });
   }
 };
+
+export const getReviewSummary = async (req, res) => {
+  try {
+    const { targetType, targetIds } = req.query;
+
+    if (!targetType || !targetIds) {
+      return res.status(400).json({ message: "Missing targetType or targetIds" });
+    }
+
+    const ids = targetIds.split(",").map((id) => new mongoose.Types.ObjectId(id));
+
+    const summaries = await Review.aggregate([
+      {
+        $match: {
+          targetType,
+          targetId: { $in: ids },
+        },
+      },
+      {
+        $group: {
+          _id: "$targetId",
+          averageRating: { $avg: "$rating" },
+          reviewCount: { $sum: 1 },
+        },
+      },
+    ]);
+
+    const result = {};
+    summaries.forEach((summary) => {
+      result[summary._id.toString()] = {
+        averageRating: Number(summary.averageRating.toFixed(1)),
+        reviewCount: summary.reviewCount,
+      };
+    });
+
+    res.json(result);
+  } catch (error) {
+    console.error("Error in getReviewSummary:", error);
+    res.status(500).json({ message: "Server error while getting review summary" });
+  }
+};
+

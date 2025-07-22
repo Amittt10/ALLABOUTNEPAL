@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import useScrollAnimation from "../../hooks/useScrollAnimation";
-import "./FestivalCard.css"; // Assuming you have styles for the festival card
+import "./FestivalCard.css";
 
 export default function FestivalCard({ festival, getFullImageUrl, i18n }) {
   const { ref, visible } = useScrollAnimation();
@@ -18,20 +18,19 @@ export default function FestivalCard({ festival, getFullImageUrl, i18n }) {
   return (
     <div
       ref={ref}
-      className={`festival-card fade-in-section ${visible ? "fade-in-visible" : ""}`}
+      className={`festival-card-simple fade-in-section ${visible ? "fade-in-visible" : ""}`}
       onClick={() => navigate(`/festival-detail/${festival.slug}`)}
     >
-      <div className="festival-image-wrapper">
-        <img
-          src={getFullImageUrl(festival.image, "festival")}
-          alt={i18n.language === "np" ? festival.name_np : festival.name_en}
-          loading="lazy"
-        />
-      </div>
-      <div className="festival-info">
-        <p className="festival-date">{formatDate(festival.dateAD)}</p>
-        <h3>{i18n.language === "np" ? festival.name_np : festival.name_en}</h3>
-      </div>
+      <img
+        src={getFullImageUrl(festival.image, "festival")}
+        alt={i18n.language === "np" ? festival.name_np : festival.name_en}
+        loading="lazy"
+        className="festival-image"
+      />
+      <p className="festival-card-date">{formatDate(festival.dateAD)}</p>
+      <h3 className="festival-title">
+        {i18n.language === "np" ? festival.name_np : festival.name_en}
+      </h3>
     </div>
   );
 }

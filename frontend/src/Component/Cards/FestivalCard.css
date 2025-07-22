@@ -1,68 +1,42 @@
-/* FestivalCard.css */
-
-.festival-card {
-  background-color: #ffffff;
-  border-radius: 0;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+.festival-card-simple {
   cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  text-align: left;       /* Align text to left */
+  transition: transform 0.3s ease;
+  width: 280px;
+  flex: 0 0 auto;
 }
 
-.festival-card:hover {
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-  transform: translateY(-5px);
+.festival-card-simple:hover {
+  transform: translateY(-4px);
 }
 
-.festival-image-wrapper {
-  line-height: 0;
-  margin-bottom: -40px;
-}
-
-.festival-card img {
-  display: block;
+.festival-image {
   width: 100%;
-  height: 200px;
+  height: auto;
   object-fit: cover;
-  margin: 0;
-  padding: 0;
-  border-radius: 6px 6px 0 0;
+  display: block;
+  max-height: 200px;
+  margin: 0; /* Reduced gap between image and info */
 }
 
-.festival-info {
-  margin-top: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.festival-date {
-  margin: -6px 0 0 0;
-  padding: 0;
-  font-size: 0.85rem;
+.festival-card-date {
+  font-size: 0.7rem;
+  color: #5ce42a;
+  margin: 0 0 2px 0; /* Reduced bottom margin */
   font-weight: 600;
-  color: #ff6f00;
-  letter-spacing: 0.03em;
+  margin-top: 8px;
+  margin-bottom: 0;
+  font-family: 'Poppins', sans-serif;
+
 }
 
-.festival-info h3 {
+.festival-title {
   font-size: 1.1rem;
-  font-weight: 700;
-  margin: 0;
-  color: #1e2a38;
-  line-height: 1.3;
+  font-weight: 600;
+  color: #000203;
+  margin: 0 0 8px 0; /* Reduced bottom margin */
   text-transform: capitalize;
-}
-
-/* Responsive grid container for festival cards if needed */
-.festival-card-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.8rem 1.5rem;
-  padding: 0;
-  margin: 0 auto;
-  list-style: none;
+  font-family: 'Poppins', sans-serif;
 }
 
 /* Fade In Animation */
@@ -70,24 +44,16 @@
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-  will-change: opacity, transform;
 }
 
 .fade-in-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-  .festival-card-list {
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .festival-card-list {
-    grid-template-columns: 1fr;
+  .festival-image {
+    max-height: 160px;
   }
 }

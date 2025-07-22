@@ -21,9 +21,28 @@ const FestivalDetailById = () => {
 
      // ✅ First define lang
   const lang = i18n.language || 'en';
-
   // ✅ Then use lang to define langCode
   const langCode = lang === "np" ? "ne-NP" : "en-US";
+
+  const addToRecentlyViewed = (item) => {
+  const existing = JSON.parse(localStorage.getItem("recentlyViewed")) || [];
+  // Remove duplicates by _id and type
+  const filtered = existing.filter(
+    (i) => !(i._id === item._id && i.type === item.type)
+  );
+  // Prepare minimal object to store
+  const cleaned = {
+    _id: item._id,
+    title: item.title_en || item.title || "No Title", // localize as needed
+    slug: item.slug,
+    image: item.thumbnail || item.image?.[0] || item.image || "",
+    type: item.type || "unknown",
+  };
+  // Put newest at front and limit to 10 items max
+  const updated = [cleaned, ...filtered].slice(0, 10);
+  localStorage.setItem("recentlyViewed", JSON.stringify(updated));
+};
+
 
   useEffect(() => {
     const fetchFestival = async () => {
@@ -44,6 +63,13 @@ const FestivalDetailById = () => {
 
     fetchFestival();
   }, [slug]);
+
+  useEffect(() => {
+  if (festival) {
+    addToRecentlyViewed({ ...festival, type: "festival" });
+  }
+}, [festival]);
+
 
   const name = festival?.[`name_${lang}`] || festival?.name_en || "No Name";
   const dateAD = festival?.dateAD || "";

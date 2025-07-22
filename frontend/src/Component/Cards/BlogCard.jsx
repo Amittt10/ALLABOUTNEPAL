@@ -13,6 +13,7 @@ export default function BlogCard({ blog, getFullImageUrl, i18n }) {
       className={`blog-card fade-in-section ${visible ? "fade-in-visible" : ""}`}
       data-category={blog.category || "Other"}
     >
+      
       {blog.category && (
         <span className="blog-category-label">{blog.category.toUpperCase()}</span>
       )}

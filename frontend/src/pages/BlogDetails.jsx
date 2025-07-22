@@ -11,6 +11,26 @@ export default function BlogDetails() {
   const [loading, setLoading] = useState(true);
   const [fullscreenImg, setFullscreenImg] = useState(null);
 
+  const addToRecentlyViewed = (item) => {
+  const existing = JSON.parse(localStorage.getItem("recentlyViewed")) || [];
+  // Remove duplicates by _id and type
+  const filtered = existing.filter(
+    (i) => !(i._id === item._id && i.type === item.type)
+  );
+  // Prepare minimal object to store
+  const cleaned = {
+    _id: item._id,
+    title: item.title_en || item.title || "No Title", // localize as needed
+    slug: item.slug,
+    image: item.thumbnail || item.image?.[0] || item.image || "",
+    type: item.type || "unknown",
+  };
+  // Put newest at front and limit to 10 items max
+  const updated = [cleaned, ...filtered].slice(0, 10);
+  localStorage.setItem("recentlyViewed", JSON.stringify(updated));
+};
+
+
   useEffect(() => {
     const fetchBlog = async () => {
       try {
@@ -25,6 +45,13 @@ export default function BlogDetails() {
     fetchBlog();
     window.scrollTo(0, 0);
   }, [slug]);
+
+ useEffect(() => {
+  if (blog) {
+    addToRecentlyViewed({ ...blog, type: "blog" });
+  }
+}, [blog]);
+
 
   if (loading) return <p className="blog-loading">Loading blog...</p>;
   if (!blog) return <p className="blog-error">Blog not found.</p>;
