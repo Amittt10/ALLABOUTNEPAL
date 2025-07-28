@@ -24,21 +24,33 @@ const FestivalDetailById = () => {
   // ✅ Then use lang to define langCode
   const langCode = lang === "np" ? "ne-NP" : "en-US";
 
-  const addToRecentlyViewed = (item) => {
+const addToRecentlyViewed = (item) => {
   const existing = JSON.parse(localStorage.getItem("recentlyViewed")) || [];
+
   // Remove duplicates by _id and type
   const filtered = existing.filter(
     (i) => !(i._id === item._id && i.type === item.type)
   );
-  // Prepare minimal object to store
+
+  // ✅ Ensure full image URL is stored
+  const rawImage =
+    item.thumbnail ||
+    (Array.isArray(item.image) ? item.image[0] : item.image) ||
+    "";
+
+  const fullImage =
+    rawImage && !rawImage.startsWith("http")
+      ? `${API}/uploads/${rawImage}`
+      : rawImage;
+
   const cleaned = {
     _id: item._id,
-    title: item.title_en || item.title || "No Title", // localize as needed
+    title: item[`title_${i18n.language}`] || item.title || "No Title",
     slug: item.slug,
-    image: item.thumbnail || item.image?.[0] || item.image || "",
+    image: fullImage,
     type: item.type || "unknown",
   };
-  // Put newest at front and limit to 10 items max
+
   const updated = [cleaned, ...filtered].slice(0, 10);
   localStorage.setItem("recentlyViewed", JSON.stringify(updated));
 };

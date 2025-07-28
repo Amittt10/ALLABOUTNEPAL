@@ -22,7 +22,7 @@ import CulturalHeritage from './pages/CulturalHeritage';
 // import Quiz from './pages/Quiz';
 import Aboutus from './pages/Aboutus';
 import Festivals from './pages/Festivals';
-import Profile from './pages/Profile';
+import Profile from './pages/ProfileDashboard/Profile';
 import SearchResults from './pages/SearchResults';
 import Layout from './Component/Layout/Layout';
 import Verify from './pages/Verify';

@@ -1,0 +1,40 @@
+.custom-insta-feed-wrapper {
+  max-width: 1280px;
+  margin: 40px auto;
+  padding: 16px;
+  background-color: #f9f9f9;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+/* Optional: Smooth transition */
+.custom-insta-feed-wrapper * {
+  transition: all 0.3s ease;
+}
+
+/* On hover, scale post image */
+.custom-insta-feed-wrapper img:hover {
+  transform: scale(1.03);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive: Stack posts on mobile */
+@media (max-width: 768px) {
+  .custom-insta-feed-wrapper {
+    padding: 8px;
+  }
+
+  .elfsight-app-a35feb70-641c-4a00-a8d9-34f97d8567d9 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .elfsight-app-a35feb70-641c-4a00-a8d9-34f97d8567d9 {
+    grid-template-columns: 1fr;
+  }
+}

@@ -11,6 +11,7 @@ import BlogCard from "../../Component/Cards/BlogCard";
 import FestivalCard from "../../Component/Cards/FestivalCard";
 import PlaceCard from "../../Component/Cards/PlaceCard";
 import RecentlyViewed from "../../Component/RecentlyViewed/RecentlyViewed";
+import InstaFeed from "../../Component/InstaFeed";
 
 import "./Home.css";
 
@@ -232,6 +233,8 @@ export default function Home() {
       </section>
 
       <RecentlyViewed />
+      {/* <InstaFeed /> */}
+
 
       {/* FAQ and Subscribe */}
       <FAQSection />
