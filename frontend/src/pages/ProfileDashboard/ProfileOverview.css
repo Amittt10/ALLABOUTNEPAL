@@ -1,0 +1,36 @@
+/* ProfileOverview.css */
+.profile-panel h2 {
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: #222;
+}
+
+.profile-panel .field-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+}
+
+.profile-panel .field-group label {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #3a3a3a;
+  margin-bottom: 0.4rem;
+}
+
+.profile-panel .field-group input[type="text"],
+.profile-panel .field-group input[type="email"] {
+  padding: 0.6rem 0.9rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1.5px solid #cdd4db;
+  color: #3a3a3a;
+  background-color: #fefefe;
+}
+
+.profile-panel .field-group input:disabled {
+  background-color: #f5f7fa;
+  border-color: #e1e5eb;
+  color: #9098a3;
+}
