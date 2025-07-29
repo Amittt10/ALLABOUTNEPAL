@@ -1,22 +1,29 @@
-/* ProfileSidebar.css */
 .profile-sidebar {
-  width: 200px;
-  background: #f9fafd;
-  border-radius: 10px;
+  width: 280px;
+  background: #0b1e46;
+  color: white;
   padding: 1.5rem 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  position: fixed;
+  top: 6rem; /* match header */
+  bottom: 0;
+  left: 0;
+  height: calc(100vh - 6rem);
+  overflow-y: auto;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.1);
   text-align: center;
+  z-index: 100;
 }
 
+/* Photo Upload */
 .profile-sidebar .photo-upload {
   width: 120px;
   height: 120px;
-  margin: 0 auto 1.5rem;
+  margin: 0 auto 1rem;
   border-radius: 50%;
   border: 3px solid #4a90e2;
   overflow: hidden;
   cursor: pointer;
-  background-color: #f5f9ff;
+  background-color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,86 +31,83 @@
   transition: border-color 0.3s ease, transform 0.3s ease;
 }
 
-.photo-upload.drag-active {
+.profile-sidebar .photo-upload.drag-active {
   border-color: #34a853;
   box-shadow: 0 0 12px rgba(52, 168, 83, 0.6);
   transform: scale(1.05);
 }
 
-.photo-upload input[type="file"] {
-  display: none;
-}
-
-.photo-upload img {
+.profile-sidebar .photo-upload img {
   width: 100%;
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  pointer-events: none;
-  user-select: none;
-  display: block;
 }
 
-.profile-sidebar .message {
+/* Name & Username */
+.profile-sidebar h3 {
+  margin-top: 0.8rem;
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+.profile-sidebar .username {
   font-size: 0.9rem;
-  margin-bottom: 1rem;
-  font-weight: 600;
+  color: #bbb;
+  margin-bottom: 1.5rem;
+}
+
+/* Message Box */
+.profile-sidebar .message {
+  font-size: 0.85rem;
+  margin: 0.5rem 0;
+  font-weight: 500;
   padding: 0.4rem;
   border-radius: 6px;
 }
 
 .profile-sidebar .message.success {
-  color: #2a7a33;
   background-color: #e6f4ea;
+  color: #2a7a33;
   border: 1px solid #61b15a;
 }
 
 .profile-sidebar .message.error {
-  color: #b3312c;
   background-color: #fdecea;
+  color: #b3312c;
   border: 1px solid #e07a74;
 }
 
-.profile-sidebar h3 {
-  margin: 0.5rem 0 0.2rem;
-  font-size: 1.2rem;
-  color: #333;
-}
-
-.profile-sidebar .username {
-  font-size: 0.9rem;
-  color: #777;
-  margin-bottom: 1.5rem;
-}
-
+/* Nav Buttons */
 .profile-sidebar nav button {
   width: 100%;
   padding: 0.6rem 1rem;
-  border: none;
   background: transparent;
+  border: none;
   text-align: left;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  color: #555;
+  color: #eee;
+  font-weight: 500;
+  font-size: 0.95rem;
   border-radius: 6px;
-  transition: background-color 0.3s ease, color 0.3s ease;
   margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .profile-sidebar nav button.active,
 .profile-sidebar nav button:hover {
   background-color: #4a90e2;
-  color: #fff;
+  color: white;
 }
 
+/* Mobile */
 @media (max-width: 720px) {
   .profile-sidebar {
     width: 100%;
-    margin-bottom: 1.5rem;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+    height: auto;
+    position: static;
+    box-shadow: none;
+    padding: 1rem;
   }
 
   .profile-sidebar nav button {

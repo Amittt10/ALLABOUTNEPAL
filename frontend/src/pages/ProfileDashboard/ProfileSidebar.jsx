@@ -1,22 +1,21 @@
-// src/pages/ProfileDashboard/ProfileSidebar.jsx
 import React, { useContext, useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../../context/AuthContext";
+import { showCustomToast } from "../utils/showCustomToast";
 import "./ProfileSidebar.css";
-
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 const ProfileSidebar = ({ activeTab, setActiveTab }) => {
   const { user, setUser, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState(false);
 
   useEffect(() => {
-    setPreview(null); // Reset preview when photo changes
+    setPreview(null);
   }, [user?.photo]);
 
   const onDrop = async (acceptedFiles) => {
@@ -25,8 +24,6 @@ const ProfileSidebar = ({ activeTab, setActiveTab }) => {
 
     setPreview(URL.createObjectURL(file));
     setLoading(true);
-    setMessage("");
-    setError(false);
 
     const form = new FormData();
     form.append("photo", file);
@@ -40,10 +37,15 @@ const ProfileSidebar = ({ activeTab, setActiveTab }) => {
         },
       });
       setUser(res.data);
-      setMessage("✅ Profile photo updated!");
+      showCustomToast(
+        "✅ PHOTO_UPDATED",
+        "Your profile photo was updated successfully!"
+      );
     } catch (err) {
-      setError(true);
-      setMessage("❌ Failed to update photo.");
+      showCustomToast(
+        "❌ UPDATE_FAILED",
+        "Failed to update profile photo. Please try again."
+      );
       setPreview(null);
     } finally {
       setLoading(false);
@@ -57,16 +59,15 @@ const ProfileSidebar = ({ activeTab, setActiveTab }) => {
   });
 
   const handleLogout = () => {
-    logout?.();
+    if (logout) logout();
+    navigate("/");
   };
 
   return (
     <aside className="profile-sidebar" role="navigation" aria-label="Profile navigation">
       <div
         {...getRootProps()}
-        className={`photo-upload ${isDragActive ? "drag-active" : ""} ${
-          loading ? "disabled" : ""
-        }`}
+        className={`photo-upload ${isDragActive ? "drag-active" : ""} ${loading ? "disabled" : ""}`}
         tabIndex={0}
         title="Click or drag to change profile photo"
         onKeyDown={(e) => {
@@ -84,12 +85,6 @@ const ProfileSidebar = ({ activeTab, setActiveTab }) => {
         {loading && <div className="spinner" aria-live="polite" aria-busy="true" />}
       </div>
 
-      {message && (
-        <p className={`message ${error ? "error" : "success"}`} role="alert">
-          {message}
-        </p>
-      )}
-
       <h3 tabIndex={0}>{user?.fullname || "User Name"}</h3>
       <p className="username">@{user?.username || "username"}</p>
 
@@ -102,6 +97,41 @@ const ProfileSidebar = ({ activeTab, setActiveTab }) => {
         >
           Overview
         </button>
+
+        <button
+          type="button"
+          className={activeTab === "quizHistory" ? "active" : ""}
+          onClick={() => setActiveTab("quizHistory")}
+        >
+          My Quizzes
+        </button>
+
+        <button
+          type="button"
+          className={activeTab === "leaderboard" ? "active" : ""}
+          onClick={() => setActiveTab("leaderboard")}
+        >
+          Leaderboard
+        </button>
+
+        <button
+          type="button"
+          className={activeTab === "achievements" ? "active" : ""}
+          onClick={() => setActiveTab("achievements")}
+        >
+          Achievements
+        </button>
+
+        {user?.role === "admin" && (
+          <button
+            type="button"
+            className={activeTab === "adminPanel" ? "active" : ""}
+            onClick={() => setActiveTab("adminPanel")}
+          >
+            Admin Panel
+          </button>
+        )}
+
         <button type="button" onClick={handleLogout}>
           Logout
         </button>
