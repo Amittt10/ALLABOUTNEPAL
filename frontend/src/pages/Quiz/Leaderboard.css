@@ -146,6 +146,12 @@ thead th {
   text-align: center;
 }
 
+thead th:nth-child(2) {
+  text-align: left;
+}
+
+
+
 tbody tr {
   border-bottom: 1px solid #e0e0e0;
   transition: background-color 0.25s ease;
@@ -172,12 +178,14 @@ tbody td {
   vertical-align: middle;
 }
 
-/* Handle alignment inside wrapper */
 .user-info-wrapper {
-  display: inline-flex; /* <-- use inline-flex for table cells */
+  display: flex;
   align-items: center;
   gap: 10px;
+  width: 100%;                /* full width to pin avatar to left */
 }
+
+
 
 /* Avatar */
 .leaderboard-avatar {
@@ -186,19 +194,17 @@ tbody td {
   border-radius: 50%;
   object-fit: cover;
   border: 2.5px solid #1a73e8;
-  box-shadow: 0 0 8px rgba(26, 115, 232, 0.4);
+  background-color: #f0f0f0;
   flex-shrink: 0;
 }
 
-/* Username text */
 .username-text {
   font-weight: 600;
   font-size: 1rem;
   color: #222;
-  line-height: 1.2;
   white-space: nowrap;
+  line-height: 1;
 }
-
 
 
 .user-info-wrapper span {
