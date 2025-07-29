@@ -78,7 +78,7 @@ body {
 .video-hero-section {
   position: relative;
   width: 100%;
-  height: clamp(50vh, 70vh, 80vh);
+  height: clamp(70vh, 75vh, 90vh);
   overflow: hidden;
   /* border-radius: 0 0 var(--radius-lg) var(--radius-lg); */
   box-shadow: 0 8px 32px var(--shadow-medium);

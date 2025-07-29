@@ -9,10 +9,6 @@ const QuizPlay = () => {
   const navigate = useNavigate();
   const { category, difficulty } = location.state || {};
 
-  useEffect(() => {
-    console.log("📍 QuizPlay location.state:", location.state); // Debug
-  }, [location.state]);
-
   const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
@@ -44,7 +40,7 @@ const QuizPlay = () => {
     fetchQuestions();
   }, [category, difficulty, navigate]);
 
-  // Timer effect: reset timer and start countdown on currentIndex change
+  // Timer effect
   useEffect(() => {
     setTimeLeft(TIMER_SECONDS);
     setSelectedAnswer(null);
@@ -59,12 +55,11 @@ const QuizPlay = () => {
     return () => clearInterval(timerRef.current);
   }, [currentIndex]);
 
-  // When timer hits zero, auto-submit and move on
+  // Auto-submit on time out
   useEffect(() => {
     if (timeLeft <= 0 && !showFeedback) {
       clearInterval(timerRef.current);
 
-      // Save answer (or null if none selected)
       const answerToSave = selectedAnswer !== null ? selectedAnswer : null;
       setUserAnswers((prev) => {
         const newAnswers = [...prev];
@@ -74,7 +69,6 @@ const QuizPlay = () => {
 
       setShowFeedback(true);
 
-      // Show feedback briefly, then move to next question or results
       setTimeout(() => {
         if (currentIndex + 1 < questions.length) {
           setCurrentIndex(currentIndex + 1);
@@ -116,7 +110,6 @@ const QuizPlay = () => {
     setShowFinishConfirm(true);
   };
 
-  // Submit quiz results and navigate to results page
   const submitResultAndNavigate = async (finalAnswers) => {
     if (!user) {
       alert("Please login to save your quiz results.");
@@ -124,7 +117,6 @@ const QuizPlay = () => {
       return;
     }
 
-    // Calculate correct answers count
     const correctAnswersCount = finalAnswers.reduce((acc, answer, idx) => {
       if (questions[idx]?.correctAnswerIndex === answer) return acc + 1;
       return acc;
@@ -140,15 +132,14 @@ const QuizPlay = () => {
         difficulty,
       });
 
-      // Get quizId from response to pass to results page
       const quizId = res.data.quizId;
 
       navigate("/quiz/result", {
         state: {
           questions,
           userAnswers: finalAnswers,
-          quizId, // Pass quizId for feedback association
-          userId: user._id, // Pass userId for feedback
+          quizId,
+          userId: user._id,
         },
       });
     } catch (error) {
@@ -157,7 +148,6 @@ const QuizPlay = () => {
     }
   };
 
-  // Confirm finish button logic
   const confirmFinishNow = () => {
     let finalAnswers = [...userAnswers];
     if (selectedAnswer !== null && !showFeedback) {
@@ -178,7 +168,7 @@ const QuizPlay = () => {
 
   return (
     <div className="quiz-play-container">
-      <h2>
+      <h2 className="question-header">
         Question {currentIndex + 1} of {questions.length}
       </h2>
 
@@ -206,6 +196,8 @@ const QuizPlay = () => {
             className += " selected";
           }
 
+          const label = String.fromCharCode(65 + i); // A, B, C, D
+
           return (
             <button
               key={i}
@@ -214,7 +206,7 @@ const QuizPlay = () => {
               disabled={showFeedback}
               aria-pressed={isSelected}
             >
-              {option}
+              <span className="option-label">{label}.</span> {option}
             </button>
           );
         })}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { api } from "../../api/api";
 import "./Leaderboard.css";
 
-const categories = ["All", "General", "Science", "Math", "History", "Sports"];
+const categories = ["All", "General", "Location", "History"];
 const difficulties = ["All", "easy", "medium", "hard"];
 
 const Leaderboard = () => {
@@ -37,7 +37,10 @@ const Leaderboard = () => {
       <div className="filters">
         <label>
           Category:
-          <select value={category} onChange={(e) => setCategory(e.target.value)}>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          >
             {categories.map((cat) => (
               <option key={cat} value={cat}>
                 {cat}
@@ -48,7 +51,10 @@ const Leaderboard = () => {
 
         <label>
           Difficulty:
-          <select value={difficulty} onChange={(e) => setDifficulty(e.target.value)}>
+          <select
+            value={difficulty}
+            onChange={(e) => setDifficulty(e.target.value)}
+          >
             {difficulties.map((diff) => (
               <option key={diff} value={diff}>
                 {diff}
@@ -61,46 +67,86 @@ const Leaderboard = () => {
       {loading ? (
         <p>Loading leaderboard...</p>
       ) : leaderboard.length > 0 ? (
-        <table>
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>User</th>
-              <th>Score</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-        <tbody>
-  {leaderboard.map(({ userId, score, createdAt }, idx) => (
-    <tr key={idx}>
-      <td>{idx + 1}</td>
-      <td style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-        {userId?.photo ? (
-          <img
-            src={`http://localhost:3000/${userId.photo}`}
-            alt={userId.username}
-            className="leaderboard-avatar"
-          />
-        ) : (
-          <div
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: "50%",
-              backgroundColor: "#ccc",
-              display: "inline-block",
-            }}
-          />
-        )}
-        <span>{userId?.username || "Unknown"}</span>
-      </td>
-      <td>{score}</td>
-      <td>{new Date(createdAt).toLocaleDateString()}</td>
-    </tr>
-  ))}
-</tbody>
+        <>
+          {/* TOP 3 USERS */}
+          <div className="top-three-container">
+            {leaderboard
+              .slice(0, 3)
+              .map(({ userId, score, createdAt }, idx) => (
+                <div className={`top-user-card rank-${idx + 1}`} key={idx}>
+                  <div className="top-avatar-wrapper">
+                    <img
+                      src={
+                        userId?.photo
+                          ? `http://localhost:3000/${userId.photo}`
+                          : "/images/avatar.png"
+                      }
+                      alt={userId?.username || "User"}
+                      className="top-avatar"
+                    />
+                    <div
+                      className={`badge-icon ${
+                        ["gold", "silver", "bronze"][idx]
+                      }`}
+                    >
+                      {idx === 0 ? "🥇" : idx === 1 ? "🥈" : "🥉"}
+                    </div>
+                  </div>
+                  <div className="top-user-info">
+                    <h3>{userId?.username || "Unknown"}</h3>
+                    <p>
+                      Score: <strong>{score}</strong>
+                    </p>
+                    <p>{new Date(createdAt).toLocaleDateString()}</p>
+                  </div>
+                </div>
+              ))}
+          </div>
 
-        </table>
+          {/* REMAINING USERS */}
+          {leaderboard.length > 3 && (
+            <table>
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>User</th>
+                  <th>Score</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {leaderboard
+                  .slice(3)
+                  .map(({ userId, score, createdAt }, idx) => (
+                    <tr key={idx + 3}>
+                      <td style={{ textAlign: "center" }}>{idx + 4}</td>
+                      <td className="user-cell">
+                        <div className="user-info-wrapper">
+                          <img
+                            src={
+                              userId?.photo
+                                ? `http://localhost:3000/${userId.photo}`
+                                : "/images/avatar.png"
+                            }
+                            alt={userId?.username || "User"}
+                            className="leaderboard-avatar"
+                          />
+                          <span className="username-text">
+                            {userId?.username || "Unknown"}
+                          </span>
+                        </div>
+                      </td>
+
+                      <td style={{ textAlign: "center" }}>{score}</td>
+                      <td style={{ textAlign: "center" }}>
+                        {new Date(createdAt).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          )}
+        </>
       ) : (
         <p>No leaderboard data available.</p>
       )}

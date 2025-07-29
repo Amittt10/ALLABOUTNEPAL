@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { api } from "../../api/api";
 import LoginCard from "../../Component/LoginCard";
+import { showCustomToast } from "../utils/showCustomToast";
 import "./QuizHome.css";
 
 const categories = ["General", "Location", "History"];
@@ -18,7 +19,6 @@ const QuizHome = () => {
   const [loadingLeaderboard, setLoadingLeaderboard] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
 
-  // Fetch leaderboard whenever category or difficulty changes
   useEffect(() => {
     setLoadingLeaderboard(true);
     api
@@ -42,7 +42,7 @@ const QuizHome = () => {
     }
 
     if (!category) {
-      alert("Please select a quiz category.");
+      showCustomToast("❗ REQUIRED", "Please select a quiz category to begin.");
       return;
     }
 
@@ -62,7 +62,6 @@ const QuizHome = () => {
       <h1 className="page-title">Quiz Dashboard</h1>
 
       <div className="quiz-main-content">
-        {/* Start Quiz Section */}
         <section className="quiz-filters">
           <h2>Start New Quiz</h2>
           <div className="filters-row">
@@ -105,7 +104,6 @@ const QuizHome = () => {
           </div>
         </section>
 
-        {/* Leaderboard Section */}
         <section className="quiz-leaderboard">
           <h2>Leaderboard (Top 3)</h2>
           {loadingLeaderboard ? (
@@ -126,20 +124,20 @@ const QuizHome = () => {
                     <tr key={idx}>
                       <td>{idx + 1}</td>
                       <td>
-  {userId ? (
-    <div className="user-info-cell">
-      <img
-        src={userId.photo || "/default-avatar.png"}
-        alt={`${userId.username}'s avatar`}
-        className="user-avatar"
-      />
-      <span>{userId.username}</span>
-    </div>
-  ) : (
-    "Unknown"
-  )}
-</td>
-
+                        <div className="home-user-cell">
+                          <img
+                            src={userId?.photo ? `http://localhost:3000/${userId.photo}` : "/images/avatar.png"}
+                            alt={userId?.username || "User"}
+                            className="home-user-avatar"
+                          />
+                          <span className={`home-username medal-${idx}`}>
+                            {userId?.username || "Unknown"}
+                            <span className="medal-icon">
+                              {idx === 0 ? "🥇" : idx === 1 ? "🥈" : "🥉"}
+                            </span>
+                          </span>
+                        </div>
+                      </td>
                       <td>{score}</td>
                       <td>{new Date(createdAt).toLocaleDateString()}</td>
                     </tr>
@@ -158,7 +156,6 @@ const QuizHome = () => {
         </section>
       </div>
 
-      {/* Login Modal Popup */}
       {!user && showLogin && (
         <div className="auth-modal-overlay">
           <div className="auth-modal">
