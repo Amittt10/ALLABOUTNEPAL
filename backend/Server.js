@@ -28,7 +28,7 @@ import blogRoutes from "./routes/blogRoutes.js";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 10000;
+const PORT = process.env.PORT || 3000;
 
 const allowedOrigins = ["http://localhost:5173", "http://localhost:5174"];
 
