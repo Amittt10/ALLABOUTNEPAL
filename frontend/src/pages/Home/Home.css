@@ -409,7 +409,7 @@ body {
 
 .festival-card-list {
   display: flex;
-  gap: 24px;
+  gap: 32px;
   flex-wrap: wrap;
   padding: 0 16px 40px;
   box-sizing: border-box;

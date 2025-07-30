@@ -231,3 +231,24 @@ body {
     max-height: 250px;
   }
 }
+
+.nested-list {
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.nested-list.level-1 {
+  list-style-type: disc;
+}
+
+.nested-list.level-2 {
+  list-style-type: circle;
+}
+
+.nested-list.level-3 {
+  list-style-type: square;
+}
+
+.nested-list li {
+  margin: 0.25rem 0;
+}

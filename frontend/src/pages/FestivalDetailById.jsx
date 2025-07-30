@@ -18,20 +18,16 @@ const FestivalDetailById = () => {
   const [error, setError] = useState(null);
   const [fullscreenImg, setFullscreenImg] = useState(null);
 
-  // ✅ First define lang
   const lang = i18n.language || "en";
-  // ✅ Then use lang to define langCode
   const langCode = lang === "np" ? "ne-NP" : "en-US";
 
   const addToRecentlyViewed = (item) => {
     const existing = JSON.parse(localStorage.getItem("recentlyViewed")) || [];
 
-    // Remove duplicates by _id and type
     const filtered = existing.filter(
       (i) => !(i._id === item._id && i.type === item.type)
     );
 
-    // ✅ Ensure full image URL is stored
     const rawImage =
       item.thumbnail ||
       (Array.isArray(item.image) ? item.image[0] : item.image) ||
@@ -51,7 +47,6 @@ const FestivalDetailById = () => {
         item.name_en ||
         item.name_np ||
         "Untitled",
-
       slug: item.slug,
       image: fullImage,
       type: item.type || "unknown",
@@ -110,23 +105,74 @@ const FestivalDetailById = () => {
     festival?.description_en ||
     "No content available.";
   const rawLines = descriptionRaw
-    .replace(/^[\u2022\u2013\u2014•]/gm, "-") // Replace common bullets/dashes
+    .replace(/^[\u2022\u2013\u2014•]/gm, "-")
     .replace(/\t/g, "  ")
     .split("\n")
     .map((line) => line.trimEnd());
 
-  const parsedBlocks = rawLines.map((line) => {
-    if (line.startsWith("### "))
-      return { type: "subtitle", content: line.slice(4).trim() };
-    if (line.startsWith("## "))
-      return { type: "heading", content: line.slice(3).trim() };
-    if (line.startsWith("# "))
-      return { type: "title", content: line.slice(2).trim() };
-    if (/^[A-Z\s\-:]+$/.test(line) && line.length < 40) {
-      return { type: "heading", content: line.trim() };
+  // ✅ List parsing logic
+  function parseNestedList(lines, startIndex = 0, baseIndent = 0) {
+    const items = [];
+    let i = startIndex;
+
+    while (i < lines.length) {
+      const line = lines[i];
+      const leadingSpaces = line.match(/^ */)?.[0]?.length ?? 0;
+      if (line.trim().startsWith("- ")) {
+        if (leadingSpaces < baseIndent) break;
+        if (leadingSpaces > baseIndent) {
+          if (items.length === 0) break;
+          const [nestedList, nextIndex] = parseNestedList(
+            lines,
+            i,
+            leadingSpaces
+          );
+          items[items.length - 1].children = nestedList;
+          i = nextIndex;
+          continue;
+        }
+
+        const content = line.trim().slice(2).trim();
+        items.push({ content, children: [] });
+        i++;
+      } else {
+        break;
+      }
     }
-    return { type: "paragraph", content: line };
-  });
+    return [items, i];
+  }
+
+  const parseBlocks = (lines) => {
+    const blocks = [];
+    let i = 0;
+
+    while (i < lines.length) {
+      const line = lines[i];
+
+      if (line.trim().startsWith("- ")) {
+        const [listItems, nextIndex] = parseNestedList(lines, i);
+        blocks.push({ type: "list", items: listItems });
+        i = nextIndex;
+        continue;
+      }
+
+      if (line.startsWith("### ")) {
+        blocks.push({ type: "subtitle", content: line.slice(4).trim() });
+      } else if (line.startsWith("## ")) {
+        blocks.push({ type: "heading", content: line.slice(3).trim() });
+      } else if (line.startsWith("# ")) {
+        blocks.push({ type: "title", content: line.slice(2).trim() });
+      } else if (/^[A-Z\s\-:]+$/.test(line)) {
+        blocks.push({ type: "heading", content: line.trim() });
+      } else {
+        blocks.push({ type: "paragraph", content: line });
+      }
+      i++;
+    }
+    return blocks;
+  };
+
+  const descriptionBlocks = parseBlocks(rawLines);
 
   const renderFormattedText = (text) => {
     const elements = [];
@@ -152,9 +198,21 @@ const FestivalDetailById = () => {
         elements.push(<span key={elements.length}>{part}</span>);
       }
     }
-
     return elements;
   };
+
+  const renderList = (items, keyPrefix = "", level = 1) => (
+    <ul className={`nested-list level-${level}`} key={keyPrefix}>
+      {items.map((item, idx) => (
+        <li key={`${keyPrefix}-${idx}`}>
+          {renderFormattedText(item.content)}
+          {item.children &&
+            item.children.length > 0 &&
+            renderList(item.children, `${keyPrefix}-${idx}`, level + 1)}
+        </li>
+      ))}
+    </ul>
+  );
 
   const renderBlock = (block, key) => {
     switch (block.type) {
@@ -192,6 +250,9 @@ const FestivalDetailById = () => {
           </p>
         );
 
+      case "list":
+        return renderList(block.items, `list-${key}`);
+
       case "title":
         return (
           <h2 key={key} className="festival-desc-title semibold">
@@ -219,10 +280,6 @@ const FestivalDetailById = () => {
 
   return (
     <div className="festival-details-container">
-      {/* <button className="back-btn" onClick={() => navigate(-1)}>
-        &larr; Back
-      </button> */}
-
       {festival?.image && (
         <img
           src={`${API}/uploads/${festival.image}`}
@@ -246,14 +303,12 @@ const FestivalDetailById = () => {
       </p>
 
       <div className="description-content">
-        {parsedBlocks.map((block, idx) => renderBlock(block, idx))}
+        {descriptionBlocks.map((block, idx) => renderBlock(block, idx))}
       </div>
 
       {descriptionRaw && <TTSControl text={descriptionRaw} lang={langCode} />}
 
       <ReviewSection targetType="festival" targetId={festival._id} />
-
-      {/* Recommended Festivals Section */}
       <RecommendedList
         targetType="festival"
         excludeId={festival._id}

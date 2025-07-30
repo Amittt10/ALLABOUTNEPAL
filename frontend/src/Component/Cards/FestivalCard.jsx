@@ -16,21 +16,24 @@ export default function FestivalCard({ festival, getFullImageUrl, i18n }) {
   };
 
   return (
-    <div
-      ref={ref}
-      className={`festival-card-simple fade-in-section ${visible ? "fade-in-visible" : ""}`}
-      onClick={() => navigate(`/festival-detail/${festival.slug}`)}
-    >
-      <img
-        src={getFullImageUrl(festival.image, "festival")}
-        alt={i18n.language === "np" ? festival.name_np : festival.name_en}
-        loading="lazy"
-        className="festival-image"
-      />
-      <p className="festival-card-date">{formatDate(festival.dateAD)}</p>
-      <h3 className="festival-title">
-        {i18n.language === "np" ? festival.name_np : festival.name_en}
-      </h3>
-    </div>
+  <div
+  ref={ref}
+  className={`festival-card-simple fade-in-section ${visible ? "fade-in-visible" : ""}`}
+  onClick={() => navigate(`/festival-detail/${festival.slug}`)}
+>
+  <div className="festival-image-wrapper">
+    <img
+      src={getFullImageUrl(festival.image, "festival")}
+      alt={i18n.language === "np" ? festival.name_np : festival.name_en}
+      loading="lazy"
+      className="festival-image"
+    />
+  </div>
+  <p className="festival-card-date">{formatDate(festival.dateAD)}</p>
+  <h3 className="festival-title">
+    {i18n.language === "np" ? festival.name_np : festival.name_en}
+  </h3>
+</div>
+
   );
 }
