@@ -213,7 +213,7 @@ export default function BlogDetails() {
       <h1 className="blog-details-title">{blog.title}</h1>
 
       {/* Snippet */}
-      <p className="blog-details-snippet">{blog.snippet}</p>
+      {/* <p className="blog-details-snippet">{blog.snippet}</p> */}
 
       {/* Content */}
       <div className="blog-content">
