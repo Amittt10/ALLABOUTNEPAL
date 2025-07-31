@@ -29,24 +29,57 @@ const HeritageDetails = () => {
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_KEY,
   });
 
-  const addToRecentlyViewed = (item) => {
+const addToRecentlyViewed = (item) => {
   const existing = JSON.parse(localStorage.getItem("recentlyViewed")) || [];
-  // Remove duplicates by _id and type
+
+  // Remove duplicates based on _id and type
   const filtered = existing.filter(
     (i) => !(i._id === item._id && i.type === item.type)
   );
-  // Prepare minimal object to store
+
+  // Robust image extraction logic
+  let imagePath = "";
+
+  if (item.thumbnail && typeof item.thumbnail === "string" && item.thumbnail.trim() !== "") {
+    imagePath = item.thumbnail;
+  } else if (Array.isArray(item.image) && item.image.length > 0 && typeof item.image[0] === "string") {
+    imagePath = item.image[0];
+  } else if (typeof item.image === "string" && item.image.trim() !== "") {
+    imagePath = item.image;
+  } else if (Array.isArray(item.gallery) && item.gallery.length > 0 && typeof item.gallery[0] === "string") {
+    imagePath = item.gallery[0];
+  }
+
+  // Construct full image URL (avoid double slashes)
+  const fullImageUrl = imagePath.startsWith("http")
+    ? imagePath
+    : imagePath
+    ? `${API}/${imagePath.replace(/^\/+/, "")}`
+    : "/fallback.jpg"; // fallback if no image path
+
+  // Robust title extraction, fallback to 'No Title'
+  const title =
+    item.name_en?.trim() ||
+    item.title_en?.trim() ||
+    item.title?.trim() ||
+    (typeof item.name === "string" ? item.name.trim() : "") ||
+    "No Title";
+
+  // Cleaned object for storage
   const cleaned = {
     _id: item._id,
-    title: item.title_en || item.title || "No Title", // localize as needed
-    slug: item.slug,
-    image: item.thumbnail || item.image?.[0] || item.image || "",
+    title,
+    slug: item.slug || "",
+    image: fullImageUrl,
     type: item.type || "unknown",
   };
-  // Put newest at front and limit to 10 items max
+
+  // Keep max 10 items, newest first
   const updated = [cleaned, ...filtered].slice(0, 10);
   localStorage.setItem("recentlyViewed", JSON.stringify(updated));
 };
+
+
 
 
   useEffect(() => {
@@ -72,7 +105,7 @@ const HeritageDetails = () => {
 
     useEffect(() => {
   if (site) {
-    addToRecentlyViewed({ ...site, type: "site" });
+    addToRecentlyViewed({ ...site, type: "heritage" });
   }
 }, [site]);
 

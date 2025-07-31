@@ -100,6 +100,9 @@ const RecentlyViewed = () => {
     scrollRef.current?.scrollBy({ left: -300, behavior: "smooth" });
   };
 
+  console.log("Recently viewed items:", items);
+
+
   if (!items.length) return null;
 
   return (
@@ -132,11 +135,12 @@ const RecentlyViewed = () => {
                     : item.type === "festival"
                     ? `/festival-detail/${item.slug}`
                     : "/"
+                    
                 }
                 className={`recent-card-link fade-in-section ${
                   visible ? "fade-in-visible" : ""
                 }`}
-                key={itemId}
+                key={`${item.type}-${itemId}`}
                 ref={(el) => (refs.current[itemId] = el)}
               >
                 <div className="recent-card">
