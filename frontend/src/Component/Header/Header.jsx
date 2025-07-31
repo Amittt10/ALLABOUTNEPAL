@@ -209,7 +209,7 @@ const Header = () => {
 
                   <div className="mega-menu-right">
                     <img
-                      src="/images/event-thumbnail.jpg"
+                      src="/images/event-thumbnail.jpeg"
                       alt="Upcoming Event"
                       className="mega-menu-thumbnail"
                     />
