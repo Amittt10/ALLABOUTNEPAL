@@ -8,7 +8,7 @@
   z-index: 1000;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   padding: 0.5rem 1rem;
-  font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Poppins', sans-serif;
   user-select: none;
 }
 
@@ -585,4 +585,15 @@
     padding: 0.75rem 1rem;
     font-size: 14px;
   }
+}
+
+.header a,
+.header a:visited,
+.header span,
+.header button,
+.header li,
+.header .dropdown-toggle,
+.header .menu li a,
+.header .lang-btn {
+  color: #222 !important;
 }
