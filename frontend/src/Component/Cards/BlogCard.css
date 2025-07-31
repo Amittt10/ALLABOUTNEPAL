@@ -1,13 +1,14 @@
 .blog-card {
-  flex: 0 0 auto;
-  width: 300px;
-  display: flex;
-  flex-direction: column;
-  text-decoration: none;
-  color: inherit;
-  scroll-snap-align: start;
+  cursor: pointer;
+  text-align: left;
   transition: transform 0.3s ease;
-  position: relative;
+  width: 320px;
+  flex: 0 0 auto;
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
 }
 
 /* Fix category label to overlay on image */
@@ -41,6 +42,11 @@
   object-fit: cover;
   flex-shrink: 0;
 }
+
+.blog-image-wrapper {
+  position: relative;
+}
+
 
 .blog-card .meta {
   font-family: 'Poppins', sans-serif;

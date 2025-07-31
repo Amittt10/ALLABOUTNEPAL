@@ -495,10 +495,12 @@ body {
 }
 
 .blog-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px;
-  padding-bottom: 40px;
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  padding: 0 16px 40px;
+  box-sizing: border-box;
+  justify-content: center;
 }
 
 
