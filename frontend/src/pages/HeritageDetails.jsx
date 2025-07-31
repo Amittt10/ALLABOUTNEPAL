@@ -7,8 +7,6 @@ import ReviewSection from "../Component/ReviewSection/ReviewSection";
 import TTSControl from "../Component/TTSControl/TTSControl";
 import RecommendedList from "../Component/RecommendedList/RecommendedList";
 
-
-
 const API = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 const HeritageDetails = () => {
@@ -20,9 +18,8 @@ const HeritageDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [fullscreenImg, setFullscreenImg] = useState(null);
-   // ✅ First define lang
+
   const lang = i18n.language || 'en';
-  // ✅ Then use lang to define langCode
   const langCode = lang === "np" ? "ne-NP" : "en-US";
 
   const { isLoaded } = useJsApiLoader({
@@ -37,7 +34,7 @@ const addToRecentlyViewed = (item) => {
     (i) => !(i._id === item._id && i.type === item.type)
   );
 
-  // Robust image extraction logic
+  // === Robust image extraction ===
   let imagePath = "";
 
   if (item.thumbnail && typeof item.thumbnail === "string" && item.thumbnail.trim() !== "") {
@@ -50,14 +47,14 @@ const addToRecentlyViewed = (item) => {
     imagePath = item.gallery[0];
   }
 
-  // Construct full image URL (avoid double slashes)
+  // === Construct full image URL ===
   const fullImageUrl = imagePath.startsWith("http")
     ? imagePath
     : imagePath
     ? `${API}/${imagePath.replace(/^\/+/, "")}`
-    : "/fallback.jpg"; // fallback if no image path
+    : "/fallback.jpg"; // fallback image
 
-  // Robust title extraction, fallback to 'No Title'
+  // === Title fallback ===
   const title =
     item.name_en?.trim() ||
     item.title_en?.trim() ||
@@ -65,7 +62,7 @@ const addToRecentlyViewed = (item) => {
     (typeof item.name === "string" ? item.name.trim() : "") ||
     "No Title";
 
-  // Cleaned object for storage
+  // === Construct cleaned object for storage ===
   const cleaned = {
     _id: item._id,
     title,
@@ -74,12 +71,10 @@ const addToRecentlyViewed = (item) => {
     type: item.type || "unknown",
   };
 
-  // Keep max 10 items, newest first
+  // === Add to front and trim to 10 ===
   const updated = [cleaned, ...filtered].slice(0, 10);
   localStorage.setItem("recentlyViewed", JSON.stringify(updated));
 };
-
-
 
 
   useEffect(() => {
@@ -102,13 +97,11 @@ const addToRecentlyViewed = (item) => {
     fetchSite();
   }, [slug, i18n.language]);
 
-
-    useEffect(() => {
-  if (site) {
-    addToRecentlyViewed({ ...site, type: "heritage" });
-  }
-}, [site]);
-
+  useEffect(() => {
+    if (site) {
+      addToRecentlyViewed({ ...site, type: "heritage" });
+    }
+  }, [site]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -121,29 +114,70 @@ const addToRecentlyViewed = (item) => {
   const images = site?.gallery || [];
 
   const rawLines = historyRaw
-  .replace(/^[\u2022\u2013\u2014•]/gm, "-")  // Replace common bullets/dashes
-  .replace(/\t/g, "  ")
-  .split("\n")
-  .map(line => line.trimEnd());
+    .replace(/^[\u2022\u2013\u2014•]/gm, "-")
+    .replace(/\t/g, "  ")
+    .split("\n")
+    .map(line => line.trimEnd());
 
+  function parseNestedList(lines, startIndex = 0, baseIndent = 0) {
+    const items = [];
+    let i = startIndex;
 
-  // === Enhanced block parsing with [imageX] support ===
-  const descriptionBlocks = [];
-  rawLines.forEach((line) => {
-    if (line.startsWith('### ')) {
-      descriptionBlocks.push({ type: 'subtitle', content: line.slice(4).trim() });
-    } else if (line.startsWith('## ')) {
-      descriptionBlocks.push({ type: 'heading', content: line.slice(3).trim() });
-    } else if (line.startsWith('# ')) {
-      descriptionBlocks.push({ type: 'title', content: line.slice(2).trim() });
-    } else if (/^[A-Z\s\-:]+$/.test(line) && line.length < 40) {
-      descriptionBlocks.push({ type: 'heading', content: line });
-    } else {
-      descriptionBlocks.push({ type: 'paragraph', content: line });
+    while (i < lines.length) {
+      const line = lines[i];
+      const leadingSpaces = line.match(/^ */)[0].length;
+      if (line.trim().startsWith("- ")) {
+        if (leadingSpaces < baseIndent) break;
+        if (leadingSpaces > baseIndent) {
+          if (items.length === 0) break;
+          const [nestedList, nextIndex] = parseNestedList(lines, i, leadingSpaces);
+          items[items.length - 1].children = nestedList;
+          i = nextIndex;
+          continue;
+        }
+
+        const content = line.trim().slice(2).trim();
+        items.push({ content, children: [] });
+        i++;
+      } else {
+        break;
+      }
     }
-  });
+    return [items, i];
+  }
 
-  // === Markdown-style text formatting ===
+  const parseBlocks = (lines) => {
+    const blocks = [];
+    let i = 0;
+
+    while (i < lines.length) {
+      const line = lines[i];
+
+      if (line.trim().startsWith("- ")) {
+        const [listItems, nextIndex] = parseNestedList(lines, i);
+        blocks.push({ type: "list", items: listItems });
+        i = nextIndex;
+        continue;
+      }
+
+      if (line.startsWith("### ")) {
+        blocks.push({ type: "subtitle", content: line.slice(4).trim() });
+      } else if (line.startsWith("## ")) {
+        blocks.push({ type: "heading", content: line.slice(3).trim() });
+      } else if (line.startsWith("# ")) {
+        blocks.push({ type: "title", content: line.slice(2).trim() });
+      } else if (/^[A-Z\s\-:]+$/.test(line)) {
+        blocks.push({ type: "heading", content: line.trim() });
+      } else {
+        blocks.push({ type: "paragraph", content: line });
+      }
+      i++;
+    }
+    return blocks;
+  };
+
+  const descriptionBlocks = parseBlocks(rawLines);
+
   const renderFormattedText = (text) => {
     const elements = [];
     const regex = /(\*\*\*[^*]+\*\*\*|\*\*[^*]+\*\*|\*[^*]+\*|[^*]+)/g;
@@ -166,11 +200,21 @@ const addToRecentlyViewed = (item) => {
     return elements;
   };
 
-  // === Rendering blocks ===
+  const renderList = (items, keyPrefix = "", level = 1) => (
+    <ul className={`nested-list level-${level}`} key={keyPrefix}>
+      {items.map((item, idx) => (
+        <li key={`${keyPrefix}-${idx}`}>
+          {renderFormattedText(item.content)}
+          {item.children?.length > 0 &&
+            renderList(item.children, `${keyPrefix}-${idx}`, level + 1)}
+        </li>
+      ))}
+    </ul>
+  );
+
   const renderBlock = (block, key) => {
     switch (block.type) {
       case "paragraph":
-        // Check and render images inline like [image1], [image2]
         const parts = block.content.split(/(\[image\d+\])/i);
         return (
           <p key={key} className="desc-paragraph justify-text">
@@ -198,6 +242,9 @@ const addToRecentlyViewed = (item) => {
           </p>
         );
 
+      case "list":
+        return renderList(block.items, `list-${key}`);
+
       case "title":
         return <h2 key={key} className="heritage-desc-title semibold">{block.content}</h2>;
 
@@ -218,8 +265,6 @@ const addToRecentlyViewed = (item) => {
 
   return (
     <div className="heritage-details-container">
-      {/* <button className="back-btn" onClick={() => navigate(-1)}>&larr; Back</button> */}
-
       {site.image && (
         <img
           className="heritage-main-image"
@@ -230,11 +275,7 @@ const addToRecentlyViewed = (item) => {
         />
       )}
 
-       {/* Title */}
       <h1 className="heritage-main-title">{name}</h1>
-
-      {/* <h2 className="desc-title semibold">{name}</h2> */}
-      
 
       <p className="location-entryfee">
         <span className="location-text italics small-font">{location}</span><br />
@@ -260,14 +301,13 @@ const addToRecentlyViewed = (item) => {
         </div>
       )}
 
-       {site && historyRaw && (
+      {site && historyRaw && (
         <TTSControl text={historyRaw} lang={langCode} />
       )}
 
-      <ReviewSection targetType="heritage" targetId={site?._id} />
+      <ReviewSection targetType="heritage" targetId={site._id} />
 
       <RecommendedList targetType="heritage" excludeId={site._id} lang={lang} />
-
 
       {fullscreenImg && (
         <div className="fullscreen-modal" onClick={() => setFullscreenImg(null)}>
