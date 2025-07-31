@@ -100,7 +100,7 @@ const RecentlyViewed = () => {
     scrollRef.current?.scrollBy({ left: -300, behavior: "smooth" });
   };
 
-  console.log("Recently viewed items:", items);
+  // console.log("Recently viewed items:", items);
 
 
   if (!items.length) return null;
