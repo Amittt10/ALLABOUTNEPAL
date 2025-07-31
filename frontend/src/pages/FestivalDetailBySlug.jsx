@@ -8,7 +8,6 @@ export default function FestivalDetailBySlug() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const { i18n, t } = useTranslation();
-
   const [fullscreenImg, setFullscreenImg] = useState(null);
 
   const festival = festivalsData[slug];
@@ -36,29 +35,86 @@ export default function FestivalDetailBySlug() {
 
   const formatDate = (dateStr) => {
     if (!dateStr) return "";
-    return new Date(dateStr).toLocaleDateString(
-      isNepali ? "ne-NP" : "en-US",
-      { year: "numeric", month: "long", day: "numeric" }
-    );
+    return new Date(dateStr).toLocaleDateString(isNepali ? "ne-NP" : "en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
   };
 
-  const rawLines = descriptionRaw.split("\n").map((line) => line.trim()).filter(Boolean);
+  const rawLines = descriptionRaw
+    .replace(/^[\u2022\u2013\u2014•]/gm, "-")
+    .replace(/\t/g, "  ")
+    .split("\n")
+    .map((line) => line.trimEnd())
+    .filter(Boolean);
 
-  const parsedBlocks = rawLines.map((line) => {
-    if (line.startsWith("[image:") && line.endsWith("]")) {
-      const filename = line.slice(7, -1).trim();
-      return {
-        type: "image",
-        src: `/images/${filename}`,
-        alt: filename
-      };
+  function parseNestedList(lines, startIndex = 0, baseIndent = 0) {
+    const items = [];
+    let i = startIndex;
+
+    while (i < lines.length) {
+      const line = lines[i];
+      const leadingSpaces = line.match(/^ */)?.[0]?.length ?? 0;
+
+      if (line.trim().startsWith("- ")) {
+        if (leadingSpaces < baseIndent) break;
+        if (leadingSpaces > baseIndent) {
+          if (items.length === 0) break;
+          const [nestedList, nextIndex] = parseNestedList(lines, i, leadingSpaces);
+          items[items.length - 1].children = nestedList;
+          i = nextIndex;
+          continue;
+        }
+        const content = line.trim().slice(2).trim();
+        items.push({ content, children: [] });
+        i++;
+      } else {
+        break;
+      }
     }
 
-    if (line.startsWith("### ")) return { type: "subtitle", content: line.slice(4).trim() };
-    if (line.startsWith("## ")) return { type: "heading", content: line.slice(3).trim() };
-    if (line.startsWith("# ")) return { type: "title", content: line.slice(2).trim() };
-    return { type: "paragraph", content: line };
-  });
+    return [items, i];
+  }
+
+  function parseBlocks(lines) {
+    const blocks = [];
+    let i = 0;
+
+    while (i < lines.length) {
+      const line = lines[i];
+
+      if (line.trim().startsWith("- ")) {
+        const [listItems, nextIndex] = parseNestedList(lines, i);
+        blocks.push({ type: "list", items: listItems });
+        i = nextIndex;
+        continue;
+      }
+
+      if (line.startsWith("[image:") && line.endsWith("]")) {
+        const filename = line.slice(7, -1).trim();
+        blocks.push({
+          type: "image",
+          src: `/images/${filename}`,
+          alt: filename,
+        });
+      } else if (line.startsWith("### ")) {
+        blocks.push({ type: "subtitle", content: line.slice(4).trim() });
+      } else if (line.startsWith("## ")) {
+        blocks.push({ type: "heading", content: line.slice(3).trim() });
+      } else if (line.startsWith("# ")) {
+        blocks.push({ type: "title", content: line.slice(2).trim() });
+      } else {
+        blocks.push({ type: "paragraph", content: line });
+      }
+
+      i++;
+    }
+
+    return blocks;
+  }
+
+  const descriptionBlocks = parseBlocks(rawLines);
 
   const renderFormattedText = (text) => {
     const elements = [];
@@ -86,31 +142,55 @@ export default function FestivalDetailBySlug() {
     return elements;
   };
 
+  const renderList = (items, keyPrefix = "", level = 1) => (
+    <ul className={`nested-list-slug level-${level}`} key={keyPrefix}>
+      {items.map((item, idx) => (
+        <li key={`${keyPrefix}-${idx}`}>
+          {renderFormattedText(item.content)}
+          {item.children?.length > 0 && renderList(item.children, `${keyPrefix}-${idx}`, level + 1)}
+        </li>
+      ))}
+    </ul>
+  );
+
   const renderBlock = (block, key) => {
     switch (block.type) {
       case "paragraph":
         return (
-          <p key={key} className="desc-paragraph justify-text">
+          <p key={key} className="desc-paragraph-slug justify-text-slug">
             {renderFormattedText(block.content)}
           </p>
         );
+      case "list":
+        return renderList(block.items, `list-${key}`);
       case "image":
         return (
           <img
             key={key}
             src={block.src}
             alt={block.alt || "Festival Image"}
-            className="inline-image"
+            className="inline-image-slug"
             onClick={() => setFullscreenImg(block.src)}
-            style={{ cursor: "pointer" }}
           />
         );
       case "title":
-        return <h2 key={key} className="desc-title semibold">{block.content}</h2>;
+        return (
+          <h2 key={key} className="desc-title-slug semibold-slug">
+            {block.content}
+          </h2>
+        );
       case "heading":
-        return <h3 key={key} className="desc-heading bold">{block.content}</h3>;
+        return (
+          <h3 key={key} className="desc-heading-slug bold-slug">
+            {block.content}
+          </h3>
+        );
       case "subtitle":
-        return <h4 key={key} className="desc-subtitle italics">{block.content}</h4>;
+        return (
+          <h4 key={key} className="desc-subtitle-slug italics-slug">
+            {block.content}
+          </h4>
+        );
       default:
         return null;
     }
@@ -118,29 +198,24 @@ export default function FestivalDetailBySlug() {
 
   return (
     <div className="festival-detail-page">
-      <button className="back-btn" onClick={() => navigate(-1)}>
-        &larr; Back
-      </button>
-
-      <div className="festival-detail-card">
+      <div className="festival-slug-detail-card">
         <img
           src={festival.image}
           alt={name}
-          className="festival-detail-image"
+          className="festival-detail-image-slug"
           onClick={() => setFullscreenImg(festival.image)}
-          style={{ cursor: "pointer" }}
         />
-        <h1 className="festival-detail-title">{name}</h1>
-        <p className="festival-detail-date">{formatDate(festival.dateAD)}</p>
-        <p className="festival-detail-location">{location}</p>
+        <h1 className="festival-detail-title-slug">{name}</h1>
+        <p className="festival-detail-date-slug">{formatDate(festival.dateAD)}</p>
+        <p className="festival-detail-location-slug">{location}</p>
 
-        <div className="description-content">
-          {parsedBlocks.map((block, idx) => renderBlock(block, idx))}
+        <div className="description-content-slug">
+          {descriptionBlocks.map((block, idx) => renderBlock(block, idx))}
         </div>
       </div>
 
       {fullscreenImg && (
-        <div className="fullscreen-modal" onClick={() => setFullscreenImg(null)}>
+        <div className="fullscreen-modal-slug" onClick={() => setFullscreenImg(null)}>
           <img src={fullscreenImg} alt="Fullscreen" />
         </div>
       )}
