@@ -84,7 +84,7 @@ export default function NepalMapImage({ places }) {
                   <div
                     key={place._id}
                     className="tooltip-card"
-                    onClick={() => navigate(`/places/${place._id}`)}
+                    onClick={() => navigate(`/places/${place.slug}`)}
                   >
                     <div className="image-wrapper">
                       <img src={place.thumbnail} alt={place.title_en} />
