@@ -3,15 +3,18 @@ import axiosInstance from "./axiosConfig";
 
 const BASE_URL = "/admin/quiz";
 
-export const getAllQuizQuestions = async () => {
+export const getAllQuizQuestions = async ({ page = 1, limit = 10 } = {}) => {
   try {
-    const res = await axiosInstance.get(BASE_URL);
+    const res = await axiosInstance.get(BASE_URL, {
+      params: { page, limit }
+    });
     return res.data;
   } catch (error) {
     console.error("Failed to fetch quiz questions:", error);
     throw error;
   }
 };
+
 
 export const getQuizQuestionById = async (id) => {
   try {

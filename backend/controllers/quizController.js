@@ -8,20 +8,33 @@ import QuizFeedback from '../models/QuizFeedback.js';
 // =============================
 // GET Quiz Questions (with filters)
 // =============================
+// GET Quiz Questions with Pagination
 export const getQuizQuestions = async (req, res) => {
   try {
-    const { category, difficulty } = req.query;
+    const { category, difficulty, page = 1, limit = 10 } = req.query;
     const filter = {};
 
     if (category) filter.category = new RegExp(`^${category}$`, "i");
     if (difficulty) filter.difficulty = new RegExp(`^${difficulty}$`, "i");
 
-    const questions = await QuizQuestion.find(filter).limit(10);
-    res.json(questions);
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+
+    const [questions, total] = await Promise.all([
+      QuizQuestion.find(filter).skip(skip).limit(parseInt(limit)),
+      QuizQuestion.countDocuments(filter)
+    ]);
+
+    res.json({
+      questions,
+      total,
+      page: parseInt(page),
+      pages: Math.ceil(total / limit)
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 };
+
 
 // =============================
 // CREATE a New Question
