@@ -34,29 +34,17 @@
   display: inline-flex;
   cursor: pointer;
   user-select: none;
-  flex-direction: row-reverse;
+  flex-direction: row;
 }
 
 .review-stars .star {
   font-size: 26px;
-  color: #ccc; /* default unfilled */
-  margin-right: 4px;
+  color: #ccc;
+  margin-left: 4px;
   transition: color 0.2s ease;
 }
 
-/* Highlight selected stars (on click) */
 .review-stars .star.filled {
-  color: #FFD700;
-}
-
-/* On hover: reset all */
-.review-stars:hover .star {
-  color: #ccc;
-}
-
-/* On hover: fill hovered and previous stars */
-.review-stars .star:hover,
-.review-stars .star:hover ~ .star {
   color: #FFD700;
 }
 

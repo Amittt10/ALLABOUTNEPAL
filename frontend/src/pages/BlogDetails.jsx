@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import "./BlogDetails.css";
+import ReviewSection from "../Component/ReviewSection/ReviewSection";
 
 const API = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -219,6 +220,8 @@ export default function BlogDetails() {
       <div className="blog-content">
         {blocks.map((block, idx) => renderBlock(block, idx))}
       </div>
+
+      <ReviewSection targetType="blog" targetId={blog._id} />
 
       {/* Fullscreen image modal */}
       {fullscreenImg && (
