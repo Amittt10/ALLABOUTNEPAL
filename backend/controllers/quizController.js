@@ -106,8 +106,19 @@ export const deleteQuizQuestion = async (req, res) => {
 // =============================
 export const submitQuizResult = async (req, res) => {
   try {
+    console.log("submitQuizResult req.body:", req.body);  // Log full incoming data
+
     const { userId, score, correctAnswers, totalQuestions, category, difficulty } = req.body;
 
+    // Validate required fields
+    if (totalQuestions === undefined) {
+      return res.status(400).json({ message: "`totalQuestions` is required." });
+    }
+    if (!userId) {
+      return res.status(400).json({ message: "`userId` is required." });
+    }
+
+    // Create new QuizResult document
     const result = new QuizResult({
       userId,
       score,
@@ -117,11 +128,11 @@ export const submitQuizResult = async (req, res) => {
       difficulty,
     });
 
-    const savedResult = await result.save(); // ✅ save and capture the saved result
+    const savedResult = await result.save();
 
+    // Update user stats
     const user = await User.findById(userId);
     if (user) {
-      // Update stats
       user.quizStats.totalQuizzes = (user.quizStats.totalQuizzes || 0) + 1;
       user.quizStats.highestScore = Math.max(user.quizStats.highestScore || 0, score);
 
@@ -142,17 +153,17 @@ export const submitQuizResult = async (req, res) => {
       await user.save();
     }
 
-    // ✅ Return the new quiz result ID (quizId)
     res.status(201).json({
       message: "Quiz result saved",
       quizId: savedResult._id,
-      updatedStats: user.quizStats,
+      updatedStats: user ? user.quizStats : null,
     });
   } catch (err) {
     console.error("❌ Error in submitQuizResult:", err);
     res.status(500).json({ message: err.message });
   }
 };
+
 
 // =============================
 // GET Leaderboard

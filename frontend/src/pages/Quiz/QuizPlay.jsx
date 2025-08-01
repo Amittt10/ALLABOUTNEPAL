@@ -27,12 +27,13 @@ const QuizPlay = () => {
     const fetchQuestions = async () => {
       try {
         const res = await api.getQuizQuestions(category, difficulty);
-        if (res.data.length === 0) {
+        const questionsData = res.data.questions || [];
+        if (questionsData.length === 0) {
           alert("No questions found for the selected category/difficulty.");
           navigate("/quiz");
           return;
         }
-        setQuestions(res.data);
+        setQuestions(questionsData);
       } catch (err) {
         console.error("Error fetching questions:", err);
       }
@@ -156,7 +157,8 @@ const QuizPlay = () => {
     submitResultAndNavigate(finalAnswers);
   };
 
-  if (questions.length === 0) {
+  // Safe loading check
+  if (!questions.length || !questions[currentIndex]) {
     return (
       <div className="quiz-play-container">
         <p>Loading questions...</p>
@@ -180,10 +182,10 @@ const QuizPlay = () => {
       </div>
       <div className="timer-text">Time left: {timeLeft}s</div>
 
-      <p className="quiz-question">{currentQuestion.question}</p>
+      <p className="quiz-question">{currentQuestion?.question || "Loading question..."}</p>
 
       <div className="quiz-options">
-        {currentQuestion.options.map((option, i) => {
+        {currentQuestion?.options?.map((option, i) => {
           const isSelected = selectedAnswer === i;
           const isCorrect = currentQuestion.correctAnswerIndex === i;
 
