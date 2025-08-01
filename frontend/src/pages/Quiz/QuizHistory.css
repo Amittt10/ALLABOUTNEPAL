@@ -89,7 +89,9 @@
 .quiz-history-table th {
   background-color: #f2f2f2;
   font-weight: 600;
+  color: #000; /* Ensures black text */
 }
+
 
 .quiz-history-table tbody tr:nth-child(even) {
   background-color: #fafafa;
