@@ -50,7 +50,7 @@ const FestivalBell = () => {
           {festivals.length > 0 ? (
             festivals.map((festival) => (
               <Link
-                to={`/festival-detail/${festival._id}`}
+                to={`/festival-detail/${festival.slug}`}
                 key={festival._id}
                 className="festival-item-link"
                 onClick={() => setIsOpen(false)}
