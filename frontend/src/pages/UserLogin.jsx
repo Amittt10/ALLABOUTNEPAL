@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { Eye, EyeOff } from "lucide-react";
-import { showCustomToast } from "./utils/showCustomToast"; // ⬅️ Custom toast utility
+import { showCustomToast } from "./utils/showCustomToast"; // Custom toast utility
 import "./Login.css";
 
 const UserLogin = ({ onSuccess }) => {
@@ -11,9 +11,13 @@ const UserLogin = ({ onSuccess }) => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
+
+  // Get redirect path and any saved review form data from location.state
+  const redirectFromState = location.state?.from?.pathname || "/";
+  const savedForm = location.state?.reviewForm || null;
 
   useEffect(() => {
     const query = new URLSearchParams(location.search);
@@ -28,26 +32,32 @@ const UserLogin = ({ onSuccess }) => {
   }, [location]);
 
   const handleLogin = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  const success = await login(email, password);
-  setLoading(false);
-  if (success) {
-    showCustomToast(
-      "✅ LOGIN_SUCCESS",
-      "You have logged in successfully!",
-    );
-    onSuccess ? onSuccess() : navigate(from, { replace: true });
-  } else {
-    showCustomToast(
-      "LOGIN_FAILED",
-      "Invalid email or password. Please try again.",
-      "Forgot password?",
-      "/forgot"
-    );
-  }
-};
+    e.preventDefault();
+    setLoading(true);
 
+    const success = await login(email, password);
+
+    setLoading(false);
+    if (success) {
+      showCustomToast("✅ LOGIN_SUCCESS", "You have logged in successfully!");
+      // Redirect back with saved form data so ReviewSection can restore it
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        navigate(redirectFromState, {
+          replace: true,
+          state: { reviewForm: savedForm },
+        });
+      }
+    } else {
+      showCustomToast(
+        "LOGIN_FAILED",
+        "Invalid email or password. Please try again.",
+        "Forgot password?",
+        "/forgot"
+      );
+    }
+  };
 
   return (
     <div className="login-wrapper">
@@ -65,6 +75,7 @@ const UserLogin = ({ onSuccess }) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              autoComplete="username"
             />
 
             <label>
@@ -78,12 +89,14 @@ const UserLogin = ({ onSuccess }) => {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 className="password-input"
+                autoComplete="current-password"
               />
               <button
                 type="button"
                 className="password-toggle"
                 onClick={() => setShowPassword(!showPassword)}
                 disabled={loading}
+                aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? <EyeOff /> : <Eye />}
               </button>

@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { api } from "../../api/api";
+import { AuthContext } from "../../context/AuthContext";
 import { showCustomToast } from "../../pages/utils/showCustomToast";
 import "./ReviewSection.css";
 
@@ -21,21 +23,23 @@ const ReviewItem = ({ review, onReplySubmit }) => {
 
   return (
     <li className="review-item">
-      <strong>{review.userId?.username || "User"}</strong> rated {review.rating}{" "}
-      ★<p>{review.comment}</p>
+      <strong>{review.userId?.username || "User"}</strong> rated {review.rating} ★
+      <p>{review.comment}</p>
+
       {review.replies && review.replies.length > 0 && (
         <ul className="reply-list">
           {review.replies.map((reply) => (
             <li key={reply._id} className="reply-item">
-              <strong>{reply.userId?.username || "User"}</strong>:{" "}
-              {reply.comment}
+              <strong>{reply.userId?.username || "User"}</strong>: {reply.comment}
             </li>
           ))}
         </ul>
       )}
+
       <button className="reply-btn" onClick={toggleReplyBox}>
         {showReplyBox ? "Cancel" : "Reply"}
       </button>
+
       {showReplyBox && (
         <div className="reply-form">
           <textarea
@@ -53,8 +57,9 @@ const ReviewItem = ({ review, onReplySubmit }) => {
 };
 
 const ReviewSection = ({ targetType, targetId }) => {
+  const { user, ready } = useContext(AuthContext);
   const [reviews, setReviews] = useState([]);
-  const [rating, setRating] = useState(0); // Set to 0 initially
+  const [rating, setRating] = useState(0);
   const [hoveredStar, setHoveredStar] = useState(0);
   const [comment, setComment] = useState("");
   const [average, setAverage] = useState(0);
@@ -63,18 +68,27 @@ const ReviewSection = ({ targetType, targetId }) => {
   const [totalPages, setTotalPages] = useState(1);
   const limit = 5;
 
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Restore saved review form after login redirect
+  useEffect(() => {
+    if (location.state?.reviewForm) {
+      const { rating: savedRating, comment: savedComment } = location.state.reviewForm;
+      setRating(savedRating || 0);
+      setComment(savedComment || "");
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location, navigate]);
+
   const fetchReviews = async (pageNumber = 1) => {
     try {
       const res = await api.get(
         `/reviews/${targetType}/${targetId}?page=${pageNumber}&limit=${limit}`
       );
-
       setReviews(res.data.reviews || res.data);
       setAverage(res.data.averageRating || 0);
-      setTotal(
-        res.data.totalReviews ||
-          (res.data.reviews ? res.data.reviews.length : 0)
-      );
+      setTotal(res.data.totalReviews || 0);
       setPage(res.data.page || pageNumber);
       setTotalPages(res.data.totalPages || 1);
     } catch (err) {
@@ -90,11 +104,28 @@ const ReviewSection = ({ targetType, targetId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!comment.trim()) {
+
+    if (!ready) return;
+
+    if (!user) {
       showCustomToast(
-        "⚠️ COMMENT_REQUIRED",
-        "Please write a comment before submitting."
+        "⚠️ UNAUTHORIZED",
+        "Please login to submit a review.",
+        "Login",
+        "/login",
+        () =>
+          navigate("/login", {
+            state: {
+              from: location,
+              reviewForm: { rating, comment },
+            },
+          })
       );
+      return;
+    }
+
+    if (!comment.trim()) {
+      showCustomToast("⚠️ COMMENT_REQUIRED", "Please write a comment before submitting.");
       return;
     }
 
@@ -104,19 +135,38 @@ const ReviewSection = ({ targetType, targetId }) => {
       setComment("");
       fetchReviews(1);
       setPage(1);
-      showCustomToast("Thank you for your review!");
+      showCustomToast("✅ REVIEW_ADDED", "Thank you for your review!");
     } catch (err) {
-      showCustomToast("⚠️ UNAUTHORIZED", "Please login to submit a review.");
+      showCustomToast("❌ FAILED", "Could not submit review.");
     }
   };
 
   const submitReply = async (reviewId, replyComment) => {
+    if (!ready) return;
+
+    if (!user) {
+      showCustomToast(
+        "⚠️ UNAUTHORIZED",
+        "Please login to reply.",
+        "Login",
+        "/login",
+        () =>
+          navigate("/login", {
+            state: {
+              from: location,
+              reviewForm: { rating, comment },
+            },
+          })
+      );
+      return;
+    }
+
     try {
       await api.post(`/reviews/${reviewId}/replies`, { comment: replyComment });
       fetchReviews(page);
       showCustomToast("✅ REPLY_ADDED", "Reply submitted successfully.");
     } catch (err) {
-      showCustomToast("⚠️ UNAUTHORIZED", "Please login to reply.");
+      showCustomToast("❌ FAILED", "Could not submit reply.");
     }
   };
 
@@ -150,7 +200,7 @@ const ReviewSection = ({ targetType, targetId }) => {
         <form onSubmit={handleSubmit}>
           <label>
             Rating:
-            <div className="review-stars" aria-label="Rating selector">
+            <div className="review-stars">
               {[1, 2, 3, 4, 5].map((star) => (
                 <span
                   key={star}
@@ -160,10 +210,6 @@ const ReviewSection = ({ targetType, targetId }) => {
                   onClick={() => setRating(star)}
                   onMouseEnter={() => setHoveredStar(star)}
                   onMouseLeave={() => setHoveredStar(0)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => e.key === "Enter" && setRating(star)}
-                  aria-pressed={rating === star}
                 >
                   ★
                 </span>
@@ -175,7 +221,6 @@ const ReviewSection = ({ targetType, targetId }) => {
             placeholder="Share your experience..."
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            aria-label="Review comment"
           />
           <button type="submit" className="submit-btn">
             Submit Review
@@ -197,12 +242,8 @@ const ReviewSection = ({ targetType, targetId }) => {
         )}
 
         {totalPages > 1 && (
-          <nav className="pagination" aria-label="Review pages pagination">
-            <button
-              disabled={page === 1}
-              onClick={() => handlePageChange(page - 1)}
-              aria-label="Previous page"
-            >
+          <nav className="pagination">
+            <button onClick={() => handlePageChange(page - 1)} disabled={page === 1}>
               &laquo; Prev
             </button>
             {getPaginationButtons().map((num) => (
@@ -210,15 +251,13 @@ const ReviewSection = ({ targetType, targetId }) => {
                 key={num}
                 className={num === page ? "active" : ""}
                 onClick={() => handlePageChange(num)}
-                aria-current={num === page ? "page" : undefined}
               >
                 {num}
               </button>
             ))}
             <button
-              disabled={page === totalPages}
               onClick={() => handlePageChange(page + 1)}
-              aria-label="Next page"
+              disabled={page === totalPages}
             >
               Next &raquo;
             </button>

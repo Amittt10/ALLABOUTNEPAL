@@ -12,17 +12,23 @@ export const addReview = async (req, res) => {
     }
 
     const userId = req.user.userId;
-
     const { targetType, targetId, rating, comment } = req.body;
 
+    // Validate required fields
     if (!userId || !targetType || !targetId || !rating || !comment) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
+    // Ensure targetId is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(targetId)) {
+      return res.status(400).json({ message: "Invalid targetId format" });
+    }
+
+    // Create new review
     const newReview = new Review({
       userId,
       targetType,
-      targetId,
+      targetId: new mongoose.Types.ObjectId(targetId), // ✅ Cast to ObjectId
       rating,
       comment,
     });
@@ -30,10 +36,11 @@ export const addReview = async (req, res) => {
     const savedReview = await newReview.save();
     return res.status(201).json(savedReview);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Server error" });
+    console.error("Add Review Error:", error.stack || error.message || error); // ✅ Better error logging
+    return res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
 
 export const getReviewsByTarget = async (req, res) => {
   try {

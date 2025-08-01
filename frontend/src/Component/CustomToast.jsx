@@ -1,7 +1,19 @@
 import React from "react";
 import "./CustomToast.css";
 
-const CustomToast = ({ code, message, linkText, linkHref = "#", closeToast }) => {
+const CustomToast = ({ code, message, linkText, linkHref = "#", onLinkClick, closeToast }) => {
+  const handleClick = (e) => {
+    e.preventDefault();
+    if (onLinkClick) {
+      onLinkClick();
+      closeToast();
+    } else {
+      // fallback if no onLinkClick: navigate normally
+      window.location.href = linkHref;
+      closeToast();
+    }
+  };
+
   return (
     <div className="custom-toast" role="alert" aria-live="assertive">
       <button
@@ -20,8 +32,12 @@ const CustomToast = ({ code, message, linkText, linkHref = "#", closeToast }) =>
           <a
             href={linkHref}
             className="toast-link"
-            target="_blank"
-            rel="noopener noreferrer"
+            onClick={handleClick}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleClick(e);
+            }}
           >
             {linkText}
           </a>

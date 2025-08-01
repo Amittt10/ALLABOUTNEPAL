@@ -1,4 +1,3 @@
-// backend/middleware/authMiddleware.js
 import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -12,18 +11,19 @@ export const authenticateJWT = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    // console.log("✅ Decoded JWT:", decoded);
-    req.user = decoded;  // attach user info from token payload
+    req.user = {
+      userId: decoded.userId || decoded.id || decoded._id,
+      role: decoded.role || "user",
+    };
     next();
   } catch (err) {
     return res.status(401).json({ message: "Invalid token" });
   }
 };
 
-
 export const authorizeAdmin = (req, res, next) => {
-  if (!req.user || req.user.role !== 'admin') {
-    return res.status(403).json({ message: 'Admins only' });
+  if (!req.user || req.user.role !== "admin") {
+    return res.status(403).json({ message: "Admins only" });
   }
   next();
 };

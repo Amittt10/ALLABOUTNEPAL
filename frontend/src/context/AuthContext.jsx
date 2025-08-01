@@ -9,15 +9,20 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(() => localStorage.getItem("token"));
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [ready, setReady] = useState(false); // <-- NEW
 
   useEffect(() => {
     const fetchProfile = async () => {
+      setReady(false);
       if (!token) {
         setUser(null);
+        setReady(true);
         return;
       }
+
       setLoading(true);
       setError(null);
+
       try {
         const res = await axios.get("http://localhost:3000/api/profile", {
           headers: { Authorization: `Bearer ${token}` },
@@ -30,12 +35,13 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem("token");
       } finally {
         setLoading(false);
+        setReady(true); // <-- Ready once profile loaded
       }
     };
+
     fetchProfile();
   }, [token]);
 
-  // login method performs API call, stores token, fetches profile
   const login = async (email, password) => {
     setLoading(true);
     setError(null);
@@ -50,7 +56,6 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("token", token);
       setToken(token);
 
-      // fetch profile right after login
       const profileRes = await axios.get("http://localhost:3000/api/profile", {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -72,7 +77,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading, error, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, ready, loading, error, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
