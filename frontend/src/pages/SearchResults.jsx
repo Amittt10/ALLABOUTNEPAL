@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { axiosInstance as axios } from "../api/axiosConfig";
-import "./SearchResults.css"; // import the CSS file
+import "./SearchResults.css";
 
 export default function SearchResults() {
   const location = useLocation();
@@ -12,42 +12,27 @@ export default function SearchResults() {
   const queryParams = new URLSearchParams(location.search);
   const searchQuery = queryParams.get("q");
 
-  // Determine detail link based on item type
   const getDetailLink = (item) => {
     switch (item.type) {
       case "festival":
-        return `/festival-detail/${item._id}`;
+        return `/festival-detail/${item.slug}`;
       case "heritage":
-        return `/heritage/${item._id}`;
+        return `/heritage/${item.slug}`;
       case "place":
-        return `/places/${item._id}`;
+        return `/places/${item.slug}`;
       default:
         return "#";
     }
   };
 
-  // Get appropriate image URL based on type
   const getImageUrl = (item) => {
+    const baseURL = "http://localhost:3000";
+    const rawImage = item.thumbnail || item.image;
 
-    if (item.type === "festival") {
-      return item.image
-        ? `http://localhost:3000/uploads/${item.image}`
-        : "/default-image.jpg";
-    }
-
-    if (item.type === "heritage") {
-      if (!item.image) return "/default-image.jpg";
-      return item.image.startsWith("uploads/")
-        ? `http://localhost:3000/${item.image}`
-        : `http://localhost:3000/uploads/${item.image}`;
-    }
-
-     if (item.type === "place") {
-      if (!item.thumbnail) return "/default-image.jpg";
-     return item.thumbnail.startsWith("/uploads")
-      ? `http://localhost:3000${item.thumbnail}`
-      : `http://localhost:3000/uploads/${item.thumbnail}`;
-  }
+    if (!rawImage) return "/default-image.jpg";
+    if (rawImage.startsWith("http")) return rawImage;
+    if (rawImage.startsWith("/uploads")) return `${baseURL}${rawImage}`;
+    if (rawImage.startsWith("uploads")) return `${baseURL}/${rawImage}`;
 
     return "/default-image.jpg";
   };
@@ -65,20 +50,16 @@ export default function SearchResults() {
         setLoading(false);
       }
     };
+
     if (searchQuery) {
       fetchSearchResults();
     } else {
-      setLoading(false); // no search query
+      setLoading(false);
     }
   }, [searchQuery]);
 
-  if (loading) {
-    return <div className="search-results-loading">Loading results…</div>;
-  }
-
-  if (error) {
-    return <div className="search-results-error">Error: {error}</div>;
-  }
+  if (loading) return <div className="search-results-loading">Loading results…</div>;
+  if (error) return <div className="search-results-error">Error: {error}</div>;
 
   return (
     <div className="search-results-container">
