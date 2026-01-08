@@ -1,4 +1,4 @@
-#ALLABOUTNEPAL
+# ALLABOUTNEPAL
 
 A web-based ALLABOUTNEPAL designed to promote and preserve the rich cultural heritage of Nepal. This platform provides users with detailed information about heritage sites, festivals, cultural events, and interactive features such as quizzes, reviews, maps, and multimedia content.
 
